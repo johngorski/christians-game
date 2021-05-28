@@ -6,6 +6,7 @@
 <body>
 <canvas id="screen"></canvas>
 <script>
+/**
 'GAME.BAS
 'Christian Gorski Copyright 2008
 'All Rights Reserved.
@@ -15,7 +16,8 @@
 '-1 = coins -2 = hidden key -3 = keyhole -4 = negative block
 '-5 = sealed platform -6 = hidden keyhole -7 = open door -9 = false platform -10 = eye
 '-11 = Portal‡ -12 = Portal· -13 = LifeUp -14 = AttackUp <=-20 = Key
-'---------------------DECLARE---FUNCTIONS------------------------------------
+
+---------------------DECLARE---FUNCTIONS------------------------------------
 DECLARE SUB Pause ()
 DECLARE SUB GameOver ()
 DECLARE SUB LBInfo (Choice$)
@@ -37,10 +39,12 @@ DECLARE FUNCTION WhichWorld$ (Dummy)
 DECLARE FUNCTION ZeroLimit! (Number AS INTEGER)
 DECLARE FUNCTION FlipBlocks% (block%)
 '--------------------DECLARE-CONSTANTS---------------------------------------
-CONST NoOfLevels = 10
-COMMON SHARED RGT$, LFT$, UP$, DN$, ESC$, ENTR$, SPC$, Coins, YMAX, XMAX, F1$, F2$, F3$, F4$, F5$, F6$, F7$, F8$, F9$, F10$, F11$, NJTimer, YouShouldGo, Warp, World$, WorldsChecked, BuildLevel, ADMISSION, SharedTalk, SharedWiseMessage$,  _
-SharedMessage$
-DIM SHARED GlovePos AS INTEGER
+*/
+
+const NoOfLevels = 10
+let RGT$, LFT$, UP$, DN$, ESC$, ENTR$, SPC$, Coins, YMAX, XMAX, F1$, F2$, F3$, F4$, F5$, F6$, F7$, F8$, F9$, F10$, F11$, NJTimer, YouShouldGo, Warp, World$, WorldsChecked, BuildLevel, ADMISSION, SharedTalk, SharedWiseMessage$,  _;
+let SharedMessage$;
+let GlovePos;
 RGT$ = CHR$(0) + "M"
 LFT$ = CHR$(0) + "K"
 UP$ = CHR$(0) + "H"
@@ -58,20 +62,20 @@ F10$ = CHR$(0) + "D"
 ESC$ = CHR$(27)
 ENTR$ = CHR$(13)
 SPC$ = CHR$(32)
-YMAX = 200
-XMAX = 320
-ADMISSION = 0
-KEY 15, CHR$(4) + CHR$(31)
-KEY 16, CHR$(0) + CHR$(57)
-KEY 17, CHR$(4) + CHR$(19)
-KEY(11) ON 'up
-KEY(12) ON 'left
-KEY(13) ON 'right
-KEY(14) ON 'down
-KEY(15) ON 'Ctrl+S
-KEY(16) ON
-SCREEN 7, 0, 0, 1
-'--------------DECLARE-ARRAYS-----------------------------------------------
+YMAX = 200;
+XMAX = 320;
+ADMISSION = 0;
+// KEY 15, CHR$(4) + CHR$(31)
+// KEY 16, CHR$(0) + CHR$(57)
+// KEY 17, CHR$(4) + CHR$(19)
+// KEY(11) ON 'up
+// KEY(12) ON 'left
+// KEY(13) ON 'right
+// KEY(14) ON 'down
+// KEY(15) ON 'Ctrl+S
+// KEY(16) ON
+// SCREEN 7, 0, 0, 1
+// '--------------DECLARE-ARRAYS-----------------------------------------------
 DIM SHARED ScreenMap%(31, 19)
 DIM SHARED ScreenMap2%(31, 19)
 DIM SHARED ScreenMap3%(31, 19)
@@ -1816,7 +1820,7 @@ Load:
 
 END SUB
 
-SUB Pause
+function Pause() {
   KEY(12) OFF
   KEY(13) OFF
   KEY(14) OFF
@@ -1890,7 +1894,7 @@ SUB Pause
   KEY(14) ON
   KEY(11) ON
 
-END SUB
+}
 
 SUB PlayDemo (FileName$, ScreenMap%())
   FileName$ = UCASE$(FileName$)
