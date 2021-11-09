@@ -1,0 +1,19 @@
+{
+  "name": "christians-game",
+  "version": "1.0.0",
+  "description": "Christian's QuickBasic 4.5 game. Let's port it!",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johngorski/christians-game.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/johngorski/christians-game/issues"
+  },
+  "homepage": "https://github.com/johngorski/christians-game#readme"
+}
