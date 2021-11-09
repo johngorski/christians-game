@@ -158,7 +158,6 @@ KEY(14) ON 'down
 KEY(15) ON 'Ctrl+S
 KEY(16) ON
 SCREEN 7, 0, 0, 1
-'----------------LOAD-LEVELS-------------------------------------------------
 // */
 
 const screenMap2 = loadLevelByName('LEVEL2');
