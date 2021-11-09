@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/johngorski/christians-game/issues"
   },
-  "homepage": "https://github.com/johngorski/christians-game#readme"
+  "homepage": "https://github.com/johngorski/christians-game#readme",
+  "dependencies": {
+    "binary-file": "^0.2.3"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1"
+  }
 }

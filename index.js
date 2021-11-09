@@ -1,12 +1,107 @@
-'GAME.BAS
-'Christian Gorski Copyright 2008
-'All Rights Reserved.
-'Notes:
-'>20 wiseman 04 = positive
-'block 03 = sealed eye 02 = hidden platform 01 = platform 00 = nothing
-'-1 = coins -2 = hidden key -3 = keyhole -4 = negative block
-'-5 = sealed platform -6 = hidden keyhole -7 = open door -9 = false platform -10 = eye
-'-11 = Portalà -12 = Portalá -13 = LifeUp -14 = AttackUp <=-20 = Key
+const BinaryFile = require('binary-file');
+
+const gridLoader = (width, height) => async (filename) => {
+    const grid = [];
+    const file = new BinaryFile(filename, 'r', true);
+    await file.open();
+    for (let x = 0; x < width; x++) {
+        grid[x] = [];
+        for (let y = 0; y < height; y++) {
+            grid[x][y] = await file.readInt16();
+        }
+    }
+    await file.close();
+    return grid;
+};
+
+const loadLevel = gridLoader(32, 20);
+
+const loadLevelByName = async (name) => loadLevel(`./GameLevels/${name}.LVL`);
+
+const loadBitmap = gridLoader(20, 20);
+
+const loadBitmapByName = async (name) => loadBitmap(`./Bitmaps/${name}.BMP`);
+
+const translateLevelTile = tileNumber => {
+    if (tileNumber > 20) {
+       return 'wiseman';
+    } else if (tileNumber <= -20) {
+        return 'Key';
+    } else {
+        switch (tileNumber) {
+            case 4: return 'positive block';
+            case 3: return 'sealed eye';
+            case 2: return 'hidden platform';
+            case 1: return 'platform';
+            case 0: return 'nothing';
+            case -1: return 'coins';
+            case -2: return 'hidden key';
+            case -3: return 'keyhole';
+            case -4: return 'negative block';
+            case -5: return 'sealed platform';
+            case -6: return 'hidden keyhole';
+            case -7: return 'open door';
+            case -9: return 'false platform';
+            case -10: return 'eye';
+            case -11: return 'PortalA';
+            case 11: return 'eleven';
+            case -12: return 'PortalB';
+            case -13: return 'LifeUp';
+            case -14: return 'AttackUp';
+        };
+    }
+};
+
+const tileStrings = {
+    'wiseman': 'WM',
+    'Key': 'KY',
+    'positive block': '+B',
+    'sealed eye': 'SE',
+    'hidden platform': 'HP',
+    'platform': 'PF',
+    'nothing': '..',
+    'eleven': '11',
+    'coins': 'oO',
+    'hidden key': 'HK',
+    'keyhole': 'KH',
+    'negative block': '-B',
+    'sealed platform': 'SP',
+    'hidden keyhole': 'HH',
+    'open door': 'OD',
+    'false platform': 'FP',
+    'eye': 'EY',
+    'PortalA': 'PA',
+    'PortalB': 'PB',
+    'LifeUp': 'LU',
+    'AttackUp': 'AU',
+};
+
+const transpose = m => {
+    const t = [];
+    for (let col = 0; col < m[0].length; col++) {
+        t[col] = [];
+        for (let row = 0; row < m.length; row++) {
+            t[col][row] = m[row][col];
+        }
+    }
+    return t;
+};
+
+const printLevel = flipped => {
+    const level = transpose(flipped);
+    for (let x = 0; x < level.length; x++) {
+        console.log(level[x].map(tileNumber => tileStrings[translateLevelTile(tileNumber)]).join(' '));
+    };
+};
+
+const printBitmap = flipped => {
+    const bitmap = transpose(flipped);
+    for (let x = 0; x < bitmap.length; x++) {
+        console.log(bitmap[x].join(' '));
+    };
+};
+
+/*
 '---------------------DECLARE---FUNCTIONS------------------------------------
 DECLARE SUB Pause ()
 DECLARE SUB GameOver ()
@@ -63,253 +158,45 @@ KEY(14) ON 'down
 KEY(15) ON 'Ctrl+S
 KEY(16) ON
 SCREEN 7, 0, 0, 1
-'--------------DECLARE-ARRAYS-----------------------------------------------
-DIM SHARED ScreenMap%(31, 19)
-DIM SHARED ScreenMap2%(31, 19)
-DIM SHARED ScreenMap3%(31, 19)
-DIM SHARED ScreenMap4%(31, 19)
-DIM SHARED ScreenMap5%(31, 19)
-DIM SHARED ScreenMap6%(31, 19)
-DIM SHARED ScreenMap7%(31, 19)
-DIM SHARED ScreenMap8%(31, 19)
-DIM SHARED ScreenMap9%(31, 19)
-DIM SHARED ScreenMap10%(31, 19)
-DIM SHARED ScreenMap11%(31, 19)
-DIM SHARED BonusLevel%(31, 19)
-
-DIM SHARED Dragonimage%(19, 19)
-DIM SHARED Ravenimage%(19, 19)
-DIM SHARED Snakeimage%(19, 19)
-DIM SHARED WingedStatueimage%(19, 19)
-DIM SHARED Stormyimage%(19, 19)
-DIM SHARED Lightningimage%(19, 19)
-DIM SHARED Fireimage%(19, 19)
-DIM SHARED Ghostimage%(19, 19)
-DIM SHARED LifeUpimage%(19, 19)
-DIM SHARED AttackUpimage%(19, 19)
-DIM SHARED MCloudimage%(19, 19)
-DIM SHARED RCloudimage%(19, 19)
-DIM SHARED LCloudimage%(19, 19)
 '----------------LOAD-LEVELS-------------------------------------------------
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL2.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap2%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap2%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL3.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap3%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap3%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL4.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap4%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap4%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL5.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap5%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap5%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL6.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap6%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap6%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL7.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap7%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap7%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL8.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap8%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap8%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL9.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap9%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap9%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL10.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap10%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap10%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/GAMELE~1/LEVEL11.LVL" FOR RANDOM AS #1 LEN = LEN(ScreenMap11%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, ScreenMap11%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
+// */
 
-OPEN "C:/BASIC/GAME/GAMELE~1/BONUSL~1.LVL" FOR RANDOM AS #1 LEN = LEN(BonusLevel%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, BonusLevel%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
+const screenMap2 = loadLevelByName('LEVEL2');
+const screenMap3 = loadLevelByName('LEVEL3');
+const screenMap4 = loadLevelByName('LEVEL4');
+const screenMap5 = loadLevelByName('LEVEL5');
+const screenMap6 = loadLevelByName('LEVEL6');
+const screenMap7 = loadLevelByName('LEVEL7');
+const screenMap8 = loadLevelByName('LEVEL8');
+const screenMap9 = loadLevelByName('LEVEL9');
+const screenMap10 = loadLevelByName('LEVEL10');
+const screenMap11 = loadLevelByName('LEVEL11');
+const bonusLevel = loadLevelByName('BONUSL~1');;
 
-'------------------------LOAD-BITMAPS----------------------------------------
-OPEN "C:/BASIC/GAME/BITMAPS/DRAGON.BMP" FOR RANDOM AS #1 LEN = LEN(Dragonimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, Dragonimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/RAVEN.BMP" FOR RANDOM AS #1 LEN = LEN(Ravenimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, Ravenimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/SNAKE.BMP" FOR RANDOM AS #1 LEN = LEN(Snakeimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, Snakeimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/WSTATUE.BMP" FOR RANDOM AS #1 LEN = LEN(WingedStatueimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, WingedStatueimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/STORMY.BMP" FOR RANDOM AS #1 LEN = LEN(Stormyimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, Stormyimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/LIGHTNIN.BMP" FOR RANDOM AS #1 LEN = LEN(Lightningimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, Lightningimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/FIRE.BMP" FOR RANDOM AS #1 LEN = LEN(Fireimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, Fireimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/GHOST.BMP" FOR RANDOM AS #1 LEN = LEN(Ghostimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, Ghostimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/LIFEUP.BMP" FOR RANDOM AS #1 LEN = LEN(LifeUpimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, LifeUpimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/ATKUP.BMP" FOR RANDOM AS #1 LEN = LEN(AttackUpimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, AttackUpimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/MCLOUD.BMP" FOR RANDOM AS #1 LEN = LEN(MCloudimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, MCloudimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/RCLOUD.BMP" FOR RANDOM AS #1 LEN = LEN(RCloudimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, RCloudimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
-OPEN "C:/BASIC/GAME/BITMAPS/LCLOUD.BMP" FOR RANDOM AS #1 LEN = LEN(LCloudimage%)
-  RecordNumber = 1
-  FOR x0 = 0 TO 19
-    FOR y0 = 0 TO 19
-      GET #1, RecordNumber, LCloudimage%(x0, y0)
-      RecordNumber = RecordNumber + 1
-    NEXT y0
-  NEXT x0
-CLOSE #1
+// (async () => printLevel(await loadLevelByName('LEVEL2')))();
+// (async () => printLevel(await loadLevelByName('LEVEL4')))();
+// screenMap2.then(sm => printLevel(sm));
+// screenMap2.then(printLevel);
+
+// (async () => printBitmap(await dragonImage))();
+
+const dragonImage = loadBitmapByName('DRAGON');
+const ravenImage = loadBitmapByName('RAVEN');
+const snakeImage = loadBitmapByName('SNAKE');
+const wingedStatueImage = loadBitmapByName('WSTATUE');
+const stormyImage = loadBitmapByName('STORMY');
+const lightningImage = loadBitmapByName('LIGHTNIN');
+const fireImage = loadBitmapByName('FIRE');
+const ghostImage = loadBitmapByName('GHOST');
+const lifeUpImage = loadBitmapByName('LIFEUP');
+const attackUpImage = loadBitmapByName('ATKUP');
+const mCloudImage = loadBitmapByName('MCLOUD');
+const rCloudImage = loadBitmapByName('RCLOUD');
+const lCloudImage = loadBitmapByName('LCLOUD');
+
+// lifeUpImage.then(printBitmap);
+
+/*
 '------------------HARDCODED-ARRAYS------------------------------------------
 DATA -1,-1,-1,08,08,08,-1,-1,-1,-1,-1,-1,-1
 DATA -1,-1,-1,08,15,08,-1,-1,-1,-1,-1,-1,-1
@@ -587,7 +474,7 @@ DIM SHARED GoblinTemplate AS ENEMY
   GoblinTemplate.Status = "GOOD"
   GoblinTemplate.Direc = "UR"
   GoblinTemplate.Item = "01"
- 
+
 DIM SHARED RavenTemplate AS ENEMY
   RavenTemplate.Race = "RAVEN"
   RavenTemplate.Health = 3
@@ -708,7 +595,7 @@ LevelRight:
         Guy.x = (PortalAlpha.x + 1) * 10
         Guy.y = (PortalAlpha.y * 10) - 1
       END IF
-     
+
       IF ScreenMap%(Guy.ScreenX + 1, Guy.ScreenY) > 0 THEN Guy.x = Guy.x - 5
     END IF
     MID$(Guy.Direc, 2) = "R"
@@ -749,7 +636,7 @@ LevelLeft:
         ScreenMap%(Guy.ScreenX + 1, Guy.ScreenY) = ScreenMap%(Guy.ScreenX + 1, Guy.ScreenY) + 20: ScreenMap%(Guy.ScreenX, Guy.ScreenY) = ScreenMap%(Guy.ScreenX, Guy.ScreenY) - 20
       END IF
     END IF
-    
+
     RETURN
 
 LevelJump:
@@ -801,7 +688,7 @@ MenuDown:
   IF GlovePos < 310 THEN GlovePos = GlovePos + 2
   RETURN
 
-Space:  
+Space:
     SELECT CASE RIGHT$(Guy.Direc, 1)
     CASE "R"
       IF Guy.ScreenX < 31 THEN
@@ -822,7 +709,7 @@ Space:
       ELSE SharedTalk = 0
       END IF
     END SELECT
-  
+
     IF ScreenMap%(Guy.ScreenX, Guy.ScreenY) = -4 THEN
       IF Guy.ScreenY > 1 THEN
         IF Guy.ScreenX > 1 THEN
@@ -833,7 +720,7 @@ Space:
         END IF
         ScreenMap%(Guy.ScreenX, Guy.ScreenY - 1) = FlipBlocks(ScreenMap%(Guy.ScreenX, Guy.ScreenY - 1))
       END IF
-    
+
       IF Guy.ScreenY < 19 THEN
         IF Guy.ScreenX > 1 THEN
           ScreenMap%(Guy.ScreenX - 1, Guy.ScreenY + 1) = FlipBlocks(ScreenMap%(Guy.ScreenX - 1, Guy.ScreenY + 1))
@@ -867,7 +754,7 @@ SUB AI (SerialNumber, ScreenMap%())
   DistX = Guy.x - Enemies(SerialNumber).x
   DistY = Guy.y - Enemies(SerialNumber).y + 1
   ItemType$ = LEFT$(Enemies(SerialNumber).Item, 1): ItemNo = VAL(RIGHT$(Enemies(SerialNumber).Item, 3))
- 
+
   IF ScreenMap%(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY) <> -15 THEN
     Enemies(SerialNumber).PlaceHold.x = Enemies(SerialNumber).ScreenX
     Enemies(SerialNumber).PlaceHold.y = Enemies(SerialNumber).ScreenY
@@ -879,15 +766,15 @@ SUB AI (SerialNumber, ScreenMap%())
     CASE "R": Enemies(SerialNumber).x = Enemies(SerialNumber).x - 5
     END SELECT
   END IF
-  
+
 
   IF Enemies(SerialNumber).Intelligence >= 4 THEN                'smart move
-    
+
       IF DistY < -Enemies(SerialNumber).Speed + 1 THEN EMove$ = UP$  'go nearer
       IF DistY > Enemies(SerialNumber).Speed - 1 THEN EMove$ = DN$     ' to guy
       IF DistX < -Enemies(SerialNumber).Speed + 1 THEN EMove$ = LFT$
       IF DistX > Enemies(SerialNumber).Speed - 1 THEN EMove$ = RGT$
-   
+
       IF Enemies(SerialNumber).Race = "DRAGON    " THEN
         IF DistY < -Enemies(SerialNumber).Speed THEN EMove$ = UP$
         IF DistY > Enemies(SerialNumber).Speed THEN EMove$ = DN$
@@ -918,7 +805,7 @@ SUB AI (SerialNumber, ScreenMap%())
         CASE RGT$: EMove$ = LFT$
         END SELECT
       END IF
-   
+
     IF Enemies(SerialNumber).Race = "GOBLIN    " THEN
       SELECT CASE EMove$
       CASE DN$
@@ -941,7 +828,7 @@ SUB AI (SerialNumber, ScreenMap%())
         END IF
       END SELECT
     END IF
-   
+
     IF Enemies(SerialNumber).Race = "STORMY    " THEN
       SELECT CASE EMove$
         CASE DN$
@@ -961,7 +848,7 @@ SUB AI (SerialNumber, ScreenMap%())
     Enemies(SerialNumber).ScreenY = INT(Enemies(SerialNumber).y / 10)
 
   ELSEIF Enemies(SerialNumber).Intelligence > 2 THEN
-    
+
       SELECT CASE RIGHT$(Enemies(SerialNumber).Direc, 1)
       CASE "R": EMove$ = RGT$
         IF Enemies(SerialNumber).ScreenX < 31 THEN
@@ -981,11 +868,11 @@ SUB AI (SerialNumber, ScreenMap%())
         END IF
       END SELECT
   END IF
-  
+
 
   SELECT CASE EMove$
   CASE RGT$:
-   
+
     IF Enemies(SerialNumber).ScreenX < 31 THEN
       IF ScreenMap%(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) <= 0 AND ScreenMap%(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) <> -15 THEN
         Enemies(SerialNumber).x = Enemies(SerialNumber).x + Enemies(SerialNumber).Speed: MID$(Enemies(SerialNumber).Direc, 2) = "R"
@@ -1022,7 +909,7 @@ SUB AI (SerialNumber, ScreenMap%())
       Enemies(SerialNumber).Health = 0
     END IF
   END IF
- 
+
   SELECT CASE Enemies(SerialNumber).Race
   CASE "LIGHTNING "
     IF ScreenMap%(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) > 0 THEN
@@ -1046,9 +933,9 @@ SUB AI (SerialNumber, ScreenMap%())
       Enemies(SerialNumber).PlaceVal = 0
     END IF
   END IF
- 
+
   IF Enemies(SerialNumber).PlaceVal = -11 THEN
-   
+
     SELECT CASE EMove$
     CASE UP$
       Enemies(SerialNumber).x = PortalBeta.x * 10
@@ -1063,11 +950,11 @@ SUB AI (SerialNumber, ScreenMap%())
       Enemies(SerialNumber).x = (PortalBeta.x * 10) - 10
       Enemies(SerialNumber).y = PortalBeta.y * 10
     END SELECT
- 
+
   END IF
 
   IF Enemies(SerialNumber).PlaceVal = -12 THEN
-  
+
     SELECT CASE EMove$
     CASE UP$
       Enemies(SerialNumber).x = PortalAlpha.x * 10
@@ -1118,7 +1005,7 @@ SUB AI (SerialNumber, ScreenMap%())
   END IF
 
   IF Guy.Health <= 0 THEN GameOver
- 
+
   IF Enemies(SerialNumber).Health <= 0 THEN
     Enemies(SerialNumber).Status = "GONE"
     SELECT CASE ItemType$
@@ -1131,9 +1018,9 @@ SUB AI (SerialNumber, ScreenMap%())
     ScreenMap%(Enemies(SerialNumber).PlaceHold.x, Enemies(SerialNumber).PlaceHold.y) = Enemies(SerialNumber).PlaceVal
     Enemies(SerialNumber) = NoOneTemplate
   END IF
- 
+
   Enemies(SerialNumber).Item = ItemType$ + STR$(ItemNo)
-   
+
   SELECT CASE Enemies(SerialNumber).Race
   CASE "GOBLIN    ": DrawObj Goblinimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
   CASE "DRAGON    ": DrawObj Dragonimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
@@ -1145,7 +1032,7 @@ SUB AI (SerialNumber, ScreenMap%())
   CASE "LIGHTNING ": DrawObj Lightningimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
   CASE "FIRE      ": DrawObj Fireimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
   END SELECT
- 
+
 END SUB
 
 FUNCTION DetermineCoin (LeScreenMap%())
@@ -1218,7 +1105,7 @@ SUB Game
 
 1
 IF WorldsChecked >= NoOfLevels THEN Warp = 0: WorldsChecked = 0
- 
+
   PlayLevel ScreenMap1%(), "LEVEL 1 Beware of Lonely Coins", ""
   PlayLevel ScreenMap2%(), "LEVEL 2 Keys are Immortal", ""
   PlayLevel ScreenMap3%(), "LEVEL 3 Leaping Lions Distrust Green", ""
@@ -1227,12 +1114,12 @@ IF WorldsChecked >= NoOfLevels THEN Warp = 0: WorldsChecked = 0
   PlayLevel ScreenMap6%(), "LEVEL 6 The Bottomless Pit", ""
   PlayLevel ScreenMap7%(), "LEVEL 7 Goblins Eat Coins", ""
   PlayLevel ScreenMap8%(), "LEVEL 8 The Impossible Box", ""
- 
+
   IF ADMISSION = 1 THEN
     PlayLevel BonusLevel%(), "BONUS LEVEL!!!", ""
     ADMISSION = 0
   END IF
- 
+
   PlayLevel ScreenMap9%(), "LEVEL 9 Strangers Give Good Advice", ""
   PlayLevel ScreenMap10%(), "LEVEL 10 Statues Never Die or Kill", ""
   PlayLevel ScreenMap11%(), "LEVEL 11 Just Wait", ""
@@ -1260,16 +1147,16 @@ SUB GameOver
   y = 100
   a = 150
   B = 100
- 
+
   OUT &H3C8, 0
   OUT &H3C9, 13
   OUT &H3C9, 13
   OUT &H3C9, 63
 
   DO
-  
+
     RANDOMIZE TIMER
-   
+
     CLS
 
     CIRCLE (100, 55), 4, 15
@@ -1303,10 +1190,10 @@ SUB GameOver
     CIRCLE (a + 5, B - 1), 4, 14
 
     PCOPY 0, 1
-  
+
     xDirecY = INT(RND * 3)
     aDirecB = INT(RND * 3)
-  
+
     SELECT CASE xDirecY              'random directions
       CASE 0: x = x + 5
       CASE 1: x = x - 5
@@ -1318,7 +1205,7 @@ SUB GameOver
       CASE 1: a = a - 5
       CASE 2: B = B - 5
     END SELECT
-  
+
     IF a > XMAX THEN a = 0           'world-wrap
     IF a < 0 THEN a = XMAX
     IF B < 0 THEN B = YMAX: GoneUp = GoneUp + 1
@@ -1366,7 +1253,7 @@ SUB GameOver
         DrawObj Handimage%(), 3, 3, x + 4, y - 2, "UR"
         DrawObj Handimage%(), 3, 3, x + 4, y + 9, "UR"
       END IF
-     
+
       IF y <= (YMAX / 2) + 10 THEN
         CIRCLE (x + 4, y - 1), 4, 14
       ELSE
@@ -1378,10 +1265,10 @@ SUB GameOver
         DrawObj MCloudimage%(), 9, 9, INT(x0), (YMAX / 2) + 10, "UR"
       NEXT x0
       DrawObj RCloudimage%(), 9, 9, XMAX - 11, (YMAX / 2) + 10, "UR"
-     
+
       PCOPY 0, 1
 
-      
+
       SELECT CASE MID$(COMMANDSTRING$, Place, 1)
       CASE "R"
         x = x + 5
@@ -1400,7 +1287,7 @@ SUB GameOver
       CASE "X"
         EXIT DO
       END SELECT
-     
+
       SELECT CASE MID$(ECMMANDSTRING$, Place, 1)
       CASE "R"
         Ex = Ex + 5
@@ -1411,7 +1298,7 @@ SUB GameOver
       CASE "D"
         Ey = Ey + 5
       END SELECT
-     
+
       IF INKEY$ = ESC$ THEN
         Guy.Status = "GONE"
         FOR SerialNumber = 1 TO 10
@@ -1471,10 +1358,10 @@ SUB Jump (SerialNumber, Move$, ScreenMap%())
 '    Guy(SerialNumber).Mvmnt = "DN"
 '    ELSE : Guy(SerialNumber).JTime = 25
 '    Guy(SerialNumber).Mvmnt = "DX"
-'   
+'
 '  IF LEFT$(Guy(SerialNumber).Direc, 1) = "R" OR RIGHT$(Guy(SerialNumber).Direc, 1) = "R" THEN Guy(SerialNumber).Direc = "UR"
 '  IF LEFT$(Guy(SerialNumber).Direc, 1) = "L" OR RIGHT$(Guy(SerialNumber).Direc, 1) = "L" THEN Guy(SerialNumber).Direc = "UL"
-'   
+'
 '  END IF
 'END IF
 '
@@ -1563,8 +1450,8 @@ SCREEN 7, 0, 0, 1
       NEXT x0
       CASE "i": Choice$ = "Sealed Eye": Choice = 3
       CASE "I": Choice$ = "Eye": Choice = -10
-      CASE "[": Choice$ = "Portal à": Choice = -11
-      CASE "]": Choice$ = "Portal á": Choice = -12
+      CASE "[": Choice$ = "Portal ï¿½": Choice = -11
+      CASE "]": Choice$ = "Portal ï¿½": Choice = -12
       CASE "1": Choice$ = "Goblin": Choice = 11
       CASE "2": Choice$ = "Raven": Choice = 12
       CASE "3": Choice$ = "Dragon": Choice = 13
@@ -1609,7 +1496,7 @@ SCREEN 7, 0, 0, 1
           Req = 0
         END IF
       CASE F11$
-       
+
       CASE ESC$: EXIT DO
       CASE SPC$
         FOR y0 = 0 TO 19
@@ -1634,12 +1521,12 @@ SCREEN 7, 0, 0, 1
     IF ScreenX < 0 THEN ScreenX = 31
     IF ScreenY > 19 THEN ScreenY = 0
     IF ScreenY < 0 THEN ScreenY = 19
-   
+
     TrueX = ScreenX * 10
     TrueY = (ScreenY * 10) - 1
-   
+
     PRINT Choice$
-   
+
     FOR y0 = 0 TO 19
       FOR x0 = 0 TO 31
         SELECT CASE ScreenMap%(x0, y0)
@@ -1676,11 +1563,11 @@ SCREEN 7, 0, 0, 1
         END SELECT
       NEXT x0
     NEXT y0
-   
+
     DrawObj GuyImage%(), 10, 10, INT(TrueX), INT(TrueY), GDirec$
     DrawObj Handimage%(), 3, 3, TrueX - 2, TrueY + 4, "UR"
     DrawObj Handimage%(), 3, 3, TrueX + 9, TrueY + 4, "UR"
-   
+
     PCOPY 0, 1
   LOOP
   SCREEN 9, 0, 0, 1
@@ -1704,7 +1591,7 @@ DO
   ON KEY(14) GOSUB MenuDown
   KEY(11) ON
   KEY(14) ON
- 
+
   Move$ = INKEY$
   SELECT CASE Move$
   CASE ENTR$
@@ -1738,14 +1625,14 @@ DO
   END SELECT
   CLS
   COLOR 15
-  PRINT "ÛÛÛÛÛÛÛÛÛÛÛ        ÛÛ          ÛÛÛ       ÛÛÛ    ÛÛÛÛÛÛÛÛÛ"
-  PRINT "ÛÛ                ÛÛÛÛ         ÛÛÛÛ     ÛÛÛÛ    ÛÛ"
-  PRINT "ÛÛ               ÛÛ  ÛÛ        ÛÛ ÛÛ   ÛÛ ÛÛ    ÛÛ"
-  PRINT "ÛÛ              ÛÛ    ÛÛ      ÛÛ  ÛÛÛ ÛÛÛ  ÛÛ   ÛÛÛÛÛÛÛÛ"
-  PRINT "ÛÛ     ÛÛÛÛ    ÛÛÛÛÛÛÛÛÛÛ     ÛÛ   ÛÛ ÛÛ   ÛÛ   ÛÛ"
-  PRINT "ÛÛ       ÛÛ   ÛÛÛ      ÛÛÛ   ÛÛ     ÛÛÛ     ÛÛ  ÛÛ"
-  PRINT "ÛÛ       ÛÛ  ÛÛÛ        ÛÛÛ  ÛÛ      Û      ÛÛ  ÛÛ"
-  PRINT "ÛÛÛÛÛÛÛÛÛÛÛ  ÛÛ          ÛÛ  ÛÛ             ÛÛ  ÛÛÛÛÛÛÛÛÛ.BAS "
+  PRINT "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        ï¿½ï¿½          ï¿½ï¿½ï¿½       ï¿½ï¿½ï¿½    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+  PRINT "ï¿½ï¿½                ï¿½ï¿½ï¿½ï¿½         ï¿½ï¿½ï¿½ï¿½     ï¿½ï¿½ï¿½ï¿½    ï¿½ï¿½"
+  PRINT "ï¿½ï¿½               ï¿½ï¿½  ï¿½ï¿½        ï¿½ï¿½ ï¿½ï¿½   ï¿½ï¿½ ï¿½ï¿½    ï¿½ï¿½"
+  PRINT "ï¿½ï¿½              ï¿½ï¿½    ï¿½ï¿½      ï¿½ï¿½  ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½  ï¿½ï¿½   ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+  PRINT "ï¿½ï¿½     ï¿½ï¿½ï¿½ï¿½    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½     ï¿½ï¿½   ï¿½ï¿½ ï¿½ï¿½   ï¿½ï¿½   ï¿½ï¿½"
+  PRINT "ï¿½ï¿½       ï¿½ï¿½   ï¿½ï¿½ï¿½      ï¿½ï¿½ï¿½   ï¿½ï¿½     ï¿½ï¿½ï¿½     ï¿½ï¿½  ï¿½ï¿½"
+  PRINT "ï¿½ï¿½       ï¿½ï¿½  ï¿½ï¿½ï¿½        ï¿½ï¿½ï¿½  ï¿½ï¿½      ï¿½      ï¿½ï¿½  ï¿½ï¿½"
+  PRINT "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  ï¿½ï¿½          ï¿½ï¿½  ï¿½ï¿½             ï¿½ï¿½  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.BAS "
   PRINT
   PRINT
   PRINT
@@ -1770,7 +1657,7 @@ DO
   DrawObj Gloveimage%(), 12, 9, 5, GlovePos, "UR"
   PCOPY 0, 1
   DemoTimer = DemoTimer + 1
- 
+
   IF DemoTimer = 400 THEN PlayDemo "DEMO2.DMO", ScreenMap2%()
   IF DemoTimer = 800 THEN PlayDemo "DEMO3.DMO", ScreenMap3%()
   IF DemoTimer = 1200 THEN PlayDemo "DEMO5.DMO", ScreenMap5%(): DemoTimer = 0
@@ -1817,9 +1704,9 @@ SUB Pause
   GuyY = 100
   GDirec$ = "UR"
   DO
-   
+
     CLS
-   
+
     SELECT CASE INKEY$
       CASE RGT$: GuyX = GuyX + 5: GDirec$ = "UR"
       CASE LFT$: GuyX = GuyX - 5: GDirec$ = "UL"
@@ -1838,7 +1725,7 @@ SUB Pause
           EXIT DO
         END IF
     END SELECT
-  
+
     IF GuyX > 30 AND GuyX < 70 AND GuyY > 90 AND GuyY < 130 THEN
       Message$ = " Unpause w/ Spacebar."
     ELSEIF GuyX > 270 AND GuyX < 310 AND GuyY > 90 AND GuyY < 130 THEN
@@ -1846,11 +1733,11 @@ SUB Pause
     ELSE
       Message$ = ""
     END IF
-   
+
     IF GuyX >= Guy.x AND GuyX < Guy.x + 11 AND GuyY >= Guy.y AND GuyY < Guy.y + 11 THEN
       Message$ = Warp$
     END IF
-   
+
 
     IF GuyX > XMAX THEN GuyX = 0
     IF GuyX < 0 THEN GuyX = XMAX
@@ -1870,13 +1757,13 @@ SUB Pause
     DrawObj GuyImage%(), 10, 10, INT(GuyX), INT(GuyY), GDirec$
     DrawObj Handimage%(), 3, 3, GuyX - 2, GuyY + 4, "UR"
     DrawObj Handimage%(), 3, 3, GuyX + 9, GuyY + 4, "UR"
-  
+
     'shift
     ShiftColor INT(Guy.x), INT(Guy.y), 11, 11
     PCOPY 0, 1
- 
+
   LOOP
- 
+
   KEY(12) ON
   KEY(13) ON
   KEY(14) ON
@@ -1888,7 +1775,7 @@ SUB PlayDemo (FileName$, ScreenMap%())
   FileName$ = UCASE$(FileName$)
   IF RIGHT$(FileName$, 4) <> ".DMO" THEN FileName$ = FileName$ + ".DMO"
   SCREEN 7, 0, 0, 1
-  
+
   OPEN "C:/BASIC/GAME/DEMOS/" + FileName$ FOR RANDOM AS #1 LEN = 210
     RecordNumber = 1
     FOR Time = 1 TO 200
@@ -2049,7 +1936,7 @@ PRINT SharedMessage$
       ScreenMap%(x0, y0) = -11: ScreenMap%(PortalBeta.x, PortalBeta.y + 1) = ScreenMap%(PortalBeta.x, PortalBeta.y + 1) - 20
     CASE -32
       ScreenMap%(x0, y0) = -12: ScreenMap%(PortalAlpha.x, PortalAlpha.y + 1) = ScreenMap%(PortalAlpha.x, PortalAlpha.y + 1) - 20
-   
+
     CASE IS <= -20
       DrawObj Keyimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
       IF y0 < 19 THEN
@@ -2060,13 +1947,13 @@ PRINT SharedMessage$
       ELSEIF ScreenMap%(x0, 0) <= 0 THEN
         ScreenMap%(x0, y0) = ScreenMap%(x0, y0) + 20: ScreenMap%(x0, 0) = ScreenMap%(x0, 0) - 20
       END IF
-  
+
     CASE -7: DoorX = x0 * 10: DoorY = y0 * 10
     CASE -10
       DrawObj Eyeimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
     CASE -11, -12
       DrawObj Portalimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
-   
+
     CASE IS > 20
       IF x0 > Guy.ScreenX THEN WiseDirec$ = "UL"
       IF x0 < Guy.ScreenX THEN WiseDirec$ = "UR"
@@ -2080,7 +1967,7 @@ PRINT SharedMessage$
     CASE -15
       'LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 10), 3, BF
       'anchor
-    
+
     END SELECT
     IF ScreenMap%(x0, y0) = -23 THEN ScreenMap%(x0, y0) = -7
   NEXT x0
@@ -2170,7 +2057,7 @@ IF Demo$ <> "DEMO" THEN
       Guy.Mvmnt = "DN"
     ELSE : Guy.JTime = 25
       Guy.Mvmnt = "DX"
-  
+
       IF RIGHT$(Guy.Direc, 1) = "R" THEN Guy.Direc = "UR"
       IF RIGHT$(Guy.Direc, 1) = "L" THEN Guy.Direc = "UL"
     END IF
@@ -2185,7 +2072,7 @@ IF Demo$ <> "DEMO" THEN
   END IF
 
   IF Guy.ScreenY <> (Guy.y + 1) / 10 AND ScreenMap%(Guy.ScreenX, Guy.ScreenY + 1) > 0 AND Guy.Mvmnt <> "UP" THEN Guy.y = Guy.y - 5
-  
+
   IF INKEY$ = ENTR$ THEN
     KEY(16) OFF
     Pause           'pause
@@ -2222,7 +2109,7 @@ IF YouShouldGo = 1 THEN EXIT DO
 IF Talk > 0 THEN Talk = Talk - 1: SharedTalk = SharedTalk - 1: PRINT WiseMessage$
 IF SharedTalk = 0 AND SharedWiseMessage$ = WiseMen(3).Speech THEN ADMISSION = 1: EXIT DO
 
-IF INKEY$ = ESC$ THEN Guy.Status = "GONE": EXIT SUB        'quit 
+IF INKEY$ = ESC$ THEN Guy.Status = "GONE": EXIT SUB        'quit
 
 PCOPY 0, 1
 SOUND 0, 3 'anchor
@@ -2260,7 +2147,7 @@ SUB RecordDemo
     PRINT "LOADED": PCOPY 0, 1
     SLEEP
     PlayLevel ScreenMap%(), "RECORDING", "RECORD"
-    
+
 END SUB
 
 SUB SaveDemo
@@ -2276,10 +2163,10 @@ SUB SaveDemo
       RecordNumber = RecordNumber + 1
     NEXT Time
   CLOSE #1
-  
+
   PRINT "SAVED": PCOPY 0, 1
   SLEEP
-       
+
 END SUB
 
 SUB ShiftColor (Startx, Starty, XLength, YLength)
@@ -2325,4 +2212,5 @@ FUNCTION ZeroLimit (Number AS INTEGER)
 IF Number < 0 THEN Number = 0
 ZeroLimit = Number
 END FUNCTION
+// */
 
