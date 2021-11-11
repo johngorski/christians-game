@@ -208,266 +208,141 @@ const gloveImage = transpose([
     [-1,-1, 8, 8, 8, 8, 8, 8, 8,-1,-1,-1,-1]
 ]);
 
-/*
-
-DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
-DATA -1,-1,-1,-1,15,15,-1,-1,-1,-1
-DATA -1,-1,-1,15,15,-1,-1,-1,-1,-1
-DATA -1,-1,-1,15,04,04,04,04,-1,-1
-DATA -1,01,-1,15,04,02,02,04,04,-1
-DATA -1,01,01,15,15,01,02,-1,04,-1
-DATA -1,-1,01,01,01,01,02,-1,-1,-1
-DATA -1,-1,-1,-1,-1,02,02,-1,-1,-1
-DATA -1,-1,-1,-1,02,02,-1,-1,-1,-1
-DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
-DIM SHARED Portalimage%(9, 9)
-FOR y0 = 0 TO 9
-  FOR x0 = 0 TO 9
-    READ Portalimage%(x0, y0)
-  NEXT x0
-NEXT y0
-// */
 const portalImage = transpose([
-    DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
-    DATA -1,-1,-1,-1,15,15,-1,-1,-1,-1
-    DATA -1,-1,-1,15,15,-1,-1,-1,-1,-1
-    DATA -1,-1,-1,15,04,04,04,04,-1,-1
-    DATA -1,01,-1,15,04,02,02,04,04,-1
-    DATA -1,01,01,15,15,01,02,-1,04,-1
-    DATA -1,-1,01,01,01,01,02,-1,-1,-1
-    DATA -1,-1,-1,-1,-1,02,02,-1,-1,-1
-    DATA -1,-1,-1,-1,02,02,-1,-1,-1,-1
-    DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,-1,15,15,-1,-1,-1,-1],
+     [-1,-1,-1,15,15,-1,-1,-1,-1,-1],
+     [-1,-1,-1,15, 4, 4, 4, 4,-1,-1],
+     [-1, 1,-1,15, 4, 2, 2, 4, 4,-1],
+     [-1, 1, 1,15,15, 1, 2,-1, 4,-1],
+     [-1,-1, 1, 1, 1, 1, 2,-1,-1,-1],
+     [-1,-1,-1,-1,-1, 2, 2,-1,-1,-1],
+     [-1,-1,-1,-1, 2, 2,-1,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
 ]);
-/*
-DATA -1,-1,15,15,15,15,15,15,-1,-1,-1
-DATA -1,15,15,03,03,03,03,15,15,-1,-1
-DATA 15,15,03,03,03,03,03,03,15,15,-1
-DATA 15,03,03,03,15,03,15,03,03,15,-1
-DATA 15,03,03,03,15,03,15,03,03,15,-1
-DATA 15,15,03,03,03,03,03,03,15,15,-1
-DATA -1,15,03,03,03,03,03,03,15,-1,-1
-DATA -1,-1,15,15,03,03,15,15,-1,-1,-1
-DATA -1,15,03,03,15,15,03,03,15,-1,-1
-DATA -1,15,03,03,03,15,03,03,03,15,-1
-DATA -1,15,15,15,15,15,15,15,15,15,-1
-DIM SHARED GuyImage%(10, 10)
-FOR y0 = 0 TO 10
-  FOR x0 = 0 TO 10
-    READ GuyImage%(x0, y0)
-  NEXT x0
-NEXT y0
-// */
+
 const guyImage = transpose([
-    DATA -1,-1,15,15,15,15,15,15,-1,-1,-1
-    DATA -1,15,15,03,03,03,03,15,15,-1,-1
-    DATA 15,15,03,03,03,03,03,03,15,15,-1
-    DATA 15,03,03,03,15,03,15,03,03,15,-1
-    DATA 15,03,03,03,15,03,15,03,03,15,-1
-    DATA 15,15,03,03,03,03,03,03,15,15,-1
-    DATA -1,15,03,03,03,03,03,03,15,-1,-1
-    DATA -1,-1,15,15,03,03,15,15,-1,-1,-1
-    DATA -1,15,03,03,15,15,03,03,15,-1,-1
-    DATA -1,15,03,03,03,15,03,03,03,15,-1
-    DATA -1,15,15,15,15,15,15,15,15,15,-1
+     [-1,-1,15,15,15,15,15,15,-1,-1,-1],
+     [-1,15,15, 3, 3, 3, 3,15,15,-1,-1],
+     [15,15, 3, 3, 3, 3, 3, 3,15,15,-1],
+     [15, 3, 3, 3,15, 3,15, 3, 3,15,-1],
+     [15, 3, 3, 3,15, 3,15, 3, 3,15,-1],
+     [15,15, 3, 3, 3, 3, 3, 3,15,15,-1],
+     [-1,15, 3, 3, 3, 3, 3, 3,15,-1,-1],
+     [-1,-1,15,15, 3, 3,15,15,-1,-1,-1],
+     [-1,15, 3, 3,15,15, 3, 3,15,-1,-1],
+     [-1,15, 3, 3, 3,15, 3, 3, 3,15,-1],
+     [-1,15,15,15,15,15,15,15,15,15,-1],
 ]);
-/*
-DATA -1,15,-1,-1,-1,-1,-1,15,-1,-1
-DATA -1,15,15,-1,-1,-1,15,15,-1,-1
-DATA -1,15,04,15,15,15,04,15,-1,-1
-DATA -1,15,15,04,04,04,15,15,-1,-1
-DATA -1,15,04,15,04,15,04,15,-1,-1
-DATA -1,15,04,04,04,04,04,15,-1,-1
-DATA -1,-1,15,15,15,15,15,-1,-1,-1
-DATA -1,15,15,15,04,15,15,15,-1,-1
-DATA -1,-1,-1,15,04,15,-1,-1,-1,-1
-DATA -1,-1,15,15,15,15,15,-1,-1,-1
-DIM SHARED Goblinimage%(9, 9)
-FOR y0 = 0 TO 9
-  FOR x0 = 0 TO 9
-    READ Goblinimage%(x0, y0)
-  NEXT x0
-NEXT y0
-// */
+
 const goblinImage = transpose([
-    DATA -1,15,-1,-1,-1,-1,-1,15,-1,-1
-    DATA -1,15,15,-1,-1,-1,15,15,-1,-1
-    DATA -1,15,04,15,15,15,04,15,-1,-1
-    DATA -1,15,15,04,04,04,15,15,-1,-1
-    DATA -1,15,04,15,04,15,04,15,-1,-1
-    DATA -1,15,04,04,04,04,04,15,-1,-1
-    DATA -1,-1,15,15,15,15,15,-1,-1,-1
-    DATA -1,15,15,15,04,15,15,15,-1,-1
-    DATA -1,-1,-1,15,04,15,-1,-1,-1,-1
-    DATA -1,-1,15,15,15,15,15,-1,-1,-1
+     [-1,15,-1,-1,-1,-1,-1,15,-1,-1],
+     [-1,15,15,-1,-1,-1,15,15,-1,-1],
+     [-1,15, 4,15,15,15, 4,15,-1,-1],
+     [-1,15,15, 4, 4, 4,15,15,-1,-1],
+     [-1,15, 4,15, 4,15, 4,15,-1,-1],
+     [-1,15, 4, 4, 4, 4, 4,15,-1,-1],
+     [-1,-1,15,15,15,15,15,-1,-1,-1],
+     [-1,15,15,15, 4,15,15,15,-1,-1],
+     [-1,-1,-1,15, 4,15,-1,-1,-1,-1],
+     [-1,-1,15,15,15,15,15,-1,-1,-1],
 ]);
-/*
-DATA 06,06,06,06,06,06,06,06,06,06
-DATA 06,06,06,06,06,06,06,06,06,06
-DATA 06,06,06,06,06,06,06,06,06,06
-DATA 06,06,06,06,06,06,14,14,06,06
-DATA 06,06,06,06,06,14,14,14,14,06
-DATA 06,06,06,06,06,14,14,14,14,06
-DATA 06,06,06,06,06,06,14,14,06,06
-DATA 06,06,06,06,06,06,06,06,06,06
-DATA 06,06,06,06,06,06,06,06,06,06
-DATA 06,06,06,06,06,06,06,06,06,06
-DIM SHARED Doorimage%(9, 9)
-FOR y0 = 0 TO 9
-  FOR x0 = 0 TO 9
-    READ Doorimage%(x0, y0)
-  NEXT x0
-NEXT y0
-// */
+
 const doorImage = transpose([
-    DATA 06,06,06,06,06,06,06,06,06,06
-    DATA 06,06,06,06,06,06,06,06,06,06
-    DATA 06,06,06,06,06,06,06,06,06,06
-    DATA 06,06,06,06,06,06,14,14,06,06
-    DATA 06,06,06,06,06,14,14,14,14,06
-    DATA 06,06,06,06,06,14,14,14,14,06
-    DATA 06,06,06,06,06,06,14,14,06,06
-    DATA 06,06,06,06,06,06,06,06,06,06
-    DATA 06,06,06,06,06,06,06,06,06,06
-    DATA 06,06,06,06,06,06,06,06,06,06
+     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+     [ 6, 6, 6, 6, 6, 6,14,14, 6, 6],
+     [ 6, 6, 6, 6, 6,14,14,14,14, 6],
+     [ 6, 6, 6, 6, 6,14,14,14,14, 6],
+     [ 6, 6, 6, 6, 6, 6,14,14, 6, 6],
+     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
 ]);
-/*
-DATA -1,15,15,-1
-DATA 15,03,03,15
-DATA 15,03,03,15
-DATA -1,15,15,-1
-DIM SHARED Handimage%(3, 3)
-FOR y0 = 0 TO 3
-  FOR x0 = 0 TO 3
-    READ Handimage%(x0, y0)
-  NEXT x0
-NEXT y0
-// */
+
 const handImage = transpose([
-    DATA -1,15,15,-1
-    DATA 15,03,03,15
-    DATA 15,03,03,15
-    DATA -1,15,15,-1
+     [-1,15,15,-1],
+     [15, 3, 3,15],
+     [15, 3, 3,15],
+     [-1,15,15,-1],
 ]);
-/*
-DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
-DATA -1,-1,-1,15,15,15,15,-1,-1,-1
-DATA -1,-1,15,01,01,01,01,15,-1,-1
-DATA -1,15,01,01,01,15,15,01,15,-1
-DATA 15,15,01,01,00,15,15,01,15,15
-DATA 15,15,01,01,00,00,01,01,15,15
-DATA -1,15,01,01,01,01,01,01,15,-1
-DATA -1,-1,15,01,01,01,01,15,-1,-1
-DATA -1,-1,-1,15,15,15,15,-1,-1,-1
-DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
-DIM SHARED Eyeimage%(9, 9)
-FOR y0 = 0 TO 9
-  FOR x0 = 0 TO 9
-    READ Eyeimage%(x0, y0)
-  NEXT x0
-NEXT y0
-// */
+
 const eyeImage = transpose([
-
+     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+     [-1,-1,-1,15,15,15,15,-1,-1,-1],
+     [-1,-1,15, 1, 1, 1, 1,15,-1,-1],
+     [-1,15, 1, 1, 1,15,15, 1,15,-1],
+     [15,15, 1, 1, 0,15,15, 1,15,15],
+     [15,15, 1, 1, 0, 0, 1, 1,15,15],
+     [-1,15, 1, 1, 1, 1, 1, 1,15,-1],
+     [-1,-1,15, 1, 1, 1, 1,15,-1,-1],
+     [-1,-1,-1,15,15,15,15,-1,-1,-1],
+     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
 ]);
-/*
-DATA -1,-1,-1, 7,-1,-1,-1
-DATA -1,-1, 7, 7, 7,-1,-1
-DATA -1,-1, 7, 7, 7,-1,-1
-DATA -1,-1, 7, 7, 7,-1,-1
-DATA -1,-1, 7, 7, 7,-1,-1
-DATA -1,-1, 7, 7, 7,-1,-1
-DATA -1,-1, 7, 7, 7,-1,-1
-DATA -1,-1,-1, 7,-1,-1,-1
-DATA 15,15,15,15,15,15,15
-DATA -1,15,15,15,15,15,-1
-DATA -1,-1,-1,15,-1,-1,-1
-DATA -1,-1,-1,15,-1,-1,-1
-DIM Swordimage%(6, 11)
-FOR y0 = 0 TO 11
-  FOR x0 = 0 TO 6
-    READ Swordimage%(x0, y0)
-  NEXT
-NEXT
-// */
-const Image = transpose([
 
+const swordImage = transpose([
+     [-1,-1,-1, 7,-1,-1,-1],
+     [-1,-1, 7, 7, 7,-1,-1],
+     [-1,-1, 7, 7, 7,-1,-1],
+     [-1,-1, 7, 7, 7,-1,-1],
+     [-1,-1, 7, 7, 7,-1,-1],
+     [-1,-1, 7, 7, 7,-1,-1],
+     [-1,-1, 7, 7, 7,-1,-1],
+     [-1,-1,-1, 7,-1,-1,-1],
+     [15,15,15,15,15,15,15],
+     [-1,15,15,15,15,15,-1],
+     [-1,-1,-1,15,-1,-1,-1],
+     [-1,-1,-1,15,-1,-1,-1],
 ]);
-/*
-DATA -2,-2,-2,-2,-2,-2,-2,-2,-2,-2
-DATA -2,-2,-2,-2,-1,-1,-2,-2,-2,-2
-DATA -2,-2,-2,-1,-1,-1,-1,-2,-2,-2
-DATA -2,-2,-2,-1,-1,-1,-1,-2,-2,-2
-DATA -2,-2,-2,-2,-1,-1,-2,-2,-2,-2
-DATA -2,-2,-2,-2,-1,-1,-2,-2,-2,-2
-DATA -2,-2,-2,-2,-1,-1,-2,-2,-2,-2
-DATA -2,-2,-2,-1,-1,-1,-1,-2,-2,-2
-DATA -2,-2,-2,-1,-1,-1,-1,-2,-2,-2
-DATA -2,-2,-2,-2,-2,-2,-2,-2,-2,-2
-DIM SHARED Keyholeimage%(9, 9)
-FOR y0 = 0 TO 9
-  FOR x0 = 0 TO 9
-    READ Keyholeimage%(x0, y0)
-  NEXT x0
-NEXT y0
-// */
-const Image = transpose([
 
+const keyholeImage = transpose([
+     [-2,-2,-2,-2,-2,-2,-2,-2,-2,-2],
+     [-2,-2,-2,-2,-1,-1,-2,-2,-2,-2],
+     [-2,-2,-2,-1,-1,-1,-1,-2,-2,-2],
+     [-2,-2,-2,-1,-1,-1,-1,-2,-2,-2],
+     [-2,-2,-2,-2,-1,-1,-2,-2,-2,-2],
+     [-2,-2,-2,-2,-1,-1,-2,-2,-2,-2],
+     [-2,-2,-2,-2,-1,-1,-2,-2,-2,-2],
+     [-2,-2,-2,-1,-1,-1,-1,-2,-2,-2],
+     [-2,-2,-2,-1,-1,-1,-1,-2,-2,-2],
+     [-2,-2,-2,-2,-2,-2,-2,-2,-2,-2],
 ]);
-/*
-DATA 14,14,14,14,14,14,14,-1,-1,-1
-DATA 14,-1,-1,-1,-1,-1,14,-1,-1,-1
-DATA 14,-1,-1,-1,-1,-1,14,-1,-1,-1
-DATA 14,-1,-1,-1,-1,-1,14,-1,-1,-1
-DATA 14,14,14,14,14,14,14,-1,-1,-1
-DATA -1,-1,14,14,-1,-1,-1,-1,-1,-1
-DATA -1,-1,14,14,-1,-1,-1,-1,-1,-1
-DATA -1,-1,14,14,14,14,-1,-1,-1,-1
-DATA -1,-1,14,14,-1,-1,-1,-1,-1,-1
-DATA -1,-1,14,14,14,14,14,-1,-1,-1
-DIM SHARED Keyimage%(9, 9)
-FOR y0 = 0 TO 9
-  FOR x0 = 0 TO 9
-    READ Keyimage%(x0, y0)
-  NEXT x0
-NEXT y0
-// */
-const Image = transpose([
 
+const keyImage = transpose([
+     [14,14,14,14,14,14,14,-1,-1,-1],
+     [14,-1,-1,-1,-1,-1,14,-1,-1,-1],
+     [14,-1,-1,-1,-1,-1,14,-1,-1,-1],
+     [14,-1,-1,-1,-1,-1,14,-1,-1,-1],
+     [14,14,14,14,14,14,14,-1,-1,-1],
+     [-1,-1,14,14,-1,-1,-1,-1,-1,-1],
+     [-1,-1,14,14,-1,-1,-1,-1,-1,-1],
+     [-1,-1,14,14,14,14,-1,-1,-1,-1],
+     [-1,-1,14,14,-1,-1,-1,-1,-1,-1],
+     [-1,-1,14,14,14,14,14,-1,-1,-1],
 ]);
-/*
 
-
-DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
-DATA 00,00,00,00,00,-1,00,00,00,-1,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
-DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
-DATA 00,00,00,00,00,00,00,00,00,00,11,00,00,00,00,00,00,01,01,01,01,01,00,00,00,00,00,00,00,00,00,00
-DATA 00,-1,-1,-1,-1,00,00,00,00,00,01,01,01,01,01,01,01,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
-DATA 01,01,01,01,01,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
-DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,01,00,00,00,00,00,00,00,00,00
-DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,01,01,01,00,00,00,00,00,00,00,00
-DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,01,01,01,01,01,00,-1,00,00,00,00,00
-DATA 00,00,00,00,00,00,00,00,00,00,00,01,01,01,01,01,01,01,01,01,01,01,01,01,01,-9,-9,01,01,01,-1,00
-DATA 00,00,00,00,00,00,00,00,00,00,01,01,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,-1,00
-DATA 00,00,00,00,00,00,00,00,00,01,01,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,-1,00
-DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
-DATA 00,00,00,00,-3,00,00,00,00,00,00,00,00,00,00,00,-2,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
-DATA -5,-5,-5,01,01,01,01,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,00
-DATA -5,-5,-5,-5,-5,-5,-5,-5,-5,01,01,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,00
-DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
-DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
-DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,11,00,00,00,00,00,00,00,00,00,00,00
-DATA 01,01,01,01,01,01,01,01,01,01,01,01,01,01,01,01,01,01,01,01,01,00,00,00,00,00,00,00,00,00,00,00
-
-DIM SHARED ScreenMap1%(31, 19)
-FOR y0 = 0 TO 19
-  FOR x0 = 0 TO 31
-    READ ScreenMap1%(x0, y0)
-  NEXT x0
-NEXT y0
-// */
-const Image = transpose([
-
+const screenMap1 = transpose([
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0, 0,-1, 0, 0, 0,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0,-1,-1,-1,-1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0,-1, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,-9,-9, 1, 1, 1,-1, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0,-3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [-5,-5,-5, 1, 1, 1, 1,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5, 0],
+     [-5,-5,-5,-5,-5,-5,-5,-5,-5, 1, 1,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+     [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]);
 /*
 '-----------------------------TYPES------------------------------------------
@@ -523,131 +398,141 @@ DIM SHARED Enemies(1 TO 15) AS ENEMY
 DIM SHARED WiseMen(1 TO 10) AS PERSON
 DIM SHARED PortalAlpha AS LOCATION
 DIM SHARED PortalBeta AS LOCATION
-'--------------------------ENEMY-TYPES---------------------------------------
-DIM SHARED NoOneTemplate AS ENEMY
-  NoOneTemplate.Race = "NO ONE"
-  NoOneTemplate.Health = 0
-  NoOneTemplate.Intelligence = 0
-  NoOneTemplate.Speed = 0
-  NoOneTemplate.AP = 0
-  NoOneTemplate.DP = 1
-  NoOneTemplate.CanFly = 0
-  NoOneTemplate.NotBounce = 0
-  NoOneTemplate.Status = "GONE"
-  NoOneTemplate.Direc = ""
-  NoOneTemplate.Item = ""
+// */
+const noOneTemplate = {
+    Race: "NO ONE",
+    Health: 0,
+    Intelligence: 0,
+    Speed: 0,
+    AP: 0,
+    DP: 1,
+    CanFly: 0,
+    NotBounce: 0,
+    Status: "GONE",
+    Direc: "",
+    Item: ""
+};
 
-DIM SHARED GoblinTemplate AS ENEMY
-  GoblinTemplate.Race = "GOBLIN"
-  GoblinTemplate.Health = 1
-  GoblinTemplate.Intelligence = 5
-  GoblinTemplate.Speed = 3
-  GoblinTemplate.AP = 1
-  GoblinTemplate.DP = 1
-  GoblinTemplate.CanFly = 0
-  GoblinTemplate.NotBounce = 0
-  GoblinTemplate.Status = "GOOD"
-  GoblinTemplate.Direc = "UR"
-  GoblinTemplate.Item = "01"
+const goblinTemplate = {
+    Race: "GOBLIN",
+    Health: 1,
+    Intelligence: 5,
+    Speed: 3,
+    AP: 1,
+    DP: 1,
+    CanFly: 0,
+    NotBounce: 0,
+    Status: "GOOD",
+    Direc: "UR",
+    Item: "01"
+};
 
-DIM SHARED RavenTemplate AS ENEMY
-  RavenTemplate.Race = "RAVEN"
-  RavenTemplate.Health = 3
-  RavenTemplate.Intelligence = 3
-  RavenTemplate.Speed = 5
-  RavenTemplate.AP = 1
-  RavenTemplate.DP = 1
-  RavenTemplate.CanFly = -1
-  RavenTemplate.NotBounce = 0
-  RavenTemplate.Status = "GOOD"
-  RavenTemplate.Direc = "UR"
-  RavenTemplate.Item = "02"
+const ravenTemplate = {
+    Race: "RAVEN",
+    Health: 3,
+    Intelligence: 3,
+    Speed: 5,
+    AP: 1,
+    DP: 1,
+    CanFly: -1,
+    NotBounce: 0,
+    Status: "GOOD",
+    Direc: "UR",
+    Item: "02"
+};
 
-DIM SHARED DragonTemplate AS ENEMY
-  DragonTemplate.Race = "DRAGON"
-  DragonTemplate.Health = 5
-  DragonTemplate.Intelligence = 4
-  DragonTemplate.Speed = 5
-  DragonTemplate.AP = 2
-  DragonTemplate.DP = 1
-  DragonTemplate.CanFly = -1
-  DragonTemplate.NotBounce = 0
-  DragonTemplate.Status = "GOOD"
-  DragonTemplate.Direc = "UR"
-  DragonTemplate.Item = "05"
+const dragonTemplate = {
+    Race: "DRAGON",
+    Health: 5,
+    Intelligence: 4,
+    Speed: 5,
+    AP: 2,
+    DP: 1,
+    CanFly: -1,
+    NotBounce: 0,
+    Status: "GOOD",
+    Direc: "UR",
+    Item: "05"
+};
 
-DIM SHARED WingedStatueTemplate AS ENEMY
-  WingedStatueTemplate = RavenTemplate
-  WingedStatueTemplate.Race = "WSTATUE"
-  WingedStatueTemplate.AP = 0
-  WingedStatueTemplate.DP = -1
-  WingedStatueTemplate.Item = "X000"
+const wingedStatueTemplate = {
+    ...ravenTemplate,
+    Race: "WSTATUE",
+    AP: 0,
+    DP: -1,
+    Item: "X000",
+};
 
-DIM SHARED SnakeTemplate AS ENEMY
-  SnakeTemplate.Race = "SNAKE"
-  SnakeTemplate.Health = 4
-  SnakeTemplate.Intelligence = 3
-  SnakeTemplate.Speed = 5
-  SnakeTemplate.AP = 3
-  SnakeTemplate.DP = 2
-  SnakeTemplate.CanFly = 0
-  SnakeTemplate.NotBounce = 0
-  SnakeTemplate.Status = "GOOD"
-  SnakeTemplate.Direc = "UR"
-  SnakeTemplate.Item = "003"
+const snakeTemplate = {
+    Race: "SNAKE",
+    Health: 4,
+    Intelligence: 3,
+    Speed: 5,
+    AP: 3,
+    DP: 2,
+    CanFly: 0,
+    NotBounce: 0,
+    Status: "GOOD",
+    Direc: "UR",
+    Item: "003",
+};
 
-DIM SHARED StormyTemplate AS ENEMY
-  StormyTemplate.Race = "STORMY"
-  StormyTemplate.Health = 2
-  StormyTemplate.Intelligence = 5
-  StormyTemplate.Speed = 10
-  StormyTemplate.AP = 1
-  StormyTemplate.DP = 1
-  StormyTemplate.CanFly = -1
-  StormyTemplate.NotBounce = 0
-  StormyTemplate.Status = "GOOD"
-  StormyTemplate.Direc = "UR"
-  StormyTemplate.Item = "002"
+const stormyTemplate = {
+    Race: "STORMY",
+    Health: 2,
+    Intelligence: 5,
+    Speed: 10,
+    AP: 1,
+    DP: 1,
+    CanFly: -1,
+    NotBounce: 0,
+    Status: "GOOD",
+    Direc: "UR",
+    Item: "002",
+};
 
-DIM SHARED LightningTemplate AS ENEMY
-  LightningTemplate.Race = "LIGHTNING"
-  LightningTemplate.Health = 3
-  LightningTemplate.Intelligence = 0
-  LightningTemplate.Speed = 5
-  LightningTemplate.AP = 4
-  LightningTemplate.DP = 1
-  LightningTemplate.CanFly = 0
-  LightningTemplate.NotBounce = -1
-  LightningTemplate.Status = "GOOD"
-  LightningTemplate.Direc = "UR"
-  LightningTemplate.Item = "X000"
+const lightningTemplate = {
+    Race: "LIGHTNING",
+    Health: 3,
+    Intelligence: 0,
+    Speed: 5,
+    AP: 4,
+    DP: 1,
+    CanFly: 0,
+    NotBounce: -1,
+    Status: "GOOD",
+    Direc: "UR",
+    Item: "X000",
+};
 
-DIM SHARED FireTemplate AS ENEMY
-  FireTemplate.Race = "FIRE"
-  FireTemplate.Health = 1
-  FireTemplate.Intelligence = 0
-  FireTemplate.Speed = 10
-  FireTemplate.AP = 2
-  FireTemplate.DP = -1
-  FireTemplate.CanFly = -1
-  FireTemplate.NotBounce = -1
-  FireTemplate.Status = "GOOD"
-  FireTemplate.Direc = "UR"
-  FireTemplate.Item = "X000"
+const fireTemplate = {
+    Race: "FIRE",
+    Health: 1,
+    Intelligence: 0,
+    Speed: 10,
+    AP: 2,
+    DP: -1,
+    CanFly: -1,
+    NotBounce: -1,
+    Status: "GOOD",
+    Direc: "UR",
+    Item: "X000",
+};
 
-DIM SHARED GhostTemplate AS ENEMY
-  GhostTemplate.Race = "GHOST"
-  GhostTemplate.Health = 1
-  GhostTemplate.Intelligence = 4
-  GhostTemplate.Speed = 1
-  GhostTemplate.AP = 3
-  GhostTemplate.DP = -1
-  GhostTemplate.CanFly = -1
-  GhostTemplate.NotBounce = -1
-  GhostTemplate.Status = "GOOD"
-  GhostTemplate.Direc = "UR"
-  GhostTemplate.Item = "X000"
-
+const ghostTemplate = {
+    Race: "GHOST",
+    Health: 1,
+    Intelligence: 4,
+    Speed: 1,
+    AP: 3,
+    DP: -1,
+    CanFly: -1,
+    NotBounce: -1,
+    Status: "GOOD",
+    Direc: "UR",
+    Item: "X000",
+};
+/*
 '----------------------WORDS-OF-WISDOM---------------------------------------
 WiseMen(1).Speech = "When time has stopped go to the place ofstrange colors. Create a valley between two <ALT>ernatives. Then speak the name of your destination."
 WiseMen(2).Speech = "Nice work on the level."
