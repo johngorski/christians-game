@@ -1,7 +1,3 @@
-module.exports = {
-    game: require('src/game')
-};
-/*
 const BinaryFile = require('binary-file');
 
 const gridLoader = (width, height) => async (filename) => {
@@ -52,7 +48,7 @@ const translateLevelTile = tileNumber => {
             case -12: return 'PortalB';
             case -13: return 'LifeUp';
             case -14: return 'AttackUp';
-        };
+        }
     }
 };
 
@@ -91,19 +87,19 @@ const transpose = m => {
     return t;
 };
 
-const printLevel = flipped => {
-    const level = transpose(flipped);
-    for (let x = 0; x < level.length; x++) {
-        console.log(level[x].map(tileNumber => tileStrings[translateLevelTile(tileNumber)]).join(' '));
-    };
-};
+const gridString = (charTable = id => id) => flipped => transpose(flipped)
+    .map(row => row
+        .map(charTable)
+        .join(' '))
+    .join('\n');
 
-const printBitmap = flipped => {
-    const bitmap = transpose(flipped);
-    for (let x = 0; x < bitmap.length; x++) {
-        console.log(bitmap[x].join(' '));
-    };
-};
+const levelString = gridString(tileNumber => tileStrings[translateLevelTile(tileNumber)]);
+
+const printLevel = flipped => console.log(levelString(flipped));
+
+const bitmapString = gridString();
+
+const printBitmap = flipped => console.log(bitmapString(flipped));
 
 /*
 '---------------------DECLARE---FUNCTIONS------------------------------------
@@ -163,7 +159,7 @@ KEY(15) ON 'Ctrl+S
 KEY(16) ON
 SCREEN 7, 0, 0, 1
 // */
-/*
+
 const screenMap2 = loadLevelByName('LEVEL2');
 const screenMap3 = loadLevelByName('LEVEL3');
 const screenMap4 = loadLevelByName('LEVEL4');
@@ -174,7 +170,7 @@ const screenMap8 = loadLevelByName('LEVEL8');
 const screenMap9 = loadLevelByName('LEVEL9');
 const screenMap10 = loadLevelByName('LEVEL10');
 const screenMap11 = loadLevelByName('LEVEL11');
-const bonusLevel = loadLevelByName('BONUSL~1');;
+const bonusLevel = loadLevelByName('BONUSL~1');
 
 // (async () => printLevel(await loadLevelByName('LEVEL2')))();
 // (async () => printLevel(await loadLevelByName('LEVEL4')))();
@@ -199,24 +195,20 @@ const lCloudImage = loadBitmapByName('LCLOUD');
 
 // lifeUpImage.then(printBitmap);
 
+const gloveImage = transpose([
+    [-1,-1,-1, 8, 8, 8,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1,-1, 8,15, 8,-1,-1,-1,-1,-1,-1,-1],
+    [-1,-1, 8,15,15, 8,-1,-1,-1,-1,-1,-1,-1],
+    [ 8, 8,15,15,15, 8, 8, 8, 8, 8, 8, 8, 8],
+    [ 8,15,15,15,15,15,15,15,15,15,15,15, 8],
+    [ 8,15,15, 7, 7,15,15,15, 8, 8, 8, 8, 8],
+    [ 8,15,15,15,15,15,15,15, 8,-1,-1,-1,-1],
+    [ 8,15,15, 7, 7,15,15,15, 8,-1,-1,-1,-1],
+    [ 8, 8,15,15,15,15,15,15, 8,-1,-1,-1,-1],
+    [-1,-1, 8, 8, 8, 8, 8, 8, 8,-1,-1,-1,-1]
+]);
+
 /*
-'------------------HARDCODED-ARRAYS------------------------------------------
-DATA -1,-1,-1,08,08,08,-1,-1,-1,-1,-1,-1,-1
-DATA -1,-1,-1,08,15,08,-1,-1,-1,-1,-1,-1,-1
-DATA -1,-1,08,15,15,08,-1,-1,-1,-1,-1,-1,-1
-DATA 08,08,15,15,15,08,08,08,08,08,08,08,08
-DATA 08,15,15,15,15,15,15,15,15,15,15,15,08
-DATA 08,15,15,07,07,15,15,15,08,08,08,08,08
-DATA 08,15,15,15,15,15,15,15,08,-1,-1,-1,-1
-DATA 08,15,15,07,07,15,15,15,08,-1,-1,-1,-1
-DATA 08,08,15,15,15,15,15,15,08,-1,-1,-1,-1
-DATA -1,-1,08,08,08,08,08,08,08,-1,-1,-1,-1
-DIM SHARED Gloveimage%(12, 9)
-FOR y0 = 0 TO 9
-  FOR x0 = 0 TO 12
-    READ Gloveimage%(x0, y0)
-  NEXT x0
-NEXT y0
 
 DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 DATA -1,-1,-1,-1,15,15,-1,-1,-1,-1
@@ -234,7 +226,20 @@ FOR y0 = 0 TO 9
     READ Portalimage%(x0, y0)
   NEXT x0
 NEXT y0
-
+// */
+const portalImage = transpose([
+    DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+    DATA -1,-1,-1,-1,15,15,-1,-1,-1,-1
+    DATA -1,-1,-1,15,15,-1,-1,-1,-1,-1
+    DATA -1,-1,-1,15,04,04,04,04,-1,-1
+    DATA -1,01,-1,15,04,02,02,04,04,-1
+    DATA -1,01,01,15,15,01,02,-1,04,-1
+    DATA -1,-1,01,01,01,01,02,-1,-1,-1
+    DATA -1,-1,-1,-1,-1,02,02,-1,-1,-1
+    DATA -1,-1,-1,-1,02,02,-1,-1,-1,-1
+    DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
+]);
+/*
 DATA -1,-1,15,15,15,15,15,15,-1,-1,-1
 DATA -1,15,15,03,03,03,03,15,15,-1,-1
 DATA 15,15,03,03,03,03,03,03,15,15,-1
@@ -252,7 +257,21 @@ FOR y0 = 0 TO 10
     READ GuyImage%(x0, y0)
   NEXT x0
 NEXT y0
-
+// */
+const guyImage = transpose([
+    DATA -1,-1,15,15,15,15,15,15,-1,-1,-1
+    DATA -1,15,15,03,03,03,03,15,15,-1,-1
+    DATA 15,15,03,03,03,03,03,03,15,15,-1
+    DATA 15,03,03,03,15,03,15,03,03,15,-1
+    DATA 15,03,03,03,15,03,15,03,03,15,-1
+    DATA 15,15,03,03,03,03,03,03,15,15,-1
+    DATA -1,15,03,03,03,03,03,03,15,-1,-1
+    DATA -1,-1,15,15,03,03,15,15,-1,-1,-1
+    DATA -1,15,03,03,15,15,03,03,15,-1,-1
+    DATA -1,15,03,03,03,15,03,03,03,15,-1
+    DATA -1,15,15,15,15,15,15,15,15,15,-1
+]);
+/*
 DATA -1,15,-1,-1,-1,-1,-1,15,-1,-1
 DATA -1,15,15,-1,-1,-1,15,15,-1,-1
 DATA -1,15,04,15,15,15,04,15,-1,-1
@@ -269,7 +288,20 @@ FOR y0 = 0 TO 9
     READ Goblinimage%(x0, y0)
   NEXT x0
 NEXT y0
-
+// */
+const goblinImage = transpose([
+    DATA -1,15,-1,-1,-1,-1,-1,15,-1,-1
+    DATA -1,15,15,-1,-1,-1,15,15,-1,-1
+    DATA -1,15,04,15,15,15,04,15,-1,-1
+    DATA -1,15,15,04,04,04,15,15,-1,-1
+    DATA -1,15,04,15,04,15,04,15,-1,-1
+    DATA -1,15,04,04,04,04,04,15,-1,-1
+    DATA -1,-1,15,15,15,15,15,-1,-1,-1
+    DATA -1,15,15,15,04,15,15,15,-1,-1
+    DATA -1,-1,-1,15,04,15,-1,-1,-1,-1
+    DATA -1,-1,15,15,15,15,15,-1,-1,-1
+]);
+/*
 DATA 06,06,06,06,06,06,06,06,06,06
 DATA 06,06,06,06,06,06,06,06,06,06
 DATA 06,06,06,06,06,06,06,06,06,06
@@ -286,7 +318,20 @@ FOR y0 = 0 TO 9
     READ Doorimage%(x0, y0)
   NEXT x0
 NEXT y0
-
+// */
+const doorImage = transpose([
+    DATA 06,06,06,06,06,06,06,06,06,06
+    DATA 06,06,06,06,06,06,06,06,06,06
+    DATA 06,06,06,06,06,06,06,06,06,06
+    DATA 06,06,06,06,06,06,14,14,06,06
+    DATA 06,06,06,06,06,14,14,14,14,06
+    DATA 06,06,06,06,06,14,14,14,14,06
+    DATA 06,06,06,06,06,06,14,14,06,06
+    DATA 06,06,06,06,06,06,06,06,06,06
+    DATA 06,06,06,06,06,06,06,06,06,06
+    DATA 06,06,06,06,06,06,06,06,06,06
+]);
+/*
 DATA -1,15,15,-1
 DATA 15,03,03,15
 DATA 15,03,03,15
@@ -297,7 +342,14 @@ FOR y0 = 0 TO 3
     READ Handimage%(x0, y0)
   NEXT x0
 NEXT y0
-
+// */
+const handImage = transpose([
+    DATA -1,15,15,-1
+    DATA 15,03,03,15
+    DATA 15,03,03,15
+    DATA -1,15,15,-1
+]);
+/*
 DATA -1,-1,-1,-1,-1,-1,-1,-1,-1,-1
 DATA -1,-1,-1,15,15,15,15,-1,-1,-1
 DATA -1,-1,15,01,01,01,01,15,-1,-1
@@ -314,15 +366,19 @@ FOR y0 = 0 TO 9
     READ Eyeimage%(x0, y0)
   NEXT x0
 NEXT y0
+// */
+const eyeImage = transpose([
 
-DATA -1,-1,-1,07,-1,-1,-1
-DATA -1,-1,07,07,07,-1,-1
-DATA -1,-1,07,07,07,-1,-1
-DATA -1,-1,07,07,07,-1,-1
-DATA -1,-1,07,07,07,-1,-1
-DATA -1,-1,07,07,07,-1,-1
-DATA -1,-1,07,07,07,-1,-1
-DATA -1,-1,-1,07,-1,-1,-1
+]);
+/*
+DATA -1,-1,-1, 7,-1,-1,-1
+DATA -1,-1, 7, 7, 7,-1,-1
+DATA -1,-1, 7, 7, 7,-1,-1
+DATA -1,-1, 7, 7, 7,-1,-1
+DATA -1,-1, 7, 7, 7,-1,-1
+DATA -1,-1, 7, 7, 7,-1,-1
+DATA -1,-1, 7, 7, 7,-1,-1
+DATA -1,-1,-1, 7,-1,-1,-1
 DATA 15,15,15,15,15,15,15
 DATA -1,15,15,15,15,15,-1
 DATA -1,-1,-1,15,-1,-1,-1
@@ -333,7 +389,11 @@ FOR y0 = 0 TO 11
     READ Swordimage%(x0, y0)
   NEXT
 NEXT
+// */
+const Image = transpose([
 
+]);
+/*
 DATA -2,-2,-2,-2,-2,-2,-2,-2,-2,-2
 DATA -2,-2,-2,-2,-1,-1,-2,-2,-2,-2
 DATA -2,-2,-2,-1,-1,-1,-1,-2,-2,-2
@@ -350,7 +410,11 @@ FOR y0 = 0 TO 9
     READ Keyholeimage%(x0, y0)
   NEXT x0
 NEXT y0
+// */
+const Image = transpose([
 
+]);
+/*
 DATA 14,14,14,14,14,14,14,-1,-1,-1
 DATA 14,-1,-1,-1,-1,-1,14,-1,-1,-1
 DATA 14,-1,-1,-1,-1,-1,14,-1,-1,-1
@@ -367,7 +431,11 @@ FOR y0 = 0 TO 9
     READ Keyimage%(x0, y0)
   NEXT x0
 NEXT y0
+// */
+const Image = transpose([
 
+]);
+/*
 
 
 DATA 00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00,00
@@ -397,7 +465,11 @@ FOR y0 = 0 TO 19
     READ ScreenMap1%(x0, y0)
   NEXT x0
 NEXT y0
+// */
+const Image = transpose([
 
+]);
+/*
 '-----------------------------TYPES------------------------------------------
 
 TYPE LOCATION
@@ -2217,3 +2289,11 @@ ZeroLimit = Number
 END FUNCTION
 // */
 
+module.exports = {
+    bitmapString,
+    gloveImage,
+    levelString,
+    loadBitmapByName,
+    loadLevelByName,
+    transpose
+};
