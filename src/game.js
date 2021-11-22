@@ -24,30 +24,49 @@ const loadBitmapByName = async (name) => loadBitmap(`./Bitmaps/${name}.BMP`);
 
 const translateLevelTile = tileNumber => {
     if (tileNumber > 20) {
-       return 'wiseman';
+        return 'wiseman';
     } else if (tileNumber <= -20) {
         return 'Key';
     } else {
         switch (tileNumber) {
-            case 4: return 'positive block';
-            case 3: return 'sealed eye';
-            case 2: return 'hidden platform';
-            case 1: return 'platform';
-            case 0: return 'nothing';
-            case -1: return 'coins';
-            case -2: return 'hidden key';
-            case -3: return 'keyhole';
-            case -4: return 'negative block';
-            case -5: return 'sealed platform';
-            case -6: return 'hidden keyhole';
-            case -7: return 'open door';
-            case -9: return 'false platform';
-            case -10: return 'eye';
-            case -11: return 'PortalA';
-            case 11: return 'eleven';
-            case -12: return 'PortalB';
-            case -13: return 'LifeUp';
-            case -14: return 'AttackUp';
+            case 4:
+                return 'positive block';
+            case 3:
+                return 'sealed eye';
+            case 2:
+                return 'hidden platform';
+            case 1:
+                return 'platform';
+            case 0:
+                return 'nothing';
+            case -1:
+                return 'coins';
+            case -2:
+                return 'hidden key';
+            case -3:
+                return 'keyhole';
+            case -4:
+                return 'negative block';
+            case -5:
+                return 'sealed platform';
+            case -6:
+                return 'hidden keyhole';
+            case -7:
+                return 'open door';
+            case -9:
+                return 'false platform';
+            case -10:
+                return 'eye';
+            case -11:
+                return 'PortalA';
+            case 11:
+                return 'eleven';
+            case -12:
+                return 'PortalB';
+            case -13:
+                return 'LifeUp';
+            case -14:
+                return 'AttackUp';
         }
     }
 };
@@ -102,29 +121,11 @@ const bitmapString = gridString();
 const printBitmap = flipped => console.log(bitmapString(flipped));
 
 /*
-'---------------------DECLARE---FUNCTIONS------------------------------------
-DECLARE SUB Pause ()
-DECLARE SUB GameOver ()
-DECLARE SUB LBInfo (Choice$)
-DECLARE SUB LevelBuilder ()
-DECLARE SUB PlayLevel (ScreenMap%(), Message$, Demo$)
-DECLARE SUB ShiftColor (Startx!, Starty!, XLength!, YLength!)
-DECLARE SUB AI (SerialNumber!, ScreenMap%())
-DECLARE SUB Jump (SerialNumber, Move$, ScreenMap%())
-DECLARE SUB Directions ()
-DECLARE SUB Game ()
-DECLARE SUB MainMenu ()
-DECLARE SUB DrawObj (Image() AS INTEGER, xlimit AS INTEGER, ylimit AS INTEGER, x AS INTEGER, y AS INTEGER, position$)
-DECLARE SUB RecordDemo ()
-DECLARE SUB SaveDemo ()
-DECLARE SUB PlayDemo (FileName$, ScreenMap%())
-DECLARE FUNCTION DetermineCoin! (LeScreenMap%())
-DECLARE FUNCTION Spin$ (Direction AS STRING)
-DECLARE FUNCTION WhichWorld$ (Dummy)
-DECLARE FUNCTION ZeroLimit! (Number AS INTEGER)
-DECLARE FUNCTION FlipBlocks% (block%)
 '--------------------DECLARE-CONSTANTS---------------------------------------
-CONST NoOfLevels = 10
+// */
+const NoOfLevels = 10
+
+/*
 COMMON SHARED RGT$, LFT$, UP$, DN$, ESC$, ENTR$, SPC$, Coins, YMAX, XMAX, F1$, F2$, F3$, F4$, F5$, F6$, F7$, F8$, F9$, F10$, F11$, NJTimer, YouShouldGo, Warp, World$, WorldsChecked, BuildLevel, ADMISSION, SharedTalk, SharedWiseMessage$,  _
 SharedMessage$
 DIM SHARED GlovePos AS INTEGER
@@ -145,9 +146,11 @@ F10$ = CHR$(0) + "D"
 ESC$ = CHR$(27)
 ENTR$ = CHR$(13)
 SPC$ = CHR$(32)
-YMAX = 200
-XMAX = 320
-ADMISSION = 0
+// */
+const YMAX = 200
+const XMAX = 320
+let ADMISSION = 0
+/*
 KEY 15, CHR$(4) + CHR$(31)
 KEY 16, CHR$(0) + CHR$(57)
 KEY 17, CHR$(4) + CHR$(19)
@@ -196,154 +199,155 @@ const lCloudImage = loadBitmapByName('LCLOUD');
 // lifeUpImage.then(printBitmap);
 
 const gloveImage = transpose([
-    [-1,-1,-1, 8, 8, 8,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1,-1, 8,15, 8,-1,-1,-1,-1,-1,-1,-1],
-    [-1,-1, 8,15,15, 8,-1,-1,-1,-1,-1,-1,-1],
-    [ 8, 8,15,15,15, 8, 8, 8, 8, 8, 8, 8, 8],
-    [ 8,15,15,15,15,15,15,15,15,15,15,15, 8],
-    [ 8,15,15, 7, 7,15,15,15, 8, 8, 8, 8, 8],
-    [ 8,15,15,15,15,15,15,15, 8,-1,-1,-1,-1],
-    [ 8,15,15, 7, 7,15,15,15, 8,-1,-1,-1,-1],
-    [ 8, 8,15,15,15,15,15,15, 8,-1,-1,-1,-1],
-    [-1,-1, 8, 8, 8, 8, 8, 8, 8,-1,-1,-1,-1]
+    [-1, -1, -1, 8, 8, 8, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, 8, 15, 8, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, 8, 15, 15, 8, -1, -1, -1, -1, -1, -1, -1],
+    [8, 8, 15, 15, 15, 8, 8, 8, 8, 8, 8, 8, 8],
+    [8, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 8],
+    [8, 15, 15, 7, 7, 15, 15, 15, 8, 8, 8, 8, 8],
+    [8, 15, 15, 15, 15, 15, 15, 15, 8, -1, -1, -1, -1],
+    [8, 15, 15, 7, 7, 15, 15, 15, 8, -1, -1, -1, -1],
+    [8, 8, 15, 15, 15, 15, 15, 15, 8, -1, -1, -1, -1],
+    [-1, -1, 8, 8, 8, 8, 8, 8, 8, -1, -1, -1, -1]
 ]);
 
 const portalImage = transpose([
-     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-     [-1,-1,-1,-1,15,15,-1,-1,-1,-1],
-     [-1,-1,-1,15,15,-1,-1,-1,-1,-1],
-     [-1,-1,-1,15, 4, 4, 4, 4,-1,-1],
-     [-1, 1,-1,15, 4, 2, 2, 4, 4,-1],
-     [-1, 1, 1,15,15, 1, 2,-1, 4,-1],
-     [-1,-1, 1, 1, 1, 1, 2,-1,-1,-1],
-     [-1,-1,-1,-1,-1, 2, 2,-1,-1,-1],
-     [-1,-1,-1,-1, 2, 2,-1,-1,-1,-1],
-     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, -1, 15, 15, -1, -1, -1, -1],
+    [-1, -1, -1, 15, 15, -1, -1, -1, -1, -1],
+    [-1, -1, -1, 15, 4, 4, 4, 4, -1, -1],
+    [-1, 1, -1, 15, 4, 2, 2, 4, 4, -1],
+    [-1, 1, 1, 15, 15, 1, 2, -1, 4, -1],
+    [-1, -1, 1, 1, 1, 1, 2, -1, -1, -1],
+    [-1, -1, -1, -1, -1, 2, 2, -1, -1, -1],
+    [-1, -1, -1, -1, 2, 2, -1, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
 ]);
 
 const guyImage = transpose([
-     [-1,-1,15,15,15,15,15,15,-1,-1,-1],
-     [-1,15,15, 3, 3, 3, 3,15,15,-1,-1],
-     [15,15, 3, 3, 3, 3, 3, 3,15,15,-1],
-     [15, 3, 3, 3,15, 3,15, 3, 3,15,-1],
-     [15, 3, 3, 3,15, 3,15, 3, 3,15,-1],
-     [15,15, 3, 3, 3, 3, 3, 3,15,15,-1],
-     [-1,15, 3, 3, 3, 3, 3, 3,15,-1,-1],
-     [-1,-1,15,15, 3, 3,15,15,-1,-1,-1],
-     [-1,15, 3, 3,15,15, 3, 3,15,-1,-1],
-     [-1,15, 3, 3, 3,15, 3, 3, 3,15,-1],
-     [-1,15,15,15,15,15,15,15,15,15,-1],
+    [-1, -1, 15, 15, 15, 15, 15, 15, -1, -1, -1],
+    [-1, 15, 15, 3, 3, 3, 3, 15, 15, -1, -1],
+    [15, 15, 3, 3, 3, 3, 3, 3, 15, 15, -1],
+    [15, 3, 3, 3, 15, 3, 15, 3, 3, 15, -1],
+    [15, 3, 3, 3, 15, 3, 15, 3, 3, 15, -1],
+    [15, 15, 3, 3, 3, 3, 3, 3, 15, 15, -1],
+    [-1, 15, 3, 3, 3, 3, 3, 3, 15, -1, -1],
+    [-1, -1, 15, 15, 3, 3, 15, 15, -1, -1, -1],
+    [-1, 15, 3, 3, 15, 15, 3, 3, 15, -1, -1],
+    [-1, 15, 3, 3, 3, 15, 3, 3, 3, 15, -1],
+    [-1, 15, 15, 15, 15, 15, 15, 15, 15, 15, -1],
 ]);
 
 const goblinImage = transpose([
-     [-1,15,-1,-1,-1,-1,-1,15,-1,-1],
-     [-1,15,15,-1,-1,-1,15,15,-1,-1],
-     [-1,15, 4,15,15,15, 4,15,-1,-1],
-     [-1,15,15, 4, 4, 4,15,15,-1,-1],
-     [-1,15, 4,15, 4,15, 4,15,-1,-1],
-     [-1,15, 4, 4, 4, 4, 4,15,-1,-1],
-     [-1,-1,15,15,15,15,15,-1,-1,-1],
-     [-1,15,15,15, 4,15,15,15,-1,-1],
-     [-1,-1,-1,15, 4,15,-1,-1,-1,-1],
-     [-1,-1,15,15,15,15,15,-1,-1,-1],
+    [-1, 15, -1, -1, -1, -1, -1, 15, -1, -1],
+    [-1, 15, 15, -1, -1, -1, 15, 15, -1, -1],
+    [-1, 15, 4, 15, 15, 15, 4, 15, -1, -1],
+    [-1, 15, 15, 4, 4, 4, 15, 15, -1, -1],
+    [-1, 15, 4, 15, 4, 15, 4, 15, -1, -1],
+    [-1, 15, 4, 4, 4, 4, 4, 15, -1, -1],
+    [-1, -1, 15, 15, 15, 15, 15, -1, -1, -1],
+    [-1, 15, 15, 15, 4, 15, 15, 15, -1, -1],
+    [-1, -1, -1, 15, 4, 15, -1, -1, -1, -1],
+    [-1, -1, 15, 15, 15, 15, 15, -1, -1, -1],
 ]);
 
 const doorImage = transpose([
-     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-     [ 6, 6, 6, 6, 6, 6,14,14, 6, 6],
-     [ 6, 6, 6, 6, 6,14,14,14,14, 6],
-     [ 6, 6, 6, 6, 6,14,14,14,14, 6],
-     [ 6, 6, 6, 6, 6, 6,14,14, 6, 6],
-     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
-     [ 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+    [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+    [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+    [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+    [6, 6, 6, 6, 6, 6, 14, 14, 6, 6],
+    [6, 6, 6, 6, 6, 14, 14, 14, 14, 6],
+    [6, 6, 6, 6, 6, 14, 14, 14, 14, 6],
+    [6, 6, 6, 6, 6, 6, 14, 14, 6, 6],
+    [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+    [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
+    [6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
 ]);
 
 const handImage = transpose([
-     [-1,15,15,-1],
-     [15, 3, 3,15],
-     [15, 3, 3,15],
-     [-1,15,15,-1],
+    [-1, 15, 15, -1],
+    [15, 3, 3, 15],
+    [15, 3, 3, 15],
+    [-1, 15, 15, -1],
 ]);
 
 const eyeImage = transpose([
-     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
-     [-1,-1,-1,15,15,15,15,-1,-1,-1],
-     [-1,-1,15, 1, 1, 1, 1,15,-1,-1],
-     [-1,15, 1, 1, 1,15,15, 1,15,-1],
-     [15,15, 1, 1, 0,15,15, 1,15,15],
-     [15,15, 1, 1, 0, 0, 1, 1,15,15],
-     [-1,15, 1, 1, 1, 1, 1, 1,15,-1],
-     [-1,-1,15, 1, 1, 1, 1,15,-1,-1],
-     [-1,-1,-1,15,15,15,15,-1,-1,-1],
-     [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
+    [-1, -1, -1, 15, 15, 15, 15, -1, -1, -1],
+    [-1, -1, 15, 1, 1, 1, 1, 15, -1, -1],
+    [-1, 15, 1, 1, 1, 15, 15, 1, 15, -1],
+    [15, 15, 1, 1, 0, 15, 15, 1, 15, 15],
+    [15, 15, 1, 1, 0, 0, 1, 1, 15, 15],
+    [-1, 15, 1, 1, 1, 1, 1, 1, 15, -1],
+    [-1, -1, 15, 1, 1, 1, 1, 15, -1, -1],
+    [-1, -1, -1, 15, 15, 15, 15, -1, -1, -1],
+    [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
 ]);
 
 const swordImage = transpose([
-     [-1,-1,-1, 7,-1,-1,-1],
-     [-1,-1, 7, 7, 7,-1,-1],
-     [-1,-1, 7, 7, 7,-1,-1],
-     [-1,-1, 7, 7, 7,-1,-1],
-     [-1,-1, 7, 7, 7,-1,-1],
-     [-1,-1, 7, 7, 7,-1,-1],
-     [-1,-1, 7, 7, 7,-1,-1],
-     [-1,-1,-1, 7,-1,-1,-1],
-     [15,15,15,15,15,15,15],
-     [-1,15,15,15,15,15,-1],
-     [-1,-1,-1,15,-1,-1,-1],
-     [-1,-1,-1,15,-1,-1,-1],
+    [-1, -1, -1, 7, -1, -1, -1],
+    [-1, -1, 7, 7, 7, -1, -1],
+    [-1, -1, 7, 7, 7, -1, -1],
+    [-1, -1, 7, 7, 7, -1, -1],
+    [-1, -1, 7, 7, 7, -1, -1],
+    [-1, -1, 7, 7, 7, -1, -1],
+    [-1, -1, 7, 7, 7, -1, -1],
+    [-1, -1, -1, 7, -1, -1, -1],
+    [15, 15, 15, 15, 15, 15, 15],
+    [-1, 15, 15, 15, 15, 15, -1],
+    [-1, -1, -1, 15, -1, -1, -1],
+    [-1, -1, -1, 15, -1, -1, -1],
 ]);
 
 const keyholeImage = transpose([
-     [-2,-2,-2,-2,-2,-2,-2,-2,-2,-2],
-     [-2,-2,-2,-2,-1,-1,-2,-2,-2,-2],
-     [-2,-2,-2,-1,-1,-1,-1,-2,-2,-2],
-     [-2,-2,-2,-1,-1,-1,-1,-2,-2,-2],
-     [-2,-2,-2,-2,-1,-1,-2,-2,-2,-2],
-     [-2,-2,-2,-2,-1,-1,-2,-2,-2,-2],
-     [-2,-2,-2,-2,-1,-1,-2,-2,-2,-2],
-     [-2,-2,-2,-1,-1,-1,-1,-2,-2,-2],
-     [-2,-2,-2,-1,-1,-1,-1,-2,-2,-2],
-     [-2,-2,-2,-2,-2,-2,-2,-2,-2,-2],
+    [-2, -2, -2, -2, -2, -2, -2, -2, -2, -2],
+    [-2, -2, -2, -2, -1, -1, -2, -2, -2, -2],
+    [-2, -2, -2, -1, -1, -1, -1, -2, -2, -2],
+    [-2, -2, -2, -1, -1, -1, -1, -2, -2, -2],
+    [-2, -2, -2, -2, -1, -1, -2, -2, -2, -2],
+    [-2, -2, -2, -2, -1, -1, -2, -2, -2, -2],
+    [-2, -2, -2, -2, -1, -1, -2, -2, -2, -2],
+    [-2, -2, -2, -1, -1, -1, -1, -2, -2, -2],
+    [-2, -2, -2, -1, -1, -1, -1, -2, -2, -2],
+    [-2, -2, -2, -2, -2, -2, -2, -2, -2, -2],
 ]);
 
 const keyImage = transpose([
-     [14,14,14,14,14,14,14,-1,-1,-1],
-     [14,-1,-1,-1,-1,-1,14,-1,-1,-1],
-     [14,-1,-1,-1,-1,-1,14,-1,-1,-1],
-     [14,-1,-1,-1,-1,-1,14,-1,-1,-1],
-     [14,14,14,14,14,14,14,-1,-1,-1],
-     [-1,-1,14,14,-1,-1,-1,-1,-1,-1],
-     [-1,-1,14,14,-1,-1,-1,-1,-1,-1],
-     [-1,-1,14,14,14,14,-1,-1,-1,-1],
-     [-1,-1,14,14,-1,-1,-1,-1,-1,-1],
-     [-1,-1,14,14,14,14,14,-1,-1,-1],
+    [14, 14, 14, 14, 14, 14, 14, -1, -1, -1],
+    [14, -1, -1, -1, -1, -1, 14, -1, -1, -1],
+    [14, -1, -1, -1, -1, -1, 14, -1, -1, -1],
+    [14, -1, -1, -1, -1, -1, 14, -1, -1, -1],
+    [14, 14, 14, 14, 14, 14, 14, -1, -1, -1],
+    [-1, -1, 14, 14, -1, -1, -1, -1, -1, -1],
+    [-1, -1, 14, 14, -1, -1, -1, -1, -1, -1],
+    [-1, -1, 14, 14, 14, 14, -1, -1, -1, -1],
+    [-1, -1, 14, 14, -1, -1, -1, -1, -1, -1],
+    [-1, -1, 14, 14, 14, 14, 14, -1, -1, -1],
 ]);
 
 const screenMap1 = transpose([
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0, 0,-1, 0, 0, 0,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0,-1,-1,-1,-1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0,-1, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,-9,-9, 1, 1, 1,-1, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0,-3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [-5,-5,-5, 1, 1, 1, 1,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5, 0],
-     [-5,-5,-5,-5,-5,-5,-5,-5,-5, 1, 1,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-     [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, -1, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, -1, -1, -1, -1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, -1, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, -9, -9, 1, 1, 1, -1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, -3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [-5, -5, -5, 1, 1, 1, 1, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, 0],
+    [-5, -5, -5, -5, -5, -5, -5, -5, -5, 1, 1, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, -5, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]);
+
 /*
 '-----------------------------TYPES------------------------------------------
 
@@ -391,14 +395,23 @@ TYPE PERSON
   Speech AS STRING * 200
   Direc AS STRING * 2
 END TYPE
-
-DIM SHARED Guy AS PLAYER
-DIM SHARED DemoGuy(1 TO 200) AS PLAYER
-DIM SHARED Enemies(1 TO 15) AS ENEMY
-DIM SHARED WiseMen(1 TO 10) AS PERSON
-DIM SHARED PortalAlpha AS LOCATION
-DIM SHARED PortalBeta AS LOCATION
 // */
+
+const vectorOf = (n, factory) => {
+    const vector = [];
+    for (let i = 0; i < n; i++) {
+        vector[i] = factory();
+    }
+    return vector;
+}
+
+let Guy = {}; // AS PLAYER
+let DemoGuy = vectorOf(200, () => ({})); // AS PLAYER
+let Enemies = vectorOf(15, () => ({})); // AS ENEMY
+let WiseMen = vectorOf(10, () => ({})); // AS PERSON
+let PortalAlpha = {}; // AS LOCATION
+let PortalBeta = {}; // AS LOCATION
+
 const noOneTemplate = {
     Race: "NO ONE",
     Health: 0,
@@ -532,19 +545,22 @@ const ghostTemplate = {
     Direc: "UR",
     Item: "X000",
 };
-/*
-'----------------------WORDS-OF-WISDOM---------------------------------------
-WiseMen(1).Speech = "When time has stopped go to the place ofstrange colors. Create a valley between two <ALT>ernatives. Then speak the name of your destination."
-WiseMen(2).Speech = "Nice work on the level."
-WiseMen(3).Speech = "Come with me."
-WiseMen(4).Speech = "Trying to talk to some blocks changes   their mind about colors."
-WiseMen(5).Speech = "If you come from below, you can climb   the edges of blocks."
-'-----------------------START!!!---------------------------------------------
+//---------------------WORDS-OF-WISDOM---------------------------------------
+WiseMen[0].Speech = "When time has stopped go to the place ofstrange colors. Create a valley between two <ALT>ernatives. Then speak the name of your destination."
+WiseMen[1].Speech = "Nice work on the level."
+WiseMen[2].Speech = "Come with me."
+WiseMen[3].Speech = "Trying to talk to some blocks changes   their mind about colors."
+WiseMen[4].Speech = "If you come from below, you can climb   the edges of blocks."
 
+//----------------------START!!!---------------------------------------------
+
+/*
 MainMenu
 
 '--------------------------GOSUBS--------------------------------------------
-LevelRight:
+// */
+/*
+function LevelRight() {
     Guy.x = Guy.x + 5
     IF Guy.x > 315 THEN Guy.x = 315
     IF Guy.ScreenX < 30 THEN
@@ -567,8 +583,9 @@ LevelRight:
         ScreenMap%(Guy.ScreenX, Guy.ScreenY) = ScreenMap%(Guy.ScreenX, Guy.ScreenY) + 20: ScreenMap%(Guy.ScreenX + 1, Guy.ScreenY) = ScreenMap%(Guy.ScreenX + 1, Guy.ScreenY) - 20
       END IF
     END IF
-
-    RETURN
+}
+// */
+/*
 LevelLeft:
     Guy.x = Guy.x - 5
     IF Guy.x < 5 THEN Guy.x = 5
@@ -994,17 +1011,11 @@ SUB AI (SerialNumber, ScreenMap%())
   END SELECT
 
 END SUB
-
-FUNCTION DetermineCoin (LeScreenMap%())
-  CoinMax = 0
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
-      IF LeScreenMap%(x0, y0) = -1 THEN CoinMax = CoinMax + 1
-    NEXT y0
-  NEXT x0
-  DetermineCoin = CoinMax
-END FUNCTION
-
+// */
+const determineCoin = screenMap => screenMap
+    .flatMap(row => row.map(cell => cell === -1 ? 1 : 0))
+    .reduce((prev, current) => prev + current);
+/*
 SUB Directions
   CLS
   COLOR 15
@@ -1273,68 +1284,6 @@ FOR SerialNumber = 1 TO 10
   Enemies(SerialNumber).Status = "GONE"
 NEXT
 
-END SUB
-
-SUB Jump (SerialNumber, Move$, ScreenMap%())
-'STATIC NJTimer
-'IF Move$ <> UP$ AND Guy(SerialNumber).Mvmnt = "UP" THEN NJTimer = NJTimer + 1:  ELSE NJTimer = 0
-'
-'IF Move$ = UP$ AND Guy(SerialNumber).JTime > 0 AND Guy(SerialNumber).Mvmnt <> "DN" AND Guy(SerialNumber).Mvmnt <> "XX" THEN
-'  IF Guy(SerialNumber).y > 10 THEN
-'  IF ScreenMap%(Guy(SerialNumber).ScreenX, Guy(SerialNumber).ScreenY - 1) <= 0 THEN Guy(SerialNumber).y = Guy(SerialNumber).y - 5
-'  END IF
-'  Guy(SerialNumber).Mvmnt = "UP"
-'END IF
-'
-'IF (NJTimer >= 10 AND Guy(SerialNumber).Mvmnt = "UP") OR (Guy(SerialNumber).Mvmnt = "UP" AND Guy(SerialNumber).JTime = 0) THEN
-'  Guy(SerialNumber).Mvmnt = "DN"
-'END IF
-'
-' IF Guy(SerialNumber).Mvmnt = "DN" THEN
-'  SELECT CASE Guy(SerialNumber).Direc
-'    CASE "UR"
-'      Guy(SerialNumber).Direc = "HR"
-'    CASE "UL"
-'      Guy(SerialNumber).Direc = "HL"
-'    CASE "HR"
-'      Guy(SerialNumber).Direc = "DR"
-'    CASE "HL"
-'      Guy(SerialNumber).Direc = "DL"
-'    CASE "DR"
-'      Guy(SerialNumber).Direc = "VR"
-'    CASE "DL"
-'      Guy(SerialNumber).Direc = "VL"
-'    CASE "VR"
-'      Guy(SerialNumber).Direc = "UR"
-'    CASE "VL"
-'      Guy(SerialNumber).Direc = "UL"
-'    END SELECT
-'END IF
-'
-'
-'IF Guy(SerialNumber).Mvmnt <> "UP" AND Guy(SerialNumber).Mvmnt <> "XX" THEN
-'  IF ScreenMap%(Guy(SerialNumber).ScreenX, Guy(SerialNumber).ScreenY + 1) <= 0 THEN
-'    Guy(SerialNumber).y = Guy(SerialNumber).y + 5
-'    Guy(SerialNumber).Mvmnt = "DN"
-'    ELSE : Guy(SerialNumber).JTime = 25
-'    Guy(SerialNumber).Mvmnt = "DX"
-'
-'  IF LEFT$(Guy(SerialNumber).Direc, 1) = "R" OR RIGHT$(Guy(SerialNumber).Direc, 1) = "R" THEN Guy(SerialNumber).Direc = "UR"
-'  IF LEFT$(Guy(SerialNumber).Direc, 1) = "L" OR RIGHT$(Guy(SerialNumber).Direc, 1) = "L" THEN Guy(SerialNumber).Direc = "UL"
-'
-'  END IF
-'END IF
-'
-'
-'IF Guy(SerialNumber).Mvmnt = "UP" AND Guy(SerialNumber).JTime > 0 THEN
-'  Guy(SerialNumber).JTime = Guy(SerialNumber).JTime - 5
-'END IF
-'IF Guy(SerialNumber).JTime < 0 THEN
-'  Guy(SerialNumber).JTime = Guy(SerialNumber).JTime + 1
-'END IF
-'
-'IF Guy(SerialNumber).ScreenY <> (Guy(SerialNumber).y + 1) / 10 AND ScreenMap%(Guy(SerialNumber).ScreenX, Guy(SerialNumber).ScreenY + 1) > 0 AND Guy(SerialNumber).Mvmnt <> "UP" THEN Guy(SerialNumber).y = Guy(SerialNumber).y - 5
-'
 END SUB
 
 SUB LBInfo (Choice$)
@@ -2167,12 +2116,9 @@ INPUT World$
 WhichWorld$ = World$
 SCREEN 7, 0, 0, 1
 END FUNCTION
-
-FUNCTION ZeroLimit (Number AS INTEGER)
-IF Number < 0 THEN Number = 0
-ZeroLimit = Number
-END FUNCTION
 // */
+
+const ZeroLimit = n => (n < 0) ? 0 : n
 
 module.exports = {
     bitmapString,
