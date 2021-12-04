@@ -562,6 +562,9 @@ MainMenu
 
 // from https://www.qbasic.net/en/reference/qb11/Function/MID_.htm
 const MID$ = (string, start, length) => string.substring(start, length ? start + length : string.length);
+// from https://www.qbasic.net/en/reference/qb11/Function/RIGHT_.htm
+const LEFT$ = (string, n) => MID$(string, 0, n);
+const RIGHT$ = (string, n) => MID$(string, string.length - n, n);
 
 function LevelRight() {
     Guy.x = Guy.x + 5;
@@ -583,7 +586,7 @@ function LevelRight() {
     if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1; screenMap(Guy.ScreenX, Guy.ScreenY) = 0; }
     if (Guy.ScreenX < 30) {
       if (screenMap(Guy.ScreenX, Guy.ScreenY) <= -20 && screenMap(Guy.ScreenX + 1, Guy.ScreenY) <= 0) {
-        screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) + 20: screenMap(Guy.ScreenX + 1, Guy.ScreenY) = screenMap(Guy.ScreenX + 1, Guy.ScreenY) - 20;
+        screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) + 20; screenMap(Guy.ScreenX + 1, Guy.ScreenY) = screenMap(Guy.ScreenX + 1, Guy.ScreenY) - 20;
       }
     }
 }
@@ -607,39 +610,37 @@ function LevelLeft() {
     if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1; screenMap(Guy.ScreenX, Guy.ScreenY) = 0; }
     if (Guy.ScreenX > 1) {
       if (screenMap(Guy.ScreenX, Guy.ScreenY) <= -20 && screenMap(Guy.ScreenX - 1, Guy.ScreenY) <= 0) {
-        screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) + 20: screenMap(Guy.ScreenX - 1, Guy.ScreenY) = screenMap(Guy.ScreenX - 1, Guy.ScreenY) - 20;
+        screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) + 20; screenMap(Guy.ScreenX - 1, Guy.ScreenY) = screenMap(Guy.ScreenX - 1, Guy.ScreenY) - 20;
       }
     }
     if (Guy.ScreenX > 0) {
       if (screenMap(Guy.ScreenX + 1, Guy.ScreenY) <= -20 && screenMap(Guy.ScreenX, Guy.ScreenY) <= 0) {
-        screenMap(Guy.ScreenX + 1, Guy.ScreenY) = screenMap(Guy.ScreenX + 1, Guy.ScreenY) + 20: screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) - 20;
+        screenMap(Guy.ScreenX + 1, Guy.ScreenY) = screenMap(Guy.ScreenX + 1, Guy.ScreenY) + 20; screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) - 20;
       }
     }
 }
-// */
-/*
-LevelJump:
-  if (Guy.JTime > 0 && Guy.Mvmnt <> "DN") {
+
+function LevelJump() {
+  if (Guy.JTime > 0 && Guy.Mvmnt !== "DN") {
     if (Guy.y > 10) {
       if (screenMap(Guy.ScreenX, Guy.ScreenY - 1) = -11) {
-        Guy.x = PortalBeta.x * 10
-        Guy.y = ((PortalBeta.y - 1) * 10) - 1
+        Guy.x = PortalBeta.x * 10;
+        Guy.y = ((PortalBeta.y - 1) * 10) - 1;
       } else if (screenMap(Guy.ScreenX, Guy.ScreenY - 1) = -12) {
-        Guy.x = PortalAlpha.x * 10
-        Guy.y = ((PortalAlpha.y - 1) * 10) - 1
+        Guy.x = PortalAlpha.x * 10;
+        Guy.y = ((PortalAlpha.y - 1) * 10) - 1;
       }
-      if (screenMap(Guy.ScreenX, Guy.ScreenY - 1) <= 0 OR RIGHT$(STR$(Guy.x), 1) = "5" && screenMap(Guy.ScreenX + 1, Guy.ScreenY - 1) <= 0) {
-        Guy.y = Guy.y - 5
+      if (screenMap(Guy.ScreenX, Guy.ScreenY - 1) <= 0 || RIGHT$(STR$(Guy.x), 1) = "5" && screenMap(Guy.ScreenX + 1, Guy.ScreenY - 1) <= 0) {
+        Guy.y = Guy.y - 5;
       }
-      Guy.Mvmnt = "UP"
+      Guy.Mvmnt = "UP";
     }
   }
-    Guy.ScreenX = INT(Guy.x / 10)
-    Guy.ScreenY = INT((Guy.y + 1) / 10)
-    if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1: screenMap(Guy.ScreenX, Guy.ScreenY) = 0
+    Guy.ScreenX = INT(Guy.x / 10);
+    Guy.ScreenY = INT((Guy.y + 1) / 10);
+    if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1; screenMap(Guy.ScreenX, Guy.ScreenY) = 0; }
+}
 
-RETURN
-// */
 function Down() {
   if (screenMap(Guy.ScreenX, Guy.ScreenY) = -7) { YouShouldGo = 1; }
 }
@@ -648,7 +649,7 @@ Save:
         SCREEN 12
         INPUT "FileName"; FileName$
         FileName$ = UCASE$(FileName$)
-        if (RIGHT$(FileName$, 4) <> ".LVL") { FileName$ = FileName$ + ".LVL"
+        if (RIGHT$(FileName$, 4) !== ".LVL") { FileName$ = FileName$ + ".LVL"
         SCREEN 7, 0, 0, 1
         OPEN "C:/BASIC/GAME/CUSTOM~1/" + FileName$ FOR RANDOM AS #1 LEN = LEN(screenMap)
           RecordNumber = 1
@@ -673,30 +674,30 @@ function MenuDown() {
         GlovePos = GlovePos + 2;
     }
 }
-/*
-Space:
-    SELECT CASE RIGHT$(Guy.Direc, 1)
-    CASE "R"
-      if (Guy.ScreenX < 31) {
-        if (screenMap(Guy.ScreenX + 1, Guy.ScreenY) > 20 && screenMap(Guy.ScreenX + 1, Guy.ScreenY) <= 30) {
-          SharedWiseMessage$ = WiseMen(screenMap(Guy.ScreenX + 1, Guy.ScreenY) - 20).Speech
-          SharedTalk = 100
-        ELSE SharedTalk = 0
-        }
-      ELSE SharedTalk = 0
-      }
-    CASE "L"
-      if (Guy.ScreenX > 0) {
-        if (screenMap(Guy.ScreenX - 1, Guy.ScreenY) > 20 && screenMap(Guy.ScreenX - 1, Guy.ScreenY) <= 30) {
-          SharedWiseMessage$ = WiseMen(screenMap(Guy.ScreenX - 1, Guy.ScreenY) - 20).Speech
-          SharedTalk = 100
-        ELSE SharedTalk = 0
-        }
-      ELSE SharedTalk = 0
-      }
-    END SELECT
 
-    if (screenMap(Guy.ScreenX, Guy.ScreenY) = -4) {
+function Space() {
+    switch (RIGHT$(Guy.Direc, 1)) {
+        case "R":
+            if (Guy.ScreenX < 31) {
+                if (screenMap(Guy.ScreenX + 1, Guy.ScreenY) > 20 && screenMap(Guy.ScreenX + 1, Guy.ScreenY) <= 30) {
+                    SharedWiseMessage$ = WiseMen(screenMap(Guy.ScreenX + 1, Guy.ScreenY) - 20).Speech;
+                    SharedTalk = 100;
+                } else SharedTalk = 0;
+            }
+            else SharedTalk = 0;
+            break;
+            case "L":
+                if (Guy.ScreenX > 0) {
+                    if (screenMap(Guy.ScreenX - 1, Guy.ScreenY) > 20 && screenMap(Guy.ScreenX - 1, Guy.ScreenY) <= 30) {
+                        SharedWiseMessage$ = WiseMen(screenMap(Guy.ScreenX - 1, Guy.ScreenY) - 20).Speech;
+                        SharedTalk = 100;
+                    } else {
+                        SharedTalk = 0;
+                    }
+                } else SharedTalk = 0;
+    }
+
+    if (screenMap(Guy.ScreenX, Guy.ScreenY) === -4) {
       if (Guy.ScreenY > 1) {
         if (Guy.ScreenX > 1) {
           screenMap(Guy.ScreenX - 1, Guy.ScreenY - 1) = FlipBlocks(screenMap(Guy.ScreenX - 1, Guy.ScreenY - 1))
@@ -723,8 +724,8 @@ Space:
         screenMap(Guy.ScreenX + 1, Guy.ScreenY) = FlipBlocks(screenMap(Guy.ScreenX + 1, Guy.ScreenY))
       }
     }
-    RETURN
-
+}
+/*
 Restart:
   World$ = SharedMessage$
   Warp = 1
@@ -741,16 +742,16 @@ SUB AI (SerialNumber, screenMap())
   DistY = Guy.y - Enemies(SerialNumber).y + 1
   ItemType$ = LEFT$(Enemies(SerialNumber).Item, 1): ItemNo = VAL(RIGHT$(Enemies(SerialNumber).Item, 3))
 
-  if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY) <> -15) {
+  if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY) !== -15) {
     Enemies(SerialNumber).PlaceHold.x = Enemies(SerialNumber).ScreenX
     Enemies(SerialNumber).PlaceHold.y = Enemies(SerialNumber).ScreenY
     Enemies(SerialNumber).PlaceVal = screenMap(Enemies(SerialNumber).PlaceHold.x, Enemies(SerialNumber).PlaceHold.y)
     screenMap(Enemies(SerialNumber).PlaceHold.x, Enemies(SerialNumber).PlaceHold.y) = -15
-  ELSE    'anchor
-    SELECT CASE RIGHT$(Enemies(SerialNumber).Direc, 1)
-    CASE "L": Enemies(SerialNumber).x = Enemies(SerialNumber).x + 5
-    CASE "R": Enemies(SerialNumber).x = Enemies(SerialNumber).x - 5
-    END SELECT
+  else    'anchor
+    switch (RIGHT$(Enemies(SerialNumber).Direc, 1)) {
+    case "L": Enemies(SerialNumber).x = Enemies(SerialNumber).x + 5
+    case "R": Enemies(SerialNumber).x = Enemies(SerialNumber).x - 5
+    }
   }
 
 
@@ -764,8 +765,8 @@ SUB AI (SerialNumber, screenMap())
       if (Enemies(SerialNumber).Race = "DRAGON    ") {
         if (DistY < -Enemies(SerialNumber).Speed) { EMove$ = UP$
         if (DistY > Enemies(SerialNumber).Speed) { EMove$ = DN$
-        if (Guy.Mvmnt <> "DN") {
-          if (EMove$ = LFT$ OR EMove$ = RGT$) {
+        if (Guy.Mvmnt !== "DN") {
+          if (EMove$ = LFT$ || EMove$ = RGT$) {
             if (Enemies(SerialNumber + 1).Status = "GONE") {
               if (EMove$ = LFT$) { Enemies(SerialNumber).Direc = "UL"
               if (EMove$ = RGT$) { Enemies(SerialNumber).Direc = "UR"
@@ -784,109 +785,108 @@ SUB AI (SerialNumber, screenMap())
       }
 
       if (Guy.Mvmnt = "DN") {
-        SELECT CASE EMove$
-        CASE DN$: EMove$ = UP$
-        CASE UP$: EMove$ = DN$
-        CASE LFT$: EMove$ = RGT$
-        CASE RGT$: EMove$ = LFT$
-        END SELECT
+        switch (EMove$) {
+        case DN$: EMove$ = UP$
+        case UP$: EMove$ = DN$
+        case LFT$: EMove$ = RGT$
+        case RGT$: EMove$ = LFT$
+        }
       }
 
     if (Enemies(SerialNumber).Race = "GOBLIN    ") {
-      SELECT CASE EMove$
-      CASE DN$
-        SELECT CASE RIGHT$(Enemies(SerialNumber).Direc, 1)
-        CASE "R": EMove$ = LFT$
-        CASE "L": EMove$ = RGT$
-        END SELECT
-      CASE UP$
-        SELECT CASE RIGHT$(Enemies(SerialNumber).Direc, 1)
-        CASE "R": EMove$ = LFT$
-        CASE "L": EMove$ = RGT$
-        END SELECT
-      CASE RGT$
+      switch (EMove$) {
+      case DN$
+        switch (RIGHT$(Enemies(SerialNumber).Direc, 1)) {
+        case "R": EMove$ = LFT$
+        case "L": EMove$ = RGT$
+        }
+      case UP$
+        switch (RIGHT$(Enemies(SerialNumber).Direc, 1)) {
+        case "R": EMove$ = LFT$
+        case "L": EMove$ = RGT$
+        }
+      case RGT$
         if (Enemies(SerialNumber).ScreenX < 31) {
           if (screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY + 1) <= 0) { EMove$ = ""
         }
-      CASE LFT$
+      case LFT$
         if (Enemies(SerialNumber).ScreenX > 0) {
           if (screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY + 1) <= 0) { EMove$ = ""
         }
-      END SELECT
+      }
     }
 
     if (Enemies(SerialNumber).Race = "STORMY    ") {
-      SELECT CASE EMove$
-        CASE DN$
+      switch (EMove$) {
+        case DN$
           EMove$ = ""
           if (Enemies(SerialNumber + 1).Status = "GONE") {
             Enemies(SerialNumber + 1) = LightningTemplate
             Enemies(SerialNumber + 1).x = Enemies(SerialNumber).x
             Enemies(SerialNumber + 1).y = Enemies(SerialNumber).y + 10
           }
-        CASE UP$: EMove$ = ""
-      END SELECT
+        case UP$: EMove$ = ""
+      }
     }
 
     if (ABS(DistX) < Enemies(SerialNumber).Speed) { Enemies(SerialNumber).x = Guy.x
-    'if (ABS(DistY) < Enemies(SerialNumber).Speed) { Enemies(SerialNumber).y = Guy.y + 1
     Enemies(SerialNumber).ScreenX = INT(Enemies(SerialNumber).x / 10)
     Enemies(SerialNumber).ScreenY = INT(Enemies(SerialNumber).y / 10)
 
   } else if (Enemies(SerialNumber).Intelligence > 2) {
 
-      SELECT CASE RIGHT$(Enemies(SerialNumber).Direc, 1)
-      CASE "R": EMove$ = RGT$
+      switch (RIGHT$(Enemies(SerialNumber).Direc, 1)) {
+      case "R": EMove$ = RGT$
         if (Enemies(SerialNumber).ScreenX < 31) {
-          if (screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) > 0 OR screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) = -15) {
+          if (screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) > 0 || screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) = -15) {
             EMove$ = LFT$
           }
         ELSE
           EMove$ = LFT$
         }
-      CASE "L": EMove$ = LFT$
+      case "L": EMove$ = LFT$
         if (Enemies(SerialNumber).ScreenX > 0) {
-          if (screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) > 0 OR screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) = -15) {
+          if (screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) > 0 || screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) = -15) {
             EMove$ = RGT$
           }
         ELSE
           EMove$ = RGT$
         }
-      END SELECT
+      }
   }
 
 
-  SELECT CASE EMove$
-  CASE RGT$:
+  switch (EMove$) {
+  case RGT$:
 
     if (Enemies(SerialNumber).ScreenX < 31) {
-      if (screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) <= 0 && screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) <> -15) {
+      if (screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) <= 0 && screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) !== -15) {
         Enemies(SerialNumber).x = Enemies(SerialNumber).x + Enemies(SerialNumber).Speed: MID$(Enemies(SerialNumber).Direc, 2) = "R"
       }
     }
-  CASE LFT$:
+  case LFT$:
     if (Enemies(SerialNumber).ScreenX > 0) {
-      if (screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) <= 0 && screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) <> -15) {
+      if (screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) <= 0 && screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) !== -15) {
         Enemies(SerialNumber).x = Enemies(SerialNumber).x - Enemies(SerialNumber).Speed: MID$(Enemies(SerialNumber).Direc, 2) = "L"
       }
     }
-  CASE UP$:
+  case UP$:
     if (Enemies(SerialNumber).ScreenY > 0) {
-      if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY - 1) <= 0 && screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY - 1) <> -15) {
+      if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY - 1) <= 0 && screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY - 1) !== -15) {
         Enemies(SerialNumber).y = Enemies(SerialNumber).y - Enemies(SerialNumber).Speed
       }
     }
-  CASE DN$:
+  case DN$:
     if (Enemies(SerialNumber).ScreenY < 19) {
-      if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) <= 0 && screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) <> -15) {
+      if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) <= 0 && screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) !== -15) {
         Enemies(SerialNumber).y = Enemies(SerialNumber).y + Enemies(SerialNumber).Speed
       }
     }
-  END SELECT
+  }
 
   if (NOT Enemies(SerialNumber).CanFly) {
     if (Enemies(SerialNumber).ScreenY < 19) {
-      if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) <= 0 && screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) <> -15) {
+      if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) <= 0 && screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) !== -15) {
         Enemies(SerialNumber).y = Enemies(SerialNumber).y + 10
       ELSE
         Enemies(SerialNumber).y = Enemies(SerialNumber).ScreenY * 10
@@ -896,8 +896,8 @@ SUB AI (SerialNumber, screenMap())
     }
   }
 
-  SELECT CASE Enemies(SerialNumber).Race
-  CASE "LIGHTNING "
+  switch (Enemies(SerialNumber).Race) {
+  case "LIGHTNING "
     if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) > 0) {
       EClone = Enemies(SerialNumber)
       Enemies(SerialNumber) = FireTemplate
@@ -908,56 +908,56 @@ SUB AI (SerialNumber, screenMap())
       Enemies(SerialNumber).PlaceHold = EClone.PlaceHold
       Enemies(SerialNumber).PlaceVal = EClone.PlaceVal
     }
-  CASE "FIRE      "
+  case "FIRE      "
     ETrueDamage = ZeroLimit(INT(Enemies(SerialNumber).AP / Enemies(SerialNumber).DP))
     Enemies(SerialNumber).Health = Enemies(SerialNumber).Health - ETrueDamage
-  END SELECT
+  }
 
   if (Enemies(SerialNumber).PlaceVal = -1) {
-    if (ItemType$ <> "X") {
-      if (ItemType$ = "$") { ItemNo = ItemNo + 1:  ELSE ItemType$ = "$": ItemNo = 1
+    if (ItemType$ !== "X") {
+      if (ItemType$ = "$") { ItemNo = ItemNo + 1:  else ItemType$ = "$": ItemNo = 1
       Enemies(SerialNumber).PlaceVal = 0
     }
   }
 
   if (Enemies(SerialNumber).PlaceVal = -11) {
 
-    SELECT CASE EMove$
-    CASE UP$
+    switch (EMove$) {
+    case UP$
       Enemies(SerialNumber).x = PortalBeta.x * 10
       Enemies(SerialNumber).y = (PortalBeta.y * 10) - 10
-    CASE DN$, ""
+    case DN$, ""
       Enemies(SerialNumber).x = PortalBeta.x * 10
       Enemies(SerialNumber).y = (PortalBeta.y * 10) + 10
-    CASE RGT$
+    case RGT$
       Enemies(SerialNumber).x = (PortalBeta.x * 10) + 10
       Enemies(SerialNumber).y = PortalBeta.y * 10
-    CASE LFT$
+    case LFT$
       Enemies(SerialNumber).x = (PortalBeta.x * 10) - 10
       Enemies(SerialNumber).y = PortalBeta.y * 10
-    END SELECT
+    }
 
   }
 
   if (Enemies(SerialNumber).PlaceVal = -12) {
 
-    SELECT CASE EMove$
-    CASE UP$
+    switch (EMove$) {
+    case UP$
       Enemies(SerialNumber).x = PortalAlpha.x * 10
       Enemies(SerialNumber).y = (PortalAlpha.y * 10) - 10
-    CASE DN$
+    case DN$
       Enemies(SerialNumber).x = PortalAlpha.x * 10
       Enemies(SerialNumber).y = (PortalAlpha.y * 10) + 10
-    CASE ""
+    case ""
       Enemies(SerialNumber).x = PortalAlpha.x * 10
       Enemies(SerialNumber).y = (PortalAlpha.y * 10) + 10
-    CASE RGT$
+    case RGT$
       Enemies(SerialNumber).x = (PortalAlpha.x * 10) + 10
       Enemies(SerialNumber).y = PortalAlpha.y * 10
-    CASE LFT$
+    case LFT$
       Enemies(SerialNumber).x = (PortalAlpha.x * 10) - 10
       Enemies(SerialNumber).y = PortalAlpha.y * 10
-    END SELECT
+    }
   }
 
   if (Guy.ScreenX = Enemies(SerialNumber).ScreenX && Guy.ScreenY = Enemies(SerialNumber).ScreenY) {
@@ -972,21 +972,21 @@ SUB AI (SerialNumber, screenMap())
       Guy.Mvmnt = "UP"
       MID$(Guy.Direc, 1) = "U"
       Guy.JTime = 35
-    ELSE
+    } else {
       GTrueDamage = ZeroLimit(INT(Enemies(SerialNumber).AP / Guy.DP))
       Guy.Health = ZeroLimit(Guy.Health - GTrueDamage)
       if (GTrueDamage > 0) {
         SharedWiseMessage$ = "OUCH!"
         SharedTalk = 10
       }
-      SELECT CASE RIGHT$(Enemies(SerialNumber).Direc, 1)
-      CASE "L"
+      switch (RIGHT$(Enemies(SerialNumber).Direc, 1)) {
+      case "L"
         Guy.x = Guy.x - 5
         Enemies(SerialNumber).x = Enemies(SerialNumber).x + 5
-      CASE "R"
+      case "R"
         Guy.x = Guy.x + 5
         Enemies(SerialNumber).x = Enemies(SerialNumber).x - 5
-      END SELECT
+      }
     }
   }
 
@@ -994,30 +994,30 @@ SUB AI (SerialNumber, screenMap())
 
   if (Enemies(SerialNumber).Health <= 0) {
     Enemies(SerialNumber).Status = "GONE"
-    SELECT CASE ItemType$
-    CASE ""
+    switch (ItemType$) {
+    case ""
       Guy.Health = Guy.Health + ItemNo
       if (Guy.Health > Guy.MaxHp) { Guy.Health = Guy.MaxHp
-    CASE "$"
+    case "$"
       Coins = Coins + ItemNo
-    END SELECT
+    }
     screenMap(Enemies(SerialNumber).PlaceHold.x, Enemies(SerialNumber).PlaceHold.y) = Enemies(SerialNumber).PlaceVal
     Enemies(SerialNumber) = NoOneTemplate
   }
 
   Enemies(SerialNumber).Item = ItemType$ + STR$(ItemNo)
 
-  SELECT CASE Enemies(SerialNumber).Race
-  CASE "GOBLIN    ": DrawObj Goblinimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
-  CASE "DRAGON    ": DrawObj Dragonimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
-  CASE "RAVEN     ": DrawObj Ravenimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
-  CASE "WSTATUE   ": DrawObj WingedStatueimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
-  CASE "SNAKE     ": DrawObj Snakeimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
-  CASE "STORMY    ": DrawObj Stormyimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
-  CASE "GHOST     ": DrawObj Ghostimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
-  CASE "LIGHTNING ": DrawObj Lightningimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
-  CASE "FIRE      ": DrawObj Fireimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
-  END SELECT
+  switch (Enemies(SerialNumber).Race) {
+  case "GOBLIN    ": DrawObj Goblinimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
+  case "DRAGON    ": DrawObj Dragonimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
+  case "RAVEN     ": DrawObj Ravenimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
+  case "WSTATUE   ": DrawObj WingedStatueimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
+  case "SNAKE     ": DrawObj Snakeimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
+  case "STORMY    ": DrawObj Stormyimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
+  case "GHOST     ": DrawObj Ghostimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
+  case "LIGHTNING ": DrawObj Lightningimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
+  case "FIRE      ": DrawObj Fireimage%(), 9, 9, Enemies(SerialNumber).x, Enemies(SerialNumber).y, Enemies(SerialNumber).Direc
+  }
 
 END SUB
 // */
@@ -1037,7 +1037,7 @@ SUB Directions
   PRINT "Good luck!"
   PRINT "(Press <Esc>.)"
   PCOPY 0, 1
-  WHILE INKEY$ <> ESC$
+  WHILE INKEY$ !== ESC$
   WEND
 END SUB
 
@@ -1045,32 +1045,34 @@ SUB DrawObj (Image() AS INTEGER, xlimit AS INTEGER, ylimit AS INTEGER, x AS INTE
 
 FOR yp = 0 TO ylimit
   FOR xp = 0 TO xlimit
-    SELECT CASE position$
-    CASE "UR": pixel = Image%(xp, yp)
-    CASE "UL": pixel = Image%(-xp + xlimit, yp)
-    CASE "DL": pixel = Image%(xp, -yp + ylimit)
-    CASE "DR": pixel = Image%(-xp + xlimit, -yp + ylimit)
-    CASE "VL": pixel = Image%(-yp + ylimit, -xp + xlimit)
-    CASE "VR": pixel = Image%(-yp + ylimit, xp)
-    CASE "HR": pixel = Image%(yp, -xp + xlimit)
-    CASE "HL": pixel = Image%(yp, xp)
-    END SELECT
+    switch (position$) {
+    case "UR": pixel = Image%(xp, yp)
+    case "UL": pixel = Image%(-xp + xlimit, yp)
+    case "DL": pixel = Image%(xp, -yp + ylimit)
+    case "DR": pixel = Image%(-xp + xlimit, -yp + ylimit)
+    case "VL": pixel = Image%(-yp + ylimit, -xp + xlimit)
+    case "VR": pixel = Image%(-yp + ylimit, xp)
+    case "HR": pixel = Image%(yp, -xp + xlimit)
+    case "HL": pixel = Image%(yp, xp)
+    }
     if (pixel = -2) { pixel = POINT(xp + x, yp + y) + 1
     if (pixel = 16) { pixel = 0
-    if (pixel <> -1) { PSET (xp + x, yp + y), pixel
+    if (pixel !== -1) { PSET (xp + x, yp + y), pixel
   NEXT xp
 NEXT yp
 
 END SUB
+// */
 
-FUNCTION FlipBlocks% (block%)
-SELECT CASE block%
-CASE -4: FlipBlocks% = 4
-CASE 4: FlipBlocks% = -4
-CASE ELSE: FlipBlocks% = block%
-END SELECT
-END FUNCTION
+function FlipBlocks (block) {
+    switch (block) {
+        case -4: return 4;
+        case 4: return -4;
+        default: return block;
+    }
+}
 
+/*
 SUB Game
   Guy.Health = 10
   Guy.MaxHp = 10
@@ -1084,7 +1086,7 @@ SUB Game
   Guy.Status = "GOOD"
 
 1
-if (WorldsChecked >= NoOfLevels) { Warp = 0: WorldsChecked = 0
+if (WorldsChecked >= NoOfLevels) { Warp = 0: WorldsChecked = 0; }
 
   PlayLevel screenMap1%(), "LEVEL 1 Beware of Lonely Coins", ""
   PlayLevel screenMap2%(), "LEVEL 2 Keys are Immortal", ""
@@ -1104,14 +1106,14 @@ if (WorldsChecked >= NoOfLevels) { Warp = 0: WorldsChecked = 0
   PlayLevel screenMap10%(), "LEVEL 10 Statues Never Die or Kill", ""
   PlayLevel screenMap11%(), "LEVEL 11 Just Wait", ""
 
-if (Guy.Status = "GONE") { GOTO 2
-if (Warp = 1) { GOTO 1
+if (Guy.Status = "GONE") { GOTO 2; }
+if (Warp = 1) { GOTO 1; }
 
 COLOR 15
 PRINT " YOU WINZ! Until I makes another level.  Press <Esc>."
 PCOPY 0, 1
 DO
-LOOP WHILE INKEY$ <> ESC$
+LOOP WHILE INKEY$ !== ESC$
 2 SCREEN 9, 0, 0, 1
   ON KEY(11) GOSUB MenuUp
   ON KEY(14) GOSUB MenuDown
@@ -1174,25 +1176,25 @@ SUB GameOver
     xDirecY = INT(RND * 3)
     aDirecB = INT(RND * 3)
 
-    SELECT CASE xDirecY              'random directions
-      CASE 0: x = x + 5
-      CASE 1: x = x - 5
-      CASE 2: y = y - 5
-    END SELECT
+    switch (xDirecY) {              'random directions
+      case 0: x = x + 5; break;
+      case 1: x = x - 5; break;
+      case 2: y = y - 5; break;
+    }
 
-    SELECT CASE aDirecB
-      CASE 0: a = a + 5
-      CASE 1: a = a - 5
-      CASE 2: B = B - 5
-    END SELECT
+    switch (aDirecB) {
+      case 0: a = a + 5; break;
+      case 1: a = a - 5; break;
+      case 2: B = B - 5; break;
+    }
 
-    if (a > XMAX) { a = 0           'world-wrap
-    if (a < 0) { a = XMAX
-    if (B < 0) { B = YMAX: GoneUp = GoneUp + 1
+    if (a > XMAX) { a = 0; }        'world-wrap
+    if (a < 0) { a = XMAX; }
+    if (B < 0) { B = YMAX; GoneUp = GoneUp + 1; }
 
-    if (x > XMAX) { x = 0
-    if (x < 0) { x = XMAX
-    if (y < 0) { y = YMAX: GoneUp = GoneUp + 1
+    if (x > XMAX) { x = 0; }
+    if (x < 0) { x = XMAX; }
+    if (y < 0) { y = YMAX; GoneUp = GoneUp + 1; }
 
     if (INKEY$ = ESC$) {
       Guy.Status = "GONE"
@@ -1218,7 +1220,7 @@ SUB GameOver
     ECMMANDSTRING2$ = "RRRRRRRRR   LL   UURRR             UDUDUDUDUDUDUDUDUD "
     ECMMANDSTRING$ = ECMMANDSTRING1$ + ECMMANDSTRING2$
     DO
-      if (Place < LEN(COMMANDSTRING$)) { Place = Place + 1
+      if (Place < LEN(COMMANDSTRING$)) { Place = Place + 1; }
       CLS
       LOCATE 1, 15: COLOR 4: PRINT "EPIC FAIL"
       if (MID$(COMMANDSTRING$, Place, 1) = "H") {
@@ -1226,7 +1228,7 @@ SUB GameOver
       }
       DrawObj GuyImage%(), 10, 10, x, y, HisDirec
       DrawObj Goblinimage%(), 9, 9, Ex, Ey, "UR"
-      if (LEFT$(HisDirec, 1) = "U" OR LEFT$(HisDirec, 1) = "D") {
+      if (LEFT$(HisDirec, 1) = "U" || LEFT$(HisDirec, 1) = "D") {
         DrawObj Handimage%(), 3, 3, x - 2, y + 4, "UR"
         DrawObj Handimage%(), 3, 3, x + 9, y + 4, "UR"
       ELSE
@@ -1249,35 +1251,35 @@ SUB GameOver
       PCOPY 0, 1
 
 
-      SELECT CASE MID$(COMMANDSTRING$, Place, 1)
-      CASE "R"
+      switch (MID$(COMMANDSTRING$, Place, 1)) {
+      case "R"
         x = x + 5
         MID$(HisDirec, 2, 1) = "R"
-      CASE "L"
+      case "L"
         x = x - 5
         MID$(HisDirec, 2, 1) = "L"
-      CASE "U"
+      case "U"
         y = y - 5
         MID$(HisDirec, 1, 1) = "U"
-      CASE "D"
+      case "D"
         y = y + 5
         HisDirec = Spin$(HisDirec)
-      CASE " "
+      case " "
         MID$(HisDirec, 1, 1) = "U"
-      CASE "X"
+      case "X"
         EXIT DO
-      END SELECT
+      }
 
-      SELECT CASE MID$(ECMMANDSTRING$, Place, 1)
-      CASE "R"
+      switch (MID$(ECMMANDSTRING$, Place, 1)) {
+      case "R"
         Ex = Ex + 5
-      CASE "L"
+      case "L"
         Ex = Ex - 5
-      CASE "U"
+      case "U"
         Ey = Ey - 5
-      CASE "D"
+      case "D"
         Ey = Ey + 5
-      END SELECT
+      }
 
       if (INKEY$ = ESC$) {
         Guy.Status = "GONE"
@@ -1321,26 +1323,26 @@ SCREEN 12
   PRINT "(1) Level w/ Floor"
   PRINT "(2) Build off of other level"
   INPUT "Which one"; Template
-  SELECT CASE Template
-  CASE 1
+  switch (Template) {
+  case 1
     FOR x0 = 0 TO 31
       screenMap(x0, 19) = 1
     NEXT x0
-  CASE 2
+  case 2
     INPUT "File Name"; FileName$
     FileName$ = UCASE$(FileName$)
-    if (RIGHT$(FileName$, 4) <> ".LVL") { FileName$ = FileName$ + ".LVL"
+    if (RIGHT$(FileName$, 4) !== ".LVL") { FileName$ = FileName$ + ".LVL"; }
     OPEN "C:/BASIC/GAME/CUSTOM~1/" + FileName$ FOR RANDOM AS #1 LEN = LEN(screenMap)
       RecordNumber = 1
       FOR x0 = 0 TO 31
         FOR y0 = 0 TO 19
           GET #1, RecordNumber, screenMap(x0, y0)
-          if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1
+          if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
           RecordNumber = RecordNumber + 1
         NEXT y0
       NEXT x0
     CLOSE #1
-  END SELECT
+  }
 
 SCREEN 7, 0, 0, 1
   KEY(16) OFF
@@ -1355,50 +1357,50 @@ SCREEN 7, 0, 0, 1
     CLS
 
     Move$ = INKEY$
-    SELECT CASE Move$
-      CASE RGT$: ScreenX = ScreenX + 1: GDirec$ = "UR"
-      CASE LFT$: ScreenX = ScreenX - 1: GDirec$ = "UL"
-      CASE UP$: ScreenY = ScreenY - 1
-      CASE DN$: ScreenY = ScreenY + 1
-      CASE CHR$(8)
+    switch (Move$) {
+      case RGT$: ScreenX = ScreenX + 1: GDirec$ = "UR"
+      case LFT$: ScreenX = ScreenX - 1: GDirec$ = "UL"
+      case UP$: ScreenY = ScreenY - 1
+      case DN$: ScreenY = ScreenY + 1
+      case CHR$(8)
       FOR x0 = 0 TO 31
         FOR y0 = 0 TO 19
           screenMap(x0, y0) = 0
         NEXT y0
       NEXT x0
-      CASE "i": Choice$ = "Sealed Eye": Choice = 3
-      CASE "I": Choice$ = "Eye": Choice = -10
-      CASE "[": Choice$ = "Portal �": Choice = -11
-      CASE "]": Choice$ = "Portal �": Choice = -12
-      CASE "1": Choice$ = "Goblin": Choice = 11
-      CASE "2": Choice$ = "Raven": Choice = 12
-      CASE "3": Choice$ = "Dragon": Choice = 13
-      CASE "4": Choice$ = "Winged Statue": Choice = 14
-      CASE "5": Choice$ = "Snake": Choice = 15
-      CASE "6": Choice$ = "Stormy": Choice = 16
-      CASE "7": Choice$ = "Ghost": Choice = 17
-      CASE "w": Choice$ = "Wiseman": Choice = 22
-      CASE "l": Choice$ = "LifeUp!": Choice = -13
-      CASE "a": Choice$ = "AttackUp!": Choice = -14
-      CASE "+": Choice$ = "Positive Block": Choice = 4
-      CASE "-": Choice$ = "Negative Block": Choice = -4
-      CASE F1$: Choice$ = "Platform": Choice = 1
-      CASE F2$: Choice$ = "Sealed Platform": Choice = -5
-      CASE F3$: Choice$ = "False Platform": Choice = -9
-      CASE F4$: Choice$ = "Hidden Platform": Choice = 2
-      CASE F5$: Choice$ = "Key": Choice = -20
-      CASE F6$: Choice$ = "Sealed Key": Choice = -2
-      CASE F7$: Choice$ = "Keyhole": Choice = -3
-      CASE F8$: Choice$ = "Sealed Keyhole": Choice = -6
-      CASE F9$: Choice$ = "Coin": Choice = -1
-      CASE F10$:  Choice$ = "Delete": Choice = 0
-      CASE "S"
+      case "i": Choice$ = "Sealed Eye": Choice = 3
+      case "I": Choice$ = "Eye": Choice = -10
+      case "[": Choice$ = "Portal �": Choice = -11
+      case "]": Choice$ = "Portal �": Choice = -12
+      case "1": Choice$ = "Goblin": Choice = 11
+      case "2": Choice$ = "Raven": Choice = 12
+      case "3": Choice$ = "Dragon": Choice = 13
+      case "4": Choice$ = "Winged Statue": Choice = 14
+      case "5": Choice$ = "Snake": Choice = 15
+      case "6": Choice$ = "Stormy": Choice = 16
+      case "7": Choice$ = "Ghost": Choice = 17
+      case "w": Choice$ = "Wiseman": Choice = 22
+      case "l": Choice$ = "LifeUp!": Choice = -13
+      case "a": Choice$ = "AttackUp!": Choice = -14
+      case "+": Choice$ = "Positive Block": Choice = 4
+      case "-": Choice$ = "Negative Block": Choice = -4
+      case F1$: Choice$ = "Platform": Choice = 1
+      case F2$: Choice$ = "Sealed Platform": Choice = -5
+      case F3$: Choice$ = "False Platform": Choice = -9
+      case F4$: Choice$ = "Hidden Platform": Choice = 2
+      case F5$: Choice$ = "Key": Choice = -20
+      case F6$: Choice$ = "Sealed Key": Choice = -2
+      case F7$: Choice$ = "Keyhole": Choice = -3
+      case F8$: Choice$ = "Sealed Keyhole": Choice = -6
+      case F9$: Choice$ = "Coin": Choice = -1
+      case F10$:  Choice$ = "Delete": Choice = 0
+      case "S"
         FOR y0 = 0 TO 19
           FOR x0 = 0 TO 31
-            if (screenMap(x0, y0) = -3 OR screenMap(x0, y0) = -20 OR screenMap(x0, y0) = -6 OR screenMap(x0, y0) = -2) {
+            if (screenMap(x0, y0) = -3 || screenMap(x0, y0) = -20 || screenMap(x0, y0) = -6 || screenMap(x0, y0) = -2) {
               Req = Req + 1
             }
-            if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1
+            if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
           NEXT x0
         NEXT y0
         if (Req < 2) {
@@ -1413,32 +1415,32 @@ SCREEN 7, 0, 0, 1
           PlayLevel screenMap(), "CUSTOM LEVEL", ""
           Req = 0
         }
-      CASE F11$
+      case F11$
 
-      CASE ESC$: EXIT DO
-      CASE SPC$
+      case ESC$: EXIT DO
+      case SPC$
         FOR y0 = 0 TO 19
           FOR x0 = 0 TO 31
-            if ((Choice$ = "Key" OR Choice$ = "Sealed Key") && (screenMap(x0, y0) = -20 OR screenMap(x0, y0) = -2)) { screenMap(x0, y0) = 0
-            if ((Choice$ = "Keyhole" OR Choice$ = "Sealed Keyhole") && (screenMap(x0, y0) = -6 OR screenMap(x0, y0) = -3)) { screenMap(x0, y0) = 0
-            if (Choice = -11 && screenMap(x0, y0) = -11) { screenMap(x0, y0) = 0
-            if (Choice = -12 && screenMap(x0, y0) = -12) { screenMap(x0, y0) = 0
+            if ((Choice$ = "Key" || Choice$ = "Sealed Key") && (screenMap(x0, y0) = -20 || screenMap(x0, y0) = -2)) { screenMap(x0, y0) = 0; }
+            if ((Choice$ = "Keyhole" || Choice$ = "Sealed Keyhole") && (screenMap(x0, y0) = -6 || screenMap(x0, y0) = -3)) { screenMap(x0, y0) = 0; }
+            if (Choice = -11 && screenMap(x0, y0) = -11) { screenMap(x0, y0) = 0; }
+            if (Choice = -12 && screenMap(x0, y0) = -12) { screenMap(x0, y0) = 0; }
           NEXT x0
         NEXT y0
         screenMap(ScreenX, ScreenY) = Choice
-    END SELECT
+    }
 
     if (Move$ = ENTR$) {
       EnterCount = EnterCount + 1
     ELSE
       EnterCount = 0
     }
-    if (EnterCount >= 3) { LBInfo Choice$
+    if (EnterCount >= 3) { LBInfo Choice$; }
 
-    if (ScreenX > 31) { ScreenX = 0
-    if (ScreenX < 0) { ScreenX = 31
-    if (ScreenY > 19) { ScreenY = 0
-    if (ScreenY < 0) { ScreenY = 19
+    if (ScreenX > 31) { ScreenX = 0; }
+    if (ScreenX < 0) { ScreenX = 31; }
+    if (ScreenY > 19) { ScreenY = 0; }
+    if (ScreenY < 0) { ScreenY = 19; }
 
     TrueX = ScreenX * 10
     TrueY = (ScreenY * 10) - 1
@@ -1447,38 +1449,38 @@ SCREEN 7, 0, 0, 1
 
     FOR y0 = 0 TO 19
       FOR x0 = 0 TO 31
-        SELECT CASE screenMap(x0, y0)
-        CASE 1: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF
-        CASE 2: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, B
-        CASE 4: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 1, BF
-        CASE -4: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 4, BF
-        CASE -9: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 4, B
-        CASE -5: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 1, B
-        CASE -1
+        switch (screenMap(x0, y0)) {
+        case 1: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF
+        case 2: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, B
+        case 4: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 1, BF
+        case -4: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 4, BF
+        case -9: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 4, B
+        case -5: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 1, B
+        case -1
           CIRCLE ((x0 * 10) + 5, (y0 * 10) + 5), 5, 6
           PAINT ((x0 * 10) + 5, (y0 * 10) + 5), 14, 6
-        CASE -3: DrawObj Keyholeimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
-        CASE -6: DrawObj Keyholeimage%(), 9, 9, x0 * 10, y0 * 10, "DL"
-        CASE -20: DrawObj Keyimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
-        CASE IS > 20
+        case -3: DrawObj Keyholeimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
+        case -6: DrawObj Keyholeimage%(), 9, 9, x0 * 10, y0 * 10, "DL"
+        case -20: DrawObj Keyimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
+        case IS > 20
           DrawObj GuyImage%(), 10, 10, x0 * 10, y0 * 10, "UR"
           DrawObj Handimage%(), 3, 3, (x0 * 10) - 2, (y0 * 10) + 4, "UR"
           DrawObj Handimage%(), 3, 3, (x0 * 10) + 9, (y0 * 10) + 4, "UR"
-        CASE -2: DrawObj Keyimage%(), 9, 9, x0 * 10, y0 * 10, "DL"
-        CASE -10: DrawObj Eyeimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
-        CASE 3: DrawObj Eyeimage%(), 9, 9, x0 * 10, y0 * 10, "VR"
-        CASE -11: DrawObj Portalimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
-        CASE -12: DrawObj Portalimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
-        CASE 11: DrawObj Goblinimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
-        CASE 12: DrawObj Ravenimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-        CASE 13: DrawObj Dragonimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-        CASE 14: DrawObj WingedStatueimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-        CASE 15: DrawObj Snakeimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-        CASE 16: DrawObj Stormyimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-        CASE 17: DrawObj Ghostimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-        CASE -13: DrawObj LifeUpimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-        CASE -14: DrawObj AttackUpimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-        END SELECT
+        case -2: DrawObj Keyimage%(), 9, 9, x0 * 10, y0 * 10, "DL"
+        case -10: DrawObj Eyeimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
+        case 3: DrawObj Eyeimage%(), 9, 9, x0 * 10, y0 * 10, "VR"
+        case -11: DrawObj Portalimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
+        case -12: DrawObj Portalimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
+        case 11: DrawObj Goblinimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
+        case 12: DrawObj Ravenimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
+        case 13: DrawObj Dragonimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
+        case 14: DrawObj WingedStatueimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
+        case 15: DrawObj Snakeimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
+        case 16: DrawObj Stormyimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
+        case 17: DrawObj Ghostimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
+        case -13: DrawObj LifeUpimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
+        case -14: DrawObj AttackUpimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
+        }
       NEXT x0
     NEXT y0
 
@@ -1511,11 +1513,11 @@ DO
   KEY(14) ON
 
   Move$ = INKEY$
-  SELECT CASE Move$
-  CASE ENTR$
-    if (Choice = 1) { KEY(11) OFF: KEY(14) OFF: Game
-    if (Choice = 2) { Directions
-    if (Choice = 3) { LevelBuilder
+  switch (Move$) {
+  case ENTR$
+    if (Choice = 1) { KEY(11) OFF: KEY(14) OFF: Game; }
+    if (Choice = 2) { Directions; }
+    if (Choice = 3) { LevelBuilder; }
     if (Choice = 4) {
       GOSUB Load
         ON KEY(11) GOSUB MenuUp
@@ -1524,23 +1526,23 @@ DO
         KEY(14) ON
         SCREEN 9, 0, 0, 1
     }
-    if (Choice = 5) { END
-    if (Choice = 6) { RecordDemo
-  END SELECT
-  if (GlovePos > 199 && GlovePos < 210) { Choice = 1
-  if (GlovePos > 220 && GlovePos < 230) { Choice = 2
-  if (GlovePos > 250 && GlovePos < 260) { Choice = 3
-  if (GlovePos > 280 && GlovePos < 290) { Choice = 4
-  if (GlovePos > 300 && GlovePos < 310) { Choice = 5
-  if (GlovePos > 320 && GlovePos < 330) { Choice = 6
-  SELECT CASE Choice
-  CASE 1: Opt1 = 15: Opt2 = 8: Opt3 = 8: Opt4 = 8: Opt5 = 8: Opt6 = 8
-  CASE 2: Opt1 = 8: Opt2 = 15: Opt3 = 8: Opt4 = 8: Opt5 = 8: Opt6 = 8
-  CASE 3: Opt1 = 8: Opt2 = 8: Opt3 = 15: Opt4 = 8: Opt5 = 8: Opt6 = 8
-  CASE 4: Opt1 = 8: Opt2 = 8: Opt3 = 8: Opt4 = 15: Opt5 = 8: Opt6 = 8
-  CASE 5: Opt1 = 8: Opt2 = 8: Opt3 = 8: Opt4 = 8: Opt5 = 15: Opt6 = 8
-  CASE 6: Opt1 = 8: Opt2 = 8: Opt3 = 8: Opt4 = 8: Opt5 = 8: Opt6 = 15
-  END SELECT
+    if (Choice = 5) { END; }
+    if (Choice = 6) { RecordDemo; }
+  }
+  if (GlovePos > 199 && GlovePos < 210) { Choice = 1; }
+  if (GlovePos > 220 && GlovePos < 230) { Choice = 2; }
+  if (GlovePos > 250 && GlovePos < 260) { Choice = 3; }
+  if (GlovePos > 280 && GlovePos < 290) { Choice = 4; }
+  if (GlovePos > 300 && GlovePos < 310) { Choice = 5; }
+  if (GlovePos > 320 && GlovePos < 330) { Choice = 6; }
+  switch (Choice) {
+  case 1: Opt1 = 15: Opt2 = 8: Opt3 = 8: Opt4 = 8: Opt5 = 8: Opt6 = 8
+  case 2: Opt1 = 8: Opt2 = 15: Opt3 = 8: Opt4 = 8: Opt5 = 8: Opt6 = 8
+  case 3: Opt1 = 8: Opt2 = 8: Opt3 = 15: Opt4 = 8: Opt5 = 8: Opt6 = 8
+  case 4: Opt1 = 8: Opt2 = 8: Opt3 = 8: Opt4 = 15: Opt5 = 8: Opt6 = 8
+  case 5: Opt1 = 8: Opt2 = 8: Opt3 = 8: Opt4 = 8: Opt5 = 15: Opt6 = 8
+  case 6: Opt1 = 8: Opt2 = 8: Opt3 = 8: Opt4 = 8: Opt5 = 8: Opt6 = 15
+  }
   CLS
   COLOR 15
   PRINT "�����������        ��          ���       ���    ���������"
@@ -1576,9 +1578,9 @@ DO
   PCOPY 0, 1
   DemoTimer = DemoTimer + 1
 
-  if (DemoTimer = 400) { PlayDemo "DEMO2.DMO", screenMap2%()
-  if (DemoTimer = 800) { PlayDemo "DEMO3.DMO", screenMap3%()
-  if (DemoTimer = 1200) { PlayDemo "DEMO5.DMO", screenMap5%(): DemoTimer = 0
+  if (DemoTimer = 400) { PlayDemo "DEMO2.DMO", screenMap2%(); }
+  if (DemoTimer = 800) { PlayDemo "DEMO3.DMO", screenMap3%(); }
+  if (DemoTimer = 1200) { PlayDemo "DEMO5.DMO", screenMap5%(): DemoTimer = 0; }
 
 LOOP
 Load:
@@ -1595,13 +1597,13 @@ Load:
         Guy.DP = 1
         CoinMax = 0
         FileName$ = UCASE$(FileName$)
-        if (RIGHT$(FileName$, 4) <> ".LVL") { FileName$ = FileName$ + ".LVL"
+        if (RIGHT$(FileName$, 4) !== ".LVL") { FileName$ = FileName$ + ".LVL"; }
         OPEN "C:/BASIC/GAME/CUSTOM~1/" + FileName$ FOR RANDOM AS #1 LEN = LEN(screenMap)
           RecordNumber = 1
           FOR x0 = 0 TO 31
             FOR y0 = 0 TO 19
               GET #1, RecordNumber, screenMap(x0, y0)
-              if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1
+              if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
               RecordNumber = RecordNumber + 1
             NEXT y0
           NEXT x0
@@ -1625,24 +1627,24 @@ SUB Pause
 
     CLS
 
-    SELECT CASE INKEY$
-      CASE RGT$: GuyX = GuyX + 5: GDirec$ = "UR"
-      CASE LFT$: GuyX = GuyX - 5: GDirec$ = "UL"
-      CASE UP$: GuyY = GuyY - 5
-      CASE DN$: GuyY = GuyY + 5
-      CASE SPC$
-        if (Message$ = " Go to LevelBuilder.") { BuildLevel = 1: EXIT DO
-        if (Message$ = " Unpause w/ Spacebar.") { EXIT DO
+    switch (INKEY$) {
+      case RGT$: GuyX = GuyX + 5: GDirec$ = "UR"
+      case LFT$: GuyX = GuyX - 5: GDirec$ = "UL"
+      case UP$: GuyY = GuyY - 5
+      case DN$: GuyY = GuyY + 5
+      case SPC$
+        if (Message$ = " Go to LevelBuilder.") { BuildLevel = 1: EXIT DO; }
+        if (Message$ = " Unpause w/ Spacebar.") { EXIT DO; }
         if (GuyX >= Guy.x && GuyX < Guy.x + 11 && GuyY >= Guy.y && GuyY < Guy.y + 11) {
            Warp$ = WhichWorld$(1)
         }
-      CASE ENTR$
-        if (Warp$ <> "") {
+      case ENTR$
+        if (Warp$ !== "") {
           Warp = 1
           World$ = Warp$
           EXIT DO
         }
-    END SELECT
+    }
 
     if (GuyX > 30 && GuyX < 70 && GuyY > 90 && GuyY < 130) {
       Message$ = " Unpause w/ Spacebar."
@@ -1657,10 +1659,10 @@ SUB Pause
     }
 
 
-    if (GuyX > XMAX) { GuyX = 0
-    if (GuyX < 0) { GuyX = XMAX
-    if (GuyY > YMAX) { GuyY = 0
-    if (GuyY < 0) { GuyY = YMAX
+    if (GuyX > XMAX) { GuyX = 0; }
+    if (GuyX < 0) { GuyX = XMAX; }
+    if (GuyY > YMAX) { GuyY = 0; }
+    if (GuyY < 0) { GuyY = YMAX; }
 
     'draw all de crap
 
@@ -1691,7 +1693,7 @@ END SUB
 
 SUB PlayDemo (FileName$, screenMap())
   FileName$ = UCASE$(FileName$)
-  if (RIGHT$(FileName$, 4) <> ".DMO") { FileName$ = FileName$ + ".DMO"
+  if (RIGHT$(FileName$, 4) !== ".DMO") { FileName$ = FileName$ + ".DMO"; }
   SCREEN 7, 0, 0, 1
 
   OPEN "C:/BASIC/GAME/DEMOS/" + FileName$ FOR RANDOM AS #1 LEN = 210
@@ -1709,7 +1711,7 @@ SUB PlayLevel (LescreenMap(), Message$, Demo$)
 SCREEN 7, 0, 0, 1
 SharedMessage$ = Message$
 YouShouldGo = 0
-if (Guy.Status = "GONE") { EXIT SUB
+if (Guy.Status = "GONE") { EXIT SUB; }
 if (LCASE$(Message$) = LCASE$(World$)) {
   Warp = 0
   WorldsChecked = 0
@@ -1728,7 +1730,7 @@ DoorX = -1
 DoorY = -1
 
 Guy.Health = 10
-if (Demo$ <> "DEMO") {
+if (Demo$ !== "DEMO") {
   KEY(15) ON
   KEY(16) ON
   KEY(17) ON
@@ -1760,36 +1762,36 @@ FOR y0 = 0 TO 19
       EnemyRace = screenMap(x0, y0) - 10
       screenMap(x0, y0) = 0
       SerNo = SerNo + 1
-      SELECT CASE EnemyRace
-      CASE 1
+      switch (EnemyRace) {
+      case 1
         Enemies(SerNo) = GoblinTemplate
-      CASE 2
+      case 2
         Enemies(SerNo) = RavenTemplate
-      CASE 3
+      case 3
         if (SerNo < 15) {
           Enemies(SerNo) = DragonTemplate
           Enemies(SerNo).x = x0 * 10
           Enemies(SerNo).y = y0 * 10
           SerNo = SerNo + 1
           Enemies(SerNo) = NoOneTemplate
-        ELSE Enemies(SerNo) = NoOneTemplate
+        else Enemies(SerNo) = NoOneTemplate
         }
-      CASE 4
+      case 4
         Enemies(SerNo) = WingedStatueTemplate
-      CASE 5
+      case 5
         Enemies(SerNo) = SnakeTemplate
-      CASE 6
+      case 6
         if (SerNo < 15) {
           Enemies(SerNo) = StormyTemplate
           Enemies(SerNo).x = x0 * 10
           Enemies(SerNo).y = y0 * 10
           SerNo = SerNo + 1
           Enemies(SerNo) = NoOneTemplate
-        ELSE Enemies(SerNo) = NoOneTemplate
+        else Enemies(SerNo) = NoOneTemplate
         }
-      CASE 7
+      case 7
         Enemies(SerNo) = GhostTemplate
-      END SELECT
+      }
       Enemies(SerNo).x = x0 * 10
       Enemies(SerNo).y = y0 * 10
       Enemies(SerNo).PlaceHold.x = x0
@@ -1804,16 +1806,16 @@ SharedWiseMessage$ = ""
 
 FOR y0 = 0 TO 19
   FOR x0 = 0 TO 31
-    if (screenMap(x0, y0) = -11) { PortalAlpha.x = x0: PortalAlpha.y = y0
-    if (screenMap(x0, y0) = -12) { PortalBeta.x = x0: PortalBeta.y = y0
+    if (screenMap(x0, y0) = -11) { PortalAlpha.x = x0: PortalAlpha.y = y0; }
+    if (screenMap(x0, y0) = -12) { PortalBeta.x = x0: PortalBeta.y = y0; }
   NEXT x0
 NEXT y0
 
 Time = 0
 '-----------------------------------------------------------------------------
 DO
-if (Warp = 1) { KEY(17) OFF: EXIT DO
-if (Guy.Status = "GONE") { EXIT SUB
+if (Warp = 1) { KEY(17) OFF: EXIT DO; }
+if (Guy.Status = "GONE") { EXIT SUB; }
 if (BuildLevel = 1) {
   BuildLevel = 0
   KEY(11) OFF
@@ -1834,28 +1836,28 @@ PRINT SharedMessage$
 
 0 FOR y0 = 19 TO 0 STEP -1
   FOR x0 = 0 TO 31
-    SELECT CASE screenMap(x0, y0)
-    CASE 1, 3
+    switch (screenMap(x0, y0)) {
+    case 1, 3
       LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF
-    CASE -9
-      if (screenMap(Guy.ScreenX, Guy.ScreenY) <> -10) { LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF
-    CASE 2
-      if (screenMap(Guy.ScreenX, Guy.ScreenY) = -10) { LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF
-    CASE 4
+    case -9
+      if (screenMap(Guy.ScreenX, Guy.ScreenY) !== -10) { LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF; }
+    case 2
+      if (screenMap(Guy.ScreenX, Guy.ScreenY) = -10) { LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF; }
+    case 4
       LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 10), 1, BF
-    CASE -4
+    case -4
       LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 10), 4, BF
-    CASE -1
+    case -1
       CIRCLE ((x0 * 10) + 5, (y0 * 10) + 5), 5, 6
       PAINT ((x0 * 10) + 5, (y0 * 10) + 5), 14, 6
-    CASE IS = -3
+    case IS = -3
       DrawObj Keyholeimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
-    CASE -31
+    case -31
       screenMap(x0, y0) = -11: screenMap(PortalBeta.x, PortalBeta.y + 1) = screenMap(PortalBeta.x, PortalBeta.y + 1) - 20
-    CASE -32
+    case -32
       screenMap(x0, y0) = -12: screenMap(PortalAlpha.x, PortalAlpha.y + 1) = screenMap(PortalAlpha.x, PortalAlpha.y + 1) - 20
 
-    CASE IS <= -20
+    case IS <= -20
       DrawObj Keyimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
       if (y0 < 19) {
         if (screenMap(x0, y0 + 1) <= 0) {
@@ -1866,35 +1868,35 @@ PRINT SharedMessage$
         screenMap(x0, y0) = screenMap(x0, y0) + 20: screenMap(x0, 0) = screenMap(x0, 0) - 20
       }
 
-    CASE -7: DoorX = x0 * 10: DoorY = y0 * 10
-    CASE -10
+    case -7: DoorX = x0 * 10: DoorY = y0 * 10
+    case -10
       DrawObj Eyeimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
-    CASE -11, -12
+    case -11, -12
       DrawObj Portalimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
 
-    CASE IS > 20
-      if (x0 > Guy.ScreenX) { WiseDirec$ = "UL"
-      if (x0 < Guy.ScreenX) { WiseDirec$ = "UR"
+    case IS > 20
+      if (x0 > Guy.ScreenX) { WiseDirec$ = "UL"; }
+      if (x0 < Guy.ScreenX) { WiseDirec$ = "UR"; }
       DrawObj GuyImage%(), 10, 10, x0 * 10, (y0 * 10) - 1, WiseDirec$
       DrawObj Handimage%(), 3, 3, (x0 * 10) - 2, (y0 * 10) + 4, "UR"
       DrawObj Handimage%(), 3, 3, (x0 * 10) + 9, (y0 * 10) + 4, "UR"
-    CASE -13
+    case -13
       DrawObj LifeUpimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-    CASE -14
+    case -14
       DrawObj AttackUpimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
-    CASE -15
+    case -15
       'LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 10), 3, BF
       'anchor
 
-    END SELECT
-    if (screenMap(x0, y0) = -23) { screenMap(x0, y0) = -7
+    }
+    if (screenMap(x0, y0) = -23) { screenMap(x0, y0) = -7; }
   NEXT x0
 NEXT y0
 
-if (DoorX > -1 && DoorY > -1) { DrawObj Doorimage%(), 9, 9, INT(DoorX), INT(DoorY), "UR"
+if (DoorX > -1 && DoorY > -1) { DrawObj Doorimage%(), 9, 9, INT(DoorX), INT(DoorY), "UR"; }
 DrawObj GuyImage%(), 10, 10, INT(Guy.x), INT(Guy.y), Guy.Direc
 
-if (LEFT$(Guy.Direc, 1) = "U" OR LEFT$(Guy.Direc, 1) = "D") {
+if (LEFT$(Guy.Direc, 1) = "U" || LEFT$(Guy.Direc, 1) = "D") {
   DrawObj Handimage%(), 3, 3, Guy.x - 2, Guy.y + 4, "UR"
   DrawObj Handimage%(), 3, 3, Guy.x + 9, Guy.y + 4, "UR"
 ELSE
@@ -1903,30 +1905,30 @@ ELSE
 }
 
 if (Time < 200) {
-  if (Demo$ = "DEMO") { Time = Time + 1: Guy = DemoGuy(Time)
-  if (Demo$ = "RECORD") { Time = Time + 1: DemoGuy(Time) = Guy
+  if (Demo$ = "DEMO") { Time = Time + 1: Guy = DemoGuy(Time); }
+  if (Demo$ = "RECORD") { Time = Time + 1: DemoGuy(Time) = Guy; }
 } else if (Demo$ = "RECORD") { SaveDemo: EXIT DO
 } else if (Demo$ = "DEMO") { EXIT DO
 }
 
-if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1: screenMap(Guy.ScreenX, Guy.ScreenY) = 0   'get coin
+if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1: screenMap(Guy.ScreenX, Guy.ScreenY) = 0; } 'get coin
 
-if (screenMap(Guy.ScreenX, Guy.ScreenY) <= -20 && Demo$ <> "") {
+if (screenMap(Guy.ScreenX, Guy.ScreenY) <= -20 && Demo$ !== "") {
   screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) + 20
-  SELECT CASE RIGHT$(Guy.Direc, 1)
-  CASE "R"
+  switch (RIGHT$(Guy.Direc, 1)) {
+  case "R"
     if (Guy.ScreenX < 31) {
       screenMap(Guy.ScreenX + 1, Guy.ScreenY) = screenMap(Guy.ScreenX + 1, Guy.ScreenY) - 20
     }
-  CASE "L"
+  case "L"
     if (Guy.ScreenX > 0) {
       screenMap(Guy.ScreenX - 1, Guy.ScreenY) = screenMap(Guy.ScreenX - 1, Guy.ScreenY) - 20
     }
-  END SELECT
+  }
 }
 
-if (screenMap(Guy.ScreenX, Guy.ScreenY) = -13) { Guy.MaxHp = Guy.MaxHp + 5: Guy.Health = Guy.MaxHp: screenMap(Guy.ScreenX, Guy.ScreenY) = 0: SharedWiseMessage$ = "MAX HP +5!!!": SharedTalk = 50
-if (screenMap(Guy.ScreenX, Guy.ScreenY) = -14) { Guy.AP = Guy.AP + 3: screenMap(Guy.ScreenX, Guy.ScreenY) = 0: SharedWiseMessage$ = "Attack +3!!!": SharedTalk = 50
+if (screenMap(Guy.ScreenX, Guy.ScreenY) = -13) { Guy.MaxHp = Guy.MaxHp + 5: Guy.Health = Guy.MaxHp: screenMap(Guy.ScreenX, Guy.ScreenY) = 0: SharedWiseMessage$ = "MAX HP +5!!!": SharedTalk = 50; }
+if (screenMap(Guy.ScreenX, Guy.ScreenY) = -14) { Guy.AP = Guy.AP + 3: screenMap(Guy.ScreenX, Guy.ScreenY) = 0: SharedWiseMessage$ = "Attack +3!!!": SharedTalk = 50; }
 
 if (screenMap(Guy.ScreenX, Guy.ScreenY) = -11) {
   Guy.x = PortalBeta.x * 10
@@ -1944,10 +1946,10 @@ Guy.ScreenY = INT((Guy.y + 1) / 10)
 
 
 'jump
-if (Demo$ <> "DEMO") {
-  if (Move$ <> UP$ && Guy.Mvmnt = "UP") { NJTimer = NJTimer + 1:  ELSE NJTimer = 0
+if (Demo$ !== "DEMO") {
+  if (Move$ !== UP$ && Guy.Mvmnt = "UP") { NJTimer = NJTimer + 1:  else NJTimer = 0; }
 
-  if ((NJTimer >= 10 && Guy.Mvmnt = "UP") OR (Guy.Mvmnt = "UP" && Guy.JTime = 0)) {
+  if ((NJTimer >= 10 && Guy.Mvmnt = "UP") || (Guy.Mvmnt = "UP" && Guy.JTime = 0)) {
     Guy.Mvmnt = "DN"
   }
 
@@ -1956,16 +1958,16 @@ if (Demo$ <> "DEMO") {
   }
 }
 
-if (Guy.ScreenY > 18) { GameOver: EXIT SUB
+if (Guy.ScreenY > 18) { GameOver: EXIT SUB; }
 
 FOR SerialNo = 1 TO SerNo
   AI SerialNo, screenMap()
 NEXT SerialNo
 
-if (Demo$ <> "DEMO") {
-  if (Guy.Mvmnt <> "UP") {
-    if (((Guy.y - 1) / 10) >= 19) { Guy.y = Guy.y - 10
-    if (Guy.x / 10 >= 31) { Guy.x = Guy.x - 10
+if (Demo$ !== "DEMO") {
+  if (Guy.Mvmnt !== "UP") {
+    if (((Guy.y - 1) / 10) >= 19) { Guy.y = Guy.y - 10; }
+    if (Guy.x / 10 >= 31) { Guy.x = Guy.x - 10; }
     if (screenMap(Guy.ScreenX, Guy.ScreenY + 1) <= 0 && screenMap(INT((Guy.x + 5) / 10), Guy.ScreenY + 1) <= 0) {
       if (Guy.ScreenY = (Guy.y + 1) / 10) {
         Guy.y = Guy.y + 10
@@ -1973,11 +1975,11 @@ if (Demo$ <> "DEMO") {
         Guy.y = Guy.y + 5
       }
       Guy.Mvmnt = "DN"
-    ELSE : Guy.JTime = 25
+    else : Guy.JTime = 25
       Guy.Mvmnt = "DX"
 
-      if (RIGHT$(Guy.Direc, 1) = "R") { Guy.Direc = "UR"
-      if (RIGHT$(Guy.Direc, 1) = "L") { Guy.Direc = "UL"
+      if (RIGHT$(Guy.Direc, 1) = "R") { Guy.Direc = "UR"; }
+      if (RIGHT$(Guy.Direc, 1) = "L") { Guy.Direc = "UL"; }
     }
   }
 
@@ -1989,7 +1991,7 @@ if (Demo$ <> "DEMO") {
     Guy.JTime = Guy.JTime + 1
   }
 
-  if (Guy.ScreenY <> (Guy.y + 1) / 10 && screenMap(Guy.ScreenX, Guy.ScreenY + 1) > 0 && Guy.Mvmnt <> "UP") { Guy.y = Guy.y - 5
+  if (Guy.ScreenY !== (Guy.y + 1) / 10 && screenMap(Guy.ScreenX, Guy.ScreenY + 1) > 0 && Guy.Mvmnt !== "UP") { Guy.y = Guy.y - 5; }
 
   if (INKEY$ = ENTR$) {
     KEY(16) OFF
@@ -2010,24 +2012,24 @@ if (Demo$ <> "DEMO") {
 if (Coins = CoinMax) {
   FOR y0 = 0 TO 19
     FOR x0 = 0 TO 31
-      if (screenMap(x0, y0) = -5) { screenMap(x0, y0) = 1
-      if (screenMap(x0, y0) = -2) { screenMap(x0, y0) = -20
-      if (screenMap(x0, y0) = -6) { screenMap(x0, y0) = -3
-      if (screenMap(x0, y0) = 3) { screenMap(x0, y0) = -10
+      if (screenMap(x0, y0) = -5) { screenMap(x0, y0) = 1; }
+      if (screenMap(x0, y0) = -2) { screenMap(x0, y0) = -20; }
+      if (screenMap(x0, y0) = -6) { screenMap(x0, y0) = -3; }
+      if (screenMap(x0, y0) = 3) { screenMap(x0, y0) = -10; }
     NEXT x0
   NEXT y0
   Coins = 0
 }
 
 
-if (Guy.y / 10 > 18) { GameOver: EXIT DO
+if (Guy.y / 10 > 18) { GameOver: EXIT DO; }
 
-if (YouShouldGo = 1) { EXIT DO
+if (YouShouldGo = 1) { EXIT DO; }
 
-if (Talk > 0) { Talk = Talk - 1: SharedTalk = SharedTalk - 1: PRINT WiseMessage$
-if (SharedTalk = 0 && SharedWiseMessage$ = WiseMen(3).Speech) { ADMISSION = 1: EXIT DO
+if (Talk > 0) { Talk = Talk - 1: SharedTalk = SharedTalk - 1: PRINT WiseMessage$; }
+if (SharedTalk = 0 && SharedWiseMessage$ = WiseMen(3).Speech) { ADMISSION = 1: EXIT DO; }
 
-if (INKEY$ = ESC$) { Guy.Status = "GONE": EXIT SUB        'quit
+if (INKEY$ = ESC$) { Guy.Status = "GONE": EXIT SUB; }     'quit
 
 PCOPY 0, 1
 SOUND 0, 3 'anchor
@@ -2051,13 +2053,13 @@ SUB RecordDemo
   Guy.DP = 1
   CoinMax = 0
   FileName$ = UCASE$(FileName$)
-  if (RIGHT$(FileName$, 4) <> ".LVL") { FileName$ = FileName$ + ".LVL"
+  if (RIGHT$(FileName$, 4) !== ".LVL") { FileName$ = FileName$ + ".LVL"; }
     OPEN "C:/BASIC/GAME/" + FileName$ FOR RANDOM AS #1 LEN = LEN(screenMap)
       RecordNumber = 1
       FOR x0 = 0 TO 31
         FOR y0 = 0 TO 19
           GET #1, RecordNumber, screenMap(x0, y0)
-          if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1
+          if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
           RecordNumber = RecordNumber + 1
         NEXT y0
       NEXT x0
@@ -2072,7 +2074,7 @@ SUB SaveDemo
   SCREEN 12
   INPUT "Save Demo As"; FileName$
   FileName$ = UCASE$(FileName$)
-  if (RIGHT$(FileName$, 4) <> ".DMO") { FileName$ = FileName$ + ".DMO"
+  if (RIGHT$(FileName$, 4) !== ".DMO") { FileName$ = FileName$ + ".DMO"; }
   SCREEN 7, 0, 0, 1
   OPEN "C:/BASIC/GAME/DEMOS/" + FileName$ FOR RANDOM AS #1 LEN = 210
     RecordNumber = 1
@@ -2092,7 +2094,7 @@ FOR y0 = Starty TO Starty + YLength
   FOR x0 = Startx TO Startx + XLength
     pixel = POINT(x0, y0) + 1
 
-    if (pixel = 16) { pixel = 0
+    if (pixel = 16) { pixel = 0; }
 
     PSET (x0, y0), pixel
   NEXT x0
@@ -2101,16 +2103,16 @@ END SUB
 
 FUNCTION Spin$ (Direction AS STRING)
   LeftDirec$ = LEFT$(Direction, 1)
-  SELECT CASE LeftDirec$
-    CASE "U"
+  switch (LeftDirec$) {
+    case "U"
       LeftDirec$ = "H"
-    CASE "H"
+    case "H"
       LeftDirec$ = "D"
-    CASE "D"
+    case "D"
       LeftDirec$ = "V"
-    CASE "V"
+    case "V"
       LeftDirec$ = "U"
-  END SELECT
+  }
 
   MID$(Direction, 1, 1) = LeftDirec$
   Spin = Direction
