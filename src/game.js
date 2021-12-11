@@ -570,10 +570,10 @@ function LevelRight() {
     Guy.x = Guy.x + 5;
     if (Guy.x > 316) { Guy.x = 315; }
     if (Guy.ScreenX < 30) {
-      if (screenMap(Guy.ScreenX + 1, Guy.ScreenY) = -11) {
+      if (screenMap[Guy.ScreenX + 1][Guy.ScreenY] === -11) {
         Guy.x = (PortalBeta.x + 1) * 10;
         Guy.y = (PortalBeta.y * 10) - 1;
-      } else if (screenMap(Guy.ScreenX + 1, Guy.ScreenY) = -12) {
+      } else if (screenMap[Guy.ScreenX + 1][Guy.ScreenY] === -12) {
         Guy.x = (PortalAlpha.x + 1) * 10;
         Guy.y = (PortalAlpha.y * 10) - 1;
       }
@@ -583,10 +583,14 @@ function LevelRight() {
     Guy.Direc = `${Guy.Direc[0]}R`;
     Guy.ScreenX = INT(Guy.x / 10);
     Guy.ScreenY = INT((Guy.y + 1) / 10);
-    if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1; screenMap(Guy.ScreenX, Guy.ScreenY) = 0; }
+    if (screenMap[Guy.ScreenX][Guy.ScreenY] === -1) {
+        Coins = Coins + 1;
+        screenMap[Guy.ScreenX][Guy.ScreenY] = 0;
+    }
     if (Guy.ScreenX < 30) {
       if (screenMap(Guy.ScreenX, Guy.ScreenY) <= -20 && screenMap(Guy.ScreenX + 1, Guy.ScreenY) <= 0) {
-        screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) + 20; screenMap(Guy.ScreenX + 1, Guy.ScreenY) = screenMap(Guy.ScreenX + 1, Guy.ScreenY) - 20;
+        screenMap[Guy.ScreenX][Guy.ScreenY] = screenMap[Guy.ScreenX][Guy.ScreenY] + 20;
+        screenMap[Guy.ScreenX + 1][Guy.ScreenY] = screenMap[Guy.ScreenX + 1][Guy.ScreenY] - 20;
       }
     }
 }
@@ -595,10 +599,10 @@ function LevelLeft() {
     Guy.x = Guy.x - 5;
     if (Guy.x < 5) { Guy.x = 5; }
     if (Guy.ScreenX > 0) {
-      if (screenMap(Guy.ScreenX - 1, Guy.ScreenY) = -11) {
+      if (screenMap[Guy.ScreenX - 1][Guy.ScreenY] === -11) {
         Guy.x = (PortalBeta.x - 1) * 10;
         Guy.y = (PortalBeta.y * 10) - 1;
-      } else if (screenMap(Guy.ScreenX - 1, Guy.ScreenY) = -12) {
+      } else if (screenMap[Guy.ScreenX - 1][Guy.ScreenY] === -12) {
         Guy.x = (PortalAlpha.x - 1) * 10;
         Guy.y = (PortalAlpha.y * 10) - 1;
       }
@@ -607,15 +611,20 @@ function LevelLeft() {
     Guy.Direc = `${Guy.Direc[0]}L`;
     Guy.ScreenX = INT(Guy.x / 10);
     Guy.ScreenY = INT((Guy.y + 1) / 10);
-    if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1; screenMap(Guy.ScreenX, Guy.ScreenY) = 0; }
+    if (screenMap[Guy.ScreenX][Guy.ScreenY] === -1) {
+        Coins = Coins + 1;
+        screenMap[Guy.ScreenX][Guy.ScreenY] = 0;
+    }
     if (Guy.ScreenX > 1) {
       if (screenMap(Guy.ScreenX, Guy.ScreenY) <= -20 && screenMap(Guy.ScreenX - 1, Guy.ScreenY) <= 0) {
-        screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) + 20; screenMap(Guy.ScreenX - 1, Guy.ScreenY) = screenMap(Guy.ScreenX - 1, Guy.ScreenY) - 20;
+        screenMap[Guy.ScreenX][Guy.ScreenY] = screenMap[Guy.ScreenX][Guy.ScreenY] + 20;
+        screenMap[Guy.ScreenX - 1][Guy.ScreenY] = screenMap[Guy.ScreenX - 1][Guy.ScreenY] - 20;
       }
     }
     if (Guy.ScreenX > 0) {
       if (screenMap(Guy.ScreenX + 1, Guy.ScreenY) <= -20 && screenMap(Guy.ScreenX, Guy.ScreenY) <= 0) {
-        screenMap(Guy.ScreenX + 1, Guy.ScreenY) = screenMap(Guy.ScreenX + 1, Guy.ScreenY) + 20; screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) - 20;
+        screenMap[Guy.ScreenX + 1][Guy.ScreenY] = screenMap[Guy.ScreenX + 1][Guy.ScreenY] + 20;
+        screenMap[Guy.ScreenX][Guy.ScreenY] = screenMap[Guy.ScreenX][Guy.ScreenY] - 20;
       }
     }
 }
@@ -623,14 +632,14 @@ function LevelLeft() {
 function LevelJump() {
   if (Guy.JTime > 0 && Guy.Mvmnt !== "DN") {
     if (Guy.y > 10) {
-      if (screenMap(Guy.ScreenX, Guy.ScreenY - 1) = -11) {
+      if (screenMap[Guy.ScreenX][Guy.ScreenY - 1] === -11) {
         Guy.x = PortalBeta.x * 10;
         Guy.y = ((PortalBeta.y - 1) * 10) - 1;
-      } else if (screenMap(Guy.ScreenX, Guy.ScreenY - 1) = -12) {
+      } else if (screenMap[Guy.ScreenX][Guy.ScreenY - 1] === -12) {
         Guy.x = PortalAlpha.x * 10;
         Guy.y = ((PortalAlpha.y - 1) * 10) - 1;
       }
-      if (screenMap(Guy.ScreenX, Guy.ScreenY - 1) <= 0 || RIGHT$(STR$(Guy.x), 1) = "5" && screenMap(Guy.ScreenX + 1, Guy.ScreenY - 1) <= 0) {
+      if (screenMap[Guy.ScreenX][Guy.ScreenY - 1] <= 0 || RIGHT$(STR$(Guy.x), 1) === "5" && screenMap[Guy.ScreenX + 1][Guy.ScreenY - 1] <= 0) {
         Guy.y = Guy.y - 5;
       }
       Guy.Mvmnt = "UP";
@@ -638,11 +647,16 @@ function LevelJump() {
   }
     Guy.ScreenX = INT(Guy.x / 10);
     Guy.ScreenY = INT((Guy.y + 1) / 10);
-    if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1; screenMap(Guy.ScreenX, Guy.ScreenY) = 0; }
+    if (screenMap[Guy.ScreenX][Guy.ScreenY] === -1) {
+        Coins = Coins + 1;
+        screenMap[Guy.ScreenX][Guy.ScreenY] = 0;
+    }
 }
 
 function Down() {
-  if (screenMap(Guy.ScreenX, Guy.ScreenY) = -7) { YouShouldGo = 1; }
+  if (screenMap[Guy.ScreenX][Guy.ScreenY] === -7) {
+      YouShouldGo = 1;
+  }
 }
 /*
 Save:
@@ -700,28 +714,28 @@ function Space() {
     if (screenMap(Guy.ScreenX, Guy.ScreenY) === -4) {
       if (Guy.ScreenY > 1) {
         if (Guy.ScreenX > 1) {
-          screenMap(Guy.ScreenX - 1, Guy.ScreenY - 1) = FlipBlocks(screenMap(Guy.ScreenX - 1, Guy.ScreenY - 1))
+          screenMap[Guy.ScreenX - 1][Guy.ScreenY - 1] = FlipBlocks(screenMap[Guy.ScreenX - 1][Guy.ScreenY - 1])
         }
         if (Guy.ScreenX < 31) {
-          screenMap(Guy.ScreenX + 1, Guy.ScreenY - 1) = FlipBlocks(screenMap(Guy.ScreenX + 1, Guy.ScreenY - 1))
+          screenMap[Guy.ScreenX + 1][Guy.ScreenY - 1] = FlipBlocks(screenMap[Guy.ScreenX + 1][Guy.ScreenY - 1])
         }
-        screenMap(Guy.ScreenX, Guy.ScreenY - 1) = FlipBlocks(screenMap(Guy.ScreenX, Guy.ScreenY - 1))
+        screenMap[Guy.ScreenX][Guy.ScreenY - 1] = FlipBlocks(screenMap[Guy.ScreenX][Guy.ScreenY - 1])
       }
 
       if (Guy.ScreenY < 19) {
         if (Guy.ScreenX > 1) {
-          screenMap(Guy.ScreenX - 1, Guy.ScreenY + 1) = FlipBlocks(screenMap(Guy.ScreenX - 1, Guy.ScreenY + 1))
+          screenMap[Guy.ScreenX - 1][Guy.ScreenY + 1] = FlipBlocks(screenMap[Guy.ScreenX - 1][Guy.ScreenY + 1])
         }
         if (Guy.ScreenX < 31) {
-          screenMap(Guy.ScreenX + 1, Guy.ScreenY + 1) = FlipBlocks(screenMap(Guy.ScreenX + 1, Guy.ScreenY + 1))
+          screenMap[Guy.ScreenX + 1][Guy.ScreenY + 1] = FlipBlocks(screenMap[Guy.ScreenX + 1][Guy.ScreenY + 1])
         }
-        screenMap(Guy.ScreenX, Guy.ScreenY + 1) = FlipBlocks(screenMap(Guy.ScreenX, Guy.ScreenY + 1))
+        screenMap[Guy.ScreenX][Guy.ScreenY + 1] = FlipBlocks(screenMap[Guy.ScreenX][Guy.ScreenY + 1])
       }
       if (Guy.ScreenX > 1) {
-        screenMap(Guy.ScreenX - 1, Guy.ScreenY) = FlipBlocks(screenMap(Guy.ScreenX - 1, Guy.ScreenY))
+        screenMap[Guy.ScreenX - 1][Guy.ScreenY] = FlipBlocks(screenMap[Guy.ScreenX - 1][Guy.ScreenY])
       }
       if (Guy.ScreenX < 31) {
-        screenMap(Guy.ScreenX + 1, Guy.ScreenY) = FlipBlocks(screenMap(Guy.ScreenX + 1, Guy.ScreenY))
+        screenMap[Guy.ScreenX + 1][Guy.ScreenY] = FlipBlocks(screenMap[Guy.ScreenX + 1][Guy.ScreenY])
       }
     }
 }
@@ -1055,9 +1069,9 @@ FOR yp = 0 TO ylimit
     case "HR": pixel = Image%(yp, -xp + xlimit)
     case "HL": pixel = Image%(yp, xp)
     }
-    if (pixel = -2) { pixel = POINT(xp + x, yp + y) + 1
-    if (pixel = 16) { pixel = 0
-    if (pixel !== -1) { PSET (xp + x, yp + y), pixel
+    if (pixel = -2) { pixel = POINT(xp + x, yp + y) + 1; }
+    if (pixel = 16) { pixel = 0; }
+    if (pixel !== -1) { PSET (xp + x, yp + y), pixel; }
   NEXT xp
 NEXT yp
 
