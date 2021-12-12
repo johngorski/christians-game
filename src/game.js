@@ -667,12 +667,12 @@ Save:
         SCREEN 7, 0, 0, 1
         OPEN "C:/BASIC/GAME/CUSTOM~1/" + FileName$ FOR RANDOM AS #1 LEN = LEN(screenMap)
           RecordNumber = 1
-          FOR x0 = 0 TO 31
-            FOR y0 = 0 TO 19
+          for (let x0 = 0; x0 <= 31; x0++) {
+            for (let y0 = 0; y0 <= 19; y0++) {
               PUT #1, RecordNumber, screenMap(x0, y0)
               RecordNumber = RecordNumber + 1
-            NEXT y0
-          NEXT x0
+            }
+          }
         CLOSE #1
         PRINT "SAVED": PCOPY 0, 1
         SLEEP
@@ -1057,8 +1057,8 @@ END SUB
 
 SUB DrawObj (Image() AS INTEGER, xlimit AS INTEGER, ylimit AS INTEGER, x AS INTEGER, y AS INTEGER, position$)
 
-FOR yp = 0 TO ylimit
-  FOR xp = 0 TO xlimit
+for (let yp = 0; yp <= ylimit; yp++) {
+  for (let xp = 0; xp <= xlimit; xp++) {
     switch (position$) {
     case "UR": pixel = Image%(xp, yp)
     case "UL": pixel = Image%(-xp + xlimit, yp)
@@ -1072,8 +1072,8 @@ FOR yp = 0 TO ylimit
     if (pixel = -2) { pixel = POINT(xp + x, yp + y) + 1; }
     if (pixel = 16) { pixel = 0; }
     if (pixel !== -1) { PSET (xp + x, yp + y), pixel; }
-  NEXT xp
-NEXT yp
+  }
+}
 
 END SUB
 // */
@@ -1212,9 +1212,9 @@ SUB GameOver
 
     if (INKEY$ = ESC$) {
       Guy.Status = "GONE"
-      FOR SerialNumber = 1 TO 10
+      for (let SerialNumber = 1; SerialNumber <= 10; SerialNumber++) {
         Enemies(SerialNumber).Status = "GONE"
-      NEXT
+      }
       EXIT SUB
     }
 
@@ -1257,9 +1257,9 @@ SUB GameOver
       }
 
       DrawObj LCloudimage%(), 9, 9, 0, (YMAX / 2) + 10, "UR"
-      FOR x0 = 9 TO XMAX - 19 STEP 10
+      for (let x0 = 9; x0 <= XMAX - 19; x0 += 10) {
         DrawObj MCloudimage%(), 9, 9, INT(x0), (YMAX / 2) + 10, "UR"
-      NEXT x0
+      }
       DrawObj RCloudimage%(), 9, 9, XMAX - 11, (YMAX / 2) + 10, "UR"
 
       PCOPY 0, 1
@@ -1297,17 +1297,17 @@ SUB GameOver
 
       if (INKEY$ = ESC$) {
         Guy.Status = "GONE"
-        FOR SerialNumber = 1 TO 10
+        for (let SerialNumber = 1; SerialNumber <= 10; SerialNumber += 1) {
           Enemies(SerialNumber).Status = "GONE"
-        NEXT
+        }
         EXIT SUB
       }
 
     LOOP
 Guy.Status = "GONE"
-FOR SerialNumber = 1 TO 10
+for (let SerialNumber = 1; SerialNumber <= 10; SerialNumber += 1) {
   Enemies(SerialNumber).Status = "GONE"
-NEXT
+}
 
 END SUB
 
@@ -1326,11 +1326,11 @@ END SUB
 
 SUB LevelBuilder
 SCREEN 12
-  FOR x0 = 0 TO 31
-    FOR y0 = 0 TO 19
+  for (let x0 = 0; x0 <= 31; x0 += 1) {
+    for (let y0 = 0; y0 <= 19; y0 += 1) {
       screenMap(x0, y0) = 0
-    NEXT y0
-  NEXT x0
+    }
+  }
   CLS
   PRINT "Select a template."
   PRINT "(0) Blank level"
@@ -1339,22 +1339,22 @@ SCREEN 12
   INPUT "Which one"; Template
   switch (Template) {
   case 1
-    FOR x0 = 0 TO 31
+    for (let x0 = 0; x0 <= 31; x0 += 1) {
       screenMap(x0, 19) = 1
-    NEXT x0
+    }
   case 2
     INPUT "File Name"; FileName$
     FileName$ = UCASE$(FileName$)
     if (RIGHT$(FileName$, 4) !== ".LVL") { FileName$ = FileName$ + ".LVL"; }
     OPEN "C:/BASIC/GAME/CUSTOM~1/" + FileName$ FOR RANDOM AS #1 LEN = LEN(screenMap)
       RecordNumber = 1
-      FOR x0 = 0 TO 31
-        FOR y0 = 0 TO 19
+      for (let x0 = 0; x0 <= 31; x0 += 1) {
+        for (let y0 = 0; y0 <= 19; y0 += 1) {
           GET #1, RecordNumber, screenMap(x0, y0)
           if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
           RecordNumber = RecordNumber + 1
-        NEXT y0
-      NEXT x0
+        }
+      }
     CLOSE #1
   }
 
@@ -1377,11 +1377,11 @@ SCREEN 7, 0, 0, 1
       case UP$: ScreenY = ScreenY - 1
       case DN$: ScreenY = ScreenY + 1
       case CHR$(8)
-      FOR x0 = 0 TO 31
-        FOR y0 = 0 TO 19
+      for (let x0 = 0; x0 <= 31; x0 += 1) {
+        for (let y0 = 0; y0 <= 19; y0 += 1) {
           screenMap(x0, y0) = 0
-        NEXT y0
-      NEXT x0
+        }
+      }
       case "i": Choice$ = "Sealed Eye": Choice = 3
       case "I": Choice$ = "Eye": Choice = -10
       case "[": Choice$ = "Portal �": Choice = -11
@@ -1409,14 +1409,14 @@ SCREEN 7, 0, 0, 1
       case F9$: Choice$ = "Coin": Choice = -1
       case F10$:  Choice$ = "Delete": Choice = 0
       case "S"
-        FOR y0 = 0 TO 19
-          FOR x0 = 0 TO 31
+        for (let y0 = 0; y0 <= 19; y0 += 1) {
+          for (let x0 = 0; x0 <= 31; x0 += 1) {
             if (screenMap(x0, y0) = -3 || screenMap(x0, y0) = -20 || screenMap(x0, y0) = -6 || screenMap(x0, y0) = -2) {
               Req = Req + 1
             }
             if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
-          NEXT x0
-        NEXT y0
+          }
+        }
         if (Req < 2) {
           PRINT "Need keyhole and key."
           CoinMax = 0
@@ -1433,14 +1433,14 @@ SCREEN 7, 0, 0, 1
 
       case ESC$: EXIT DO
       case SPC$
-        FOR y0 = 0 TO 19
-          FOR x0 = 0 TO 31
+        for (let y0 = 0; y0 <= 19; y0 += 1) {
+          for (let x0 = 0; x0 <= 31; x0 += 1) {
             if ((Choice$ = "Key" || Choice$ = "Sealed Key") && (screenMap(x0, y0) = -20 || screenMap(x0, y0) = -2)) { screenMap(x0, y0) = 0; }
             if ((Choice$ = "Keyhole" || Choice$ = "Sealed Keyhole") && (screenMap(x0, y0) = -6 || screenMap(x0, y0) = -3)) { screenMap(x0, y0) = 0; }
             if (Choice = -11 && screenMap(x0, y0) = -11) { screenMap(x0, y0) = 0; }
             if (Choice = -12 && screenMap(x0, y0) = -12) { screenMap(x0, y0) = 0; }
-          NEXT x0
-        NEXT y0
+          }
+        }
         screenMap(ScreenX, ScreenY) = Choice
     }
 
@@ -1461,8 +1461,8 @@ SCREEN 7, 0, 0, 1
 
     PRINT Choice$
 
-    FOR y0 = 0 TO 19
-      FOR x0 = 0 TO 31
+    for (let y0 = 0; y0 <= 19; y0 += 1) {
+      for (let x0 = 0; x0 <= 31; x0 += 1) {
         switch (screenMap(x0, y0)) {
         case 1: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF
         case 2: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, B
@@ -1495,8 +1495,8 @@ SCREEN 7, 0, 0, 1
         case -13: DrawObj LifeUpimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
         case -14: DrawObj AttackUpimage%(), 19, 19, x0 * 10, y0 * 10, "UR"
         }
-      NEXT x0
-    NEXT y0
+      }
+    }
 
     DrawObj GuyImage%(), 10, 10, INT(TrueX), INT(TrueY), GDirec$
     DrawObj Handimage%(), 3, 3, TrueX - 2, TrueY + 4, "UR"
@@ -1614,13 +1614,13 @@ Load:
         if (RIGHT$(FileName$, 4) !== ".LVL") { FileName$ = FileName$ + ".LVL"; }
         OPEN "C:/BASIC/GAME/CUSTOM~1/" + FileName$ FOR RANDOM AS #1 LEN = LEN(screenMap)
           RecordNumber = 1
-          FOR x0 = 0 TO 31
-            FOR y0 = 0 TO 19
+          for (let x0 = 0; x0 <= 31; x0 += 1) {
+            for (let y0 = 0; y0 <= 19; y0 += 1) {
               GET #1, RecordNumber, screenMap(x0, y0)
               if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
               RecordNumber = RecordNumber + 1
-            NEXT y0
-          NEXT x0
+            }
+          }
         CLOSE #1
         PRINT "LOADED": PCOPY 0, 1
         SLEEP
@@ -1712,10 +1712,10 @@ SUB PlayDemo (FileName$, screenMap())
 
   OPEN "C:/BASIC/GAME/DEMOS/" + FileName$ FOR RANDOM AS #1 LEN = 210
     RecordNumber = 1
-    FOR Time = 1 TO 200
+    for (let Time = 1; Time <= 200; Time += 1) {
       GET #1, RecordNumber, DemoGuy(Time)
       RecordNumber = RecordNumber + 1
-    NEXT Time
+    }
   CLOSE #1
   Guy = DemoGuy(1)
   PlayLevel screenMap(), "DEMO", "DEMO"
@@ -1763,14 +1763,14 @@ ELSE
 }
 Coins = 0
 
-FOR SerNo = 1 TO 10
+for (let SerNo = 1; SerNo <= 10; SerNo += 1) {
   Enemies(SerNo).Status = "GONE"
-NEXT SerNo
+}
 
 SerNo = 0
 
-FOR y0 = 0 TO 19
-  FOR x0 = 0 TO 31
+for (let y0 = 0; y0 <= 19; y0 += 1) {
+  for (let x0 = 0; x0 <= 31; x0 += 1) {
     screenMap(x0, y0) = LescreenMap(x0, y0)
     if (screenMap(x0, y0) > 10 && screenMap(x0, y0) <= 20 && SerNo < 15) {
       EnemyRace = screenMap(x0, y0) - 10
@@ -1811,19 +1811,19 @@ FOR y0 = 0 TO 19
       Enemies(SerNo).PlaceHold.x = x0
       Enemies(SerNo).PlaceHold.y = y0
     }
-  NEXT x0
-NEXT y0
+  }
+}
 
 CoinMax = DetermineCoin(LescreenMap())
 WiseMessage$ = ""
 SharedWiseMessage$ = ""
 
-FOR y0 = 0 TO 19
-  FOR x0 = 0 TO 31
+for (let y0 = 0; y0 <= 19; y0 += 1) {
+  for (let x0 = 0; x0 <= 31; x0 += 1) {
     if (screenMap(x0, y0) = -11) { PortalAlpha.x = x0: PortalAlpha.y = y0; }
     if (screenMap(x0, y0) = -12) { PortalBeta.x = x0: PortalBeta.y = y0; }
-  NEXT x0
-NEXT y0
+  }
+}
 
 Time = 0
 '-----------------------------------------------------------------------------
@@ -1848,8 +1848,8 @@ CLS
 PRINT " $"; Coins; CHR$(3); STR$(Guy.Health) + "/" + STR$(Guy.MaxHp); CHR$(6); Guy.AP; CHR$(5); Guy.DP
 PRINT SharedMessage$
 
-0 FOR y0 = 19 TO 0 STEP -1
-  FOR x0 = 0 TO 31
+0 for (let y0 = 19; y0 <= 0; y0 += 1) { STEP -1
+  for (let x0 = 0; x0 <= 31; x0 += 1) {
     switch (screenMap(x0, y0)) {
     case 1, 3
       LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF
@@ -1904,8 +1904,8 @@ PRINT SharedMessage$
 
     }
     if (screenMap(x0, y0) = -23) { screenMap(x0, y0) = -7; }
-  NEXT x0
-NEXT y0
+  }
+}
 
 if (DoorX > -1 && DoorY > -1) { DrawObj Doorimage%(), 9, 9, INT(DoorX), INT(DoorY), "UR"; }
 DrawObj GuyImage%(), 10, 10, INT(Guy.x), INT(Guy.y), Guy.Direc
@@ -1974,9 +1974,9 @@ if (Demo$ !== "DEMO") {
 
 if (Guy.ScreenY > 18) { GameOver: EXIT SUB; }
 
-FOR SerialNo = 1 TO SerNo
+for (let SerialNo = 1; SerialNo <= SerNo; SerialNo += 1) {
   AI SerialNo, screenMap()
-NEXT SerialNo
+}
 
 if (Demo$ !== "DEMO") {
   if (Guy.Mvmnt !== "UP") {
@@ -2016,22 +2016,22 @@ if (Demo$ !== "DEMO") {
     ON KEY(11) GOSUB LevelJump
     ON KEY(14) GOSUB Down
     ON KEY(15) GOSUB Save
-      FOR x0 = 0 TO 31
-        FOR y0 = 0 TO 19
+      for (let x0 = 0; x0 <= 31; x0 += 1) {
+        for (let y0 = 0; y0 <= 19; y0 += 1) {
           screenMap(x0, y0) = LescreenMap(x0, y0)
-        NEXT y0
-      NEXT x0
+        }
+      }
   }
 }
 if (Coins = CoinMax) {
-  FOR y0 = 0 TO 19
-    FOR x0 = 0 TO 31
+  for (let y0 = 0; y0 <= 19; y0 += 1) {
+    for (let x0 = 0; x0 <= 31; x0 += 1) {
       if (screenMap(x0, y0) = -5) { screenMap(x0, y0) = 1; }
       if (screenMap(x0, y0) = -2) { screenMap(x0, y0) = -20; }
       if (screenMap(x0, y0) = -6) { screenMap(x0, y0) = -3; }
       if (screenMap(x0, y0) = 3) { screenMap(x0, y0) = -10; }
-    NEXT x0
-  NEXT y0
+    }
+  }
   Coins = 0
 }
 
@@ -2070,13 +2070,13 @@ SUB RecordDemo
   if (RIGHT$(FileName$, 4) !== ".LVL") { FileName$ = FileName$ + ".LVL"; }
     OPEN "C:/BASIC/GAME/" + FileName$ FOR RANDOM AS #1 LEN = LEN(screenMap)
       RecordNumber = 1
-      FOR x0 = 0 TO 31
-        FOR y0 = 0 TO 19
+      for (let x0 = 0; x0 <= 31; x0 += 1) {
+        for (let y0 = 0; y0 <= 19; y0 += 1) {
           GET #1, RecordNumber, screenMap(x0, y0)
           if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
           RecordNumber = RecordNumber + 1
-        NEXT y0
-      NEXT x0
+        }
+      }
     CLOSE #1
     PRINT "LOADED": PCOPY 0, 1
     SLEEP
@@ -2092,10 +2092,10 @@ SUB SaveDemo
   SCREEN 7, 0, 0, 1
   OPEN "C:/BASIC/GAME/DEMOS/" + FileName$ FOR RANDOM AS #1 LEN = 210
     RecordNumber = 1
-    FOR Time = 1 TO 200
+    for (let Time = 1; Time <= 200; Time += 1) {
       PUT #1, RecordNumber, DemoGuy(Time)
       RecordNumber = RecordNumber + 1
-    NEXT Time
+    }
   CLOSE #1
 
   PRINT "SAVED": PCOPY 0, 1
@@ -2104,34 +2104,40 @@ SUB SaveDemo
 END SUB
 
 SUB ShiftColor (Startx, Starty, XLength, YLength)
-FOR y0 = Starty TO Starty + YLength
-  FOR x0 = Startx TO Startx + XLength
+for (let y0 = Starty; y0 <= Starty; y0 += 1) { + YLength
+  for (let x0 = Startx; x0 <= Startx; x0 += 1) { + XLength
     pixel = POINT(x0, y0) + 1
 
     if (pixel = 16) { pixel = 0; }
 
     PSET (x0, y0), pixel
-  NEXT x0
-NEXT y0
-END SUB
-
-FUNCTION Spin$ (Direction AS STRING)
-  LeftDirec$ = LEFT$(Direction, 1)
-  switch (LeftDirec$) {
-    case "U"
-      LeftDirec$ = "H"
-    case "H"
-      LeftDirec$ = "D"
-    case "D"
-      LeftDirec$ = "V"
-    case "V"
-      LeftDirec$ = "U"
   }
+}
+END SUB
+// */
 
-  MID$(Direction, 1, 1) = LeftDirec$
-  Spin = Direction
-END FUNCTION
+function Spin$(Direction) { // AS STRING
+    let LeftDirec$ = LEFT$(Direction, 1)
+    switch (LeftDirec$) {
+        case "U":
+            LeftDirec$ = "H";
+            break;
+        case "H":
+            LeftDirec$ = "D";
+            break;
+        case "D":
+            LeftDirec$ = "V";
+            break;
+        case "V":
+            LeftDirec$ = "U";
+            break;
+    }
 
+    Direction[1] = LeftDirec$;
+    return Direction;
+}
+
+/*
 FUNCTION WhichWorld$ (blah)
 SCREEN 9
 CLS
