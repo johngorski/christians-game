@@ -855,7 +855,7 @@ SUB AI (SerialNumber, screenMap())
           if (screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) > 0 || screenMap(Enemies(SerialNumber).ScreenX + 1, Enemies(SerialNumber).ScreenY) = -15) {
             EMove$ = LFT$
           }
-        ELSE
+        } else {
           EMove$ = LFT$
         }
       case "L": EMove$ = LFT$
@@ -863,7 +863,7 @@ SUB AI (SerialNumber, screenMap())
           if (screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) > 0 || screenMap(Enemies(SerialNumber).ScreenX - 1, Enemies(SerialNumber).ScreenY) = -15) {
             EMove$ = RGT$
           }
-        ELSE
+        } else {
           EMove$ = RGT$
         }
       }
@@ -902,10 +902,10 @@ SUB AI (SerialNumber, screenMap())
     if (Enemies(SerialNumber).ScreenY < 19) {
       if (screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) <= 0 && screenMap(Enemies(SerialNumber).ScreenX, Enemies(SerialNumber).ScreenY + 1) !== -15) {
         Enemies(SerialNumber).y = Enemies(SerialNumber).y + 10
-      ELSE
+      } else {
         Enemies(SerialNumber).y = Enemies(SerialNumber).ScreenY * 10
       }
-    ELSE
+    } else {
       Enemies(SerialNumber).Health = 0
     }
   }
@@ -1245,14 +1245,14 @@ SUB GameOver
       if (LEFT$(HisDirec, 1) = "U" || LEFT$(HisDirec, 1) = "D") {
         DrawObj Handimage%(), 3, 3, x - 2, y + 4, "UR"
         DrawObj Handimage%(), 3, 3, x + 9, y + 4, "UR"
-      ELSE
+      } else {
         DrawObj Handimage%(), 3, 3, x + 4, y - 2, "UR"
         DrawObj Handimage%(), 3, 3, x + 4, y + 9, "UR"
       }
 
       if (y <= (YMAX / 2) + 10) {
         CIRCLE (x + 4, y - 1), 4, 14
-      ELSE
+      } else {
         CIRCLE (x, (YMAX / 2) + 10), 4, 14
       }
 
@@ -1422,7 +1422,7 @@ SCREEN 7, 0, 0, 1
           CoinMax = 0
           PCOPY 0, 1
           SLEEP
-        ELSE
+        } else {
           Guy.x = TrueX
           Guy.y = TrueY
           Coins = 0
@@ -1445,7 +1445,7 @@ SCREEN 7, 0, 0, 1
 
     if (Move$ = ENTR$) {
       EnterCount = EnterCount + 1
-    ELSE
+    } else {
       EnterCount = 0
     }
     if (EnterCount >= 3) { LBInfo Choice$; }
@@ -1663,7 +1663,7 @@ SUB Pause
       Message$ = " Unpause w/ Spacebar."
     } else if (GuyX > 270 && GuyX < 310 && GuyY > 90 && GuyY < 130) {
       Message$ = " Go to LevelBuilder."
-    ELSE
+    } else {
       Message$ = ""
     }
 
@@ -1751,7 +1751,7 @@ if (Demo$ !== "DEMO") {
   KEY(12) ON 'left
   KEY(13) ON 'right
   KEY(14) ON 'down
-ELSE
+} else {
   KEY(15) OFF
   KEY(16) OFF
   KEY(17) OFF
@@ -1912,7 +1912,7 @@ DrawObj GuyImage%(), 10, 10, INT(Guy.x), INT(Guy.y), Guy.Direc
 if (LEFT$(Guy.Direc, 1) = "U" || LEFT$(Guy.Direc, 1) = "D") {
   DrawObj Handimage%(), 3, 3, Guy.x - 2, Guy.y + 4, "UR"
   DrawObj Handimage%(), 3, 3, Guy.x + 9, Guy.y + 4, "UR"
-ELSE
+} else {
   DrawObj Handimage%(), 3, 3, Guy.x + 4, Guy.y - 2, "UR"
   DrawObj Handimage%(), 3, 3, Guy.x + 4, Guy.y + 9, "UR"
 }
@@ -1984,7 +1984,7 @@ if (Demo$ !== "DEMO") {
     if (screenMap(Guy.ScreenX, Guy.ScreenY + 1) <= 0 && screenMap(INT((Guy.x + 5) / 10), Guy.ScreenY + 1) <= 0) {
       if (Guy.ScreenY = (Guy.y + 1) / 10) {
         Guy.y = Guy.y + 10
-      ELSE
+      } else {
         Guy.y = Guy.y + 5
       }
       Guy.Mvmnt = "DN"
