@@ -578,7 +578,7 @@ function LevelRight() {
         Guy.y = (PortalAlpha.y * 10) - 1;
       }
 
-      if (screenMap(Guy.ScreenX + 1, Guy.ScreenY) > 0) { Guy.x = Guy.x - 5; }
+      if (screenMap[Guy.ScreenX + 1][Guy.ScreenY] > 0) { Guy.x = Guy.x - 5; }
     }
     Guy.Direc = `${Guy.Direc[0]}R`;
     Guy.ScreenX = INT(Guy.x / 10);
@@ -588,7 +588,7 @@ function LevelRight() {
         screenMap[Guy.ScreenX][Guy.ScreenY] = 0;
     }
     if (Guy.ScreenX < 30) {
-      if (screenMap(Guy.ScreenX, Guy.ScreenY) <= -20 && screenMap(Guy.ScreenX + 1, Guy.ScreenY) <= 0) {
+      if (screenMap[Guy.ScreenX][Guy.ScreenY] <= -20 && screenMap[Guy.ScreenX + 1][Guy.ScreenY] <= 0) {
         screenMap[Guy.ScreenX][Guy.ScreenY] = screenMap[Guy.ScreenX][Guy.ScreenY] + 20;
         screenMap[Guy.ScreenX + 1][Guy.ScreenY] = screenMap[Guy.ScreenX + 1][Guy.ScreenY] - 20;
       }
@@ -606,7 +606,7 @@ function LevelLeft() {
         Guy.x = (PortalAlpha.x - 1) * 10;
         Guy.y = (PortalAlpha.y * 10) - 1;
       }
-      if (screenMap(INT(Guy.x / 10), Guy.ScreenY) > 0) { Guy.x = Guy.x + 5; }
+      if (screenMap[INT(Guy.x / 10)][Guy.ScreenY] > 0) { Guy.x = Guy.x + 5; }
     }
     Guy.Direc = `${Guy.Direc[0]}L`;
     Guy.ScreenX = INT(Guy.x / 10);
@@ -616,13 +616,13 @@ function LevelLeft() {
         screenMap[Guy.ScreenX][Guy.ScreenY] = 0;
     }
     if (Guy.ScreenX > 1) {
-      if (screenMap(Guy.ScreenX, Guy.ScreenY) <= -20 && screenMap(Guy.ScreenX - 1, Guy.ScreenY) <= 0) {
+      if (screenMap[Guy.ScreenX][Guy.ScreenY] <= -20 && screenMap[Guy.ScreenX - 1][Guy.ScreenY] <= 0) {
         screenMap[Guy.ScreenX][Guy.ScreenY] = screenMap[Guy.ScreenX][Guy.ScreenY] + 20;
         screenMap[Guy.ScreenX - 1][Guy.ScreenY] = screenMap[Guy.ScreenX - 1][Guy.ScreenY] - 20;
       }
     }
     if (Guy.ScreenX > 0) {
-      if (screenMap(Guy.ScreenX + 1, Guy.ScreenY) <= -20 && screenMap(Guy.ScreenX, Guy.ScreenY) <= 0) {
+      if (screenMap[Guy.ScreenX + 1][Guy.ScreenY] <= -20 && screenMap[Guy.ScreenX][Guy.ScreenY] <= 0) {
         screenMap[Guy.ScreenX + 1][Guy.ScreenY] = screenMap[Guy.ScreenX + 1][Guy.ScreenY] + 20;
         screenMap[Guy.ScreenX][Guy.ScreenY] = screenMap[Guy.ScreenX][Guy.ScreenY] - 20;
       }
@@ -669,7 +669,7 @@ Save:
           RecordNumber = 1
           for (let x0 = 0; x0 <= 31; x0++) {
             for (let y0 = 0; y0 <= 19; y0++) {
-              PUT #1, RecordNumber, screenMap(x0, y0)
+              PUT #1, RecordNumber, screenMap[x0][y0]
               RecordNumber = RecordNumber + 1
             }
           }
@@ -693,8 +693,8 @@ function Space() {
     switch (RIGHT$(Guy.Direc, 1)) {
         case "R":
             if (Guy.ScreenX < 31) {
-                if (screenMap(Guy.ScreenX + 1, Guy.ScreenY) > 20 && screenMap(Guy.ScreenX + 1, Guy.ScreenY) <= 30) {
-                    SharedWiseMessage$ = WiseMen(screenMap(Guy.ScreenX + 1, Guy.ScreenY) - 20).Speech;
+                if (screenMap[Guy.ScreenX + 1][Guy.ScreenY] > 20 && screenMap[Guy.ScreenX + 1][Guy.ScreenY] <= 30) {
+                    SharedWiseMessage$ = WiseMen(screenMap[Guy.ScreenX + 1][Guy.ScreenY] - 20).Speech;
                     SharedTalk = 100;
                 } else SharedTalk = 0;
             }
@@ -702,8 +702,8 @@ function Space() {
             break;
             case "L":
                 if (Guy.ScreenX > 0) {
-                    if (screenMap(Guy.ScreenX - 1, Guy.ScreenY) > 20 && screenMap(Guy.ScreenX - 1, Guy.ScreenY) <= 30) {
-                        SharedWiseMessage$ = WiseMen(screenMap(Guy.ScreenX - 1, Guy.ScreenY) - 20).Speech;
+                    if (screenMap[Guy.ScreenX - 1][Guy.ScreenY] > 20 && screenMap[Guy.ScreenX - 1][Guy.ScreenY] <= 30) {
+                        SharedWiseMessage$ = WiseMen(screenMap[Guy.ScreenX - 1][Guy.ScreenY] - 20).Speech;
                         SharedTalk = 100;
                     } else {
                         SharedTalk = 0;
@@ -711,7 +711,7 @@ function Space() {
                 } else SharedTalk = 0;
     }
 
-    if (screenMap(Guy.ScreenX, Guy.ScreenY) === -4) {
+    if (screenMap[Guy.ScreenX][Guy.ScreenY] === -4) {
       if (Guy.ScreenY > 1) {
         if (Guy.ScreenX > 1) {
           screenMap[Guy.ScreenX - 1][Guy.ScreenY - 1] = FlipBlocks(screenMap[Guy.ScreenX - 1][Guy.ScreenY - 1])
@@ -1328,7 +1328,7 @@ SUB LevelBuilder
 SCREEN 12
   for (let x0 = 0; x0 <= 31; x0 += 1) {
     for (let y0 = 0; y0 <= 19; y0 += 1) {
-      screenMap(x0, y0) = 0
+      screenMap[x0][y0] = 0
     }
   }
   CLS
@@ -1340,7 +1340,7 @@ SCREEN 12
   switch (Template) {
   case 1
     for (let x0 = 0; x0 <= 31; x0 += 1) {
-      screenMap(x0, 19) = 1
+      screenMap[x0][19] = 1
     }
   case 2
     INPUT "File Name"; FileName$
@@ -1350,8 +1350,8 @@ SCREEN 12
       RecordNumber = 1
       for (let x0 = 0; x0 <= 31; x0 += 1) {
         for (let y0 = 0; y0 <= 19; y0 += 1) {
-          GET #1, RecordNumber, screenMap(x0, y0)
-          if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
+          GET #1, RecordNumber, screenMap[x0][y0]
+          if (screenMap[x0][y0] = -1) { CoinMax = CoinMax + 1; }
           RecordNumber = RecordNumber + 1
         }
       }
@@ -1379,7 +1379,7 @@ SCREEN 7, 0, 0, 1
       case CHR$(8):
       for (let x0 = 0; x0 <= 31; x0 += 1) {
         for (let y0 = 0; y0 <= 19; y0 += 1) {
-          screenMap(x0, y0) = 0
+          screenMap[x0][y0] = 0
         }
       }
       case "i": Choice$ = "Sealed Eye": Choice = 3
@@ -1411,10 +1411,10 @@ SCREEN 7, 0, 0, 1
       case "S":
         for (let y0 = 0; y0 <= 19; y0 += 1) {
           for (let x0 = 0; x0 <= 31; x0 += 1) {
-            if (screenMap(x0, y0) = -3 || screenMap(x0, y0) = -20 || screenMap(x0, y0) = -6 || screenMap(x0, y0) = -2) {
+            if (screenMap[x0][y0] = -3 || screenMap[x0][y0] = -20 || screenMap[x0][y0] = -6 || screenMap[x0][y0] = -2) {
               Req = Req + 1
             }
-            if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
+            if (screenMap[x0][y0] = -1) { CoinMax = CoinMax + 1; }
           }
         }
         if (Req < 2) {
@@ -1434,13 +1434,13 @@ SCREEN 7, 0, 0, 1
       case SPC$:
         for (let y0 = 0; y0 <= 19; y0 += 1) {
           for (let x0 = 0; x0 <= 31; x0 += 1) {
-            if ((Choice$ = "Key" || Choice$ = "Sealed Key") && (screenMap(x0, y0) = -20 || screenMap(x0, y0) = -2)) { screenMap(x0, y0) = 0; }
-            if ((Choice$ = "Keyhole" || Choice$ = "Sealed Keyhole") && (screenMap(x0, y0) = -6 || screenMap(x0, y0) = -3)) { screenMap(x0, y0) = 0; }
-            if (Choice = -11 && screenMap(x0, y0) = -11) { screenMap(x0, y0) = 0; }
-            if (Choice = -12 && screenMap(x0, y0) = -12) { screenMap(x0, y0) = 0; }
+            if ((Choice$ = "Key" || Choice$ = "Sealed Key") && (screenMap[x0][y0] = -20 || screenMap[x0][y0] = -2)) { screenMap[x0][y0] = 0; }
+            if ((Choice$ = "Keyhole" || Choice$ = "Sealed Keyhole") && (screenMap[x0][y0] = -6 || screenMap[x0][y0] = -3)) { screenMap[x0][y0] = 0; }
+            if (Choice = -11 && screenMap[x0][y0] = -11) { screenMap[x0][y0] = 0; }
+            if (Choice = -12 && screenMap[x0][y0] = -12) { screenMap[x0][y0] = 0; }
           }
         }
-        screenMap(ScreenX, ScreenY) = Choice
+        screenMap[ScreenX][ScreenY] = Choice
     }
 
     if (Move$ = ENTR$) {
@@ -1462,7 +1462,7 @@ SCREEN 7, 0, 0, 1
 
     for (let y0 = 0; y0 <= 19; y0 += 1) {
       for (let x0 = 0; x0 <= 31; x0 += 1) {
-        switch (screenMap(x0, y0)) {
+        switch (screenMap[x0][y0]) {
         case 1: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF
         case 2: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, B
         case 4: LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 1, BF
@@ -1615,8 +1615,8 @@ Load:
           RecordNumber = 1
           for (let x0 = 0; x0 <= 31; x0 += 1) {
             for (let y0 = 0; y0 <= 19; y0 += 1) {
-              GET #1, RecordNumber, screenMap(x0, y0)
-              if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
+              GET #1, RecordNumber, screenMap[x0][y0]
+              if (screenMap[x0][y0] = -1) { CoinMax = CoinMax + 1; }
               RecordNumber = RecordNumber + 1
             }
           }
@@ -1770,10 +1770,10 @@ SerNo = 0
 
 for (let y0 = 0; y0 <= 19; y0 += 1) {
   for (let x0 = 0; x0 <= 31; x0 += 1) {
-    screenMap(x0, y0) = LescreenMap(x0, y0)
-    if (screenMap(x0, y0) > 10 && screenMap(x0, y0) <= 20 && SerNo < 15) {
-      EnemyRace = screenMap(x0, y0) - 10
-      screenMap(x0, y0) = 0
+    screenMap[x0][y0] = LescreenMap[x0][y0]
+    if (screenMap[x0][y0] > 10 && screenMap[x0][y0] <= 20 && SerNo < 15) {
+      EnemyRace = screenMap[x0][y0] - 10
+      screenMap[x0][y0] = 0
       SerNo = SerNo + 1
       switch (EnemyRace) {
       case 1
@@ -1820,7 +1820,7 @@ SharedWiseMessage$ = ""
 for (let y0 = 0; y0 <= 19; y0 += 1) {
   for (let x0 = 0; x0 <= 31; x0 += 1) {
     if (screenMap(x0, y0) = -11) { PortalAlpha.x = x0: PortalAlpha.y = y0; }
-    if (screenMap(x0, y0) = -12) { PortalBeta.x = x0: PortalBeta.y = y0; }
+    if (screenMap[x0][y0] = -12) { PortalBeta.x = x0: PortalBeta.y = y0; }
   }
 }
 
@@ -1849,13 +1849,13 @@ PRINT SharedMessage$
 
 0 for (let y0 = 19; y0 <= 0; y0 += 1) { STEP -1
   for (let x0 = 0; x0 <= 31; x0 += 1) {
-    switch (screenMap(x0, y0)) {
+    switch (screenMap[x0][y0]) {
     case 1, 3:
       LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF
     case -9:
-      if (screenMap(Guy.ScreenX, Guy.ScreenY) !== -10) { LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF; }
+      if (screenMap[Guy.ScreenX][Guy.ScreenY] !== -10) { LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF; }
     case 2
-      if (screenMap(Guy.ScreenX, Guy.ScreenY) = -10) { LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF; }
+      if (screenMap[Guy.ScreenX][Guy.ScreenY] = -10) { LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 15), 2, BF; }
     case 4
       LINE (x0 * 10, y0 * 10)-((x0 * 10) + 10, (y0 * 10) + 10), 1, BF
     case -4:
@@ -1866,19 +1866,19 @@ PRINT SharedMessage$
     case IS = -3:
       DrawObj Keyholeimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
     case -31:
-      screenMap(x0, y0) = -11: screenMap(PortalBeta.x, PortalBeta.y + 1) = screenMap(PortalBeta.x, PortalBeta.y + 1) - 20
+      screenMap[x0][y0] = -11: screenMap[PortalBeta.x][PortalBeta.y + 1] = screenMap[PortalBeta.x][PortalBeta.y + 1] - 20
     case -32:
-      screenMap(x0, y0) = -12: screenMap(PortalAlpha.x, PortalAlpha.y + 1) = screenMap(PortalAlpha.x, PortalAlpha.y + 1) - 20
+      screenMap[x0][y0] = -12: screenMap[PortalAlpha.x][PortalAlpha.y + 1] = screenMap[PortalAlpha.x][PortalAlpha.y + 1] - 20
 
     case IS <= -20:
       DrawObj Keyimage%(), 9, 9, x0 * 10, y0 * 10, "UR"
       if (y0 < 19) {
-        if (screenMap(x0, y0 + 1) <= 0) {
-          screenMap(x0, y0 + 1) = screenMap(x0, y0 + 1) - 20: screenMap(x0, y0) = screenMap(x0, y0) + 20
+        if (screenMap[x0][y0 + 1] <= 0) {
+          screenMap[x0][y0 + 1] = screenMap[x0][y0 + 1] - 20: screenMap[x0][y0] = screenMap[x0][y0] + 20
         }
 
-      } else if (screenMap(x0, 0) <= 0) {
-        screenMap(x0, y0) = screenMap(x0, y0) + 20: screenMap(x0, 0) = screenMap(x0, 0) - 20
+      } else if (screenMap[x0][0] <= 0) {
+        screenMap[x0][y0] = screenMap[x0][y0] + 20: screenMap[x0][0] = screenMap[x0][0] - 20
       }
 
     case -7: DoorX = x0 * 10: DoorY = y0 * 10
@@ -1902,7 +1902,7 @@ PRINT SharedMessage$
       'anchor
 
     }
-    if (screenMap(x0, y0) = -23) { screenMap(x0, y0) = -7; }
+    if (screenMap[x0][y0] = -23) { screenMap[x0][y0] = -7; }
   }
 }
 
@@ -1924,30 +1924,30 @@ if (Time < 200) {
 } else if (Demo$ = "DEMO") { EXIT DO
 }
 
-if (screenMap(Guy.ScreenX, Guy.ScreenY) = -1) { Coins = Coins + 1: screenMap(Guy.ScreenX, Guy.ScreenY) = 0; } 'get coin
+if (screenMap[Guy.ScreenX][Guy.ScreenY] = -1) { Coins = Coins + 1: screenMap[Guy.ScreenX][Guy.ScreenY] = 0; } 'get coin
 
-if (screenMap(Guy.ScreenX, Guy.ScreenY) <= -20 && Demo$ !== "") {
-  screenMap(Guy.ScreenX, Guy.ScreenY) = screenMap(Guy.ScreenX, Guy.ScreenY) + 20
+if (screenMap[Guy.ScreenX][Guy.ScreenY] <= -20 && Demo$ !== "") {
+  screenMap[Guy.ScreenX][Guy.ScreenY] = screenMap[Guy.ScreenX][Guy.ScreenY] + 20
   switch (RIGHT$(Guy.Direc, 1)) {
   case "R":
     if (Guy.ScreenX < 31) {
-      screenMap(Guy.ScreenX + 1, Guy.ScreenY) = screenMap(Guy.ScreenX + 1, Guy.ScreenY) - 20
+      screenMap[Guy.ScreenX + 1][Guy.ScreenY] = screenMap[Guy.ScreenX + 1][Guy.ScreenY] - 20
     }
   case "L":
     if (Guy.ScreenX > 0) {
-      screenMap(Guy.ScreenX - 1, Guy.ScreenY) = screenMap(Guy.ScreenX - 1, Guy.ScreenY) - 20
+      screenMap[Guy.ScreenX - 1][Guy.ScreenY] = screenMap[Guy.ScreenX - 1][Guy.ScreenY] - 20
     }
   }
 }
 
-if (screenMap(Guy.ScreenX, Guy.ScreenY) = -13) { Guy.MaxHp = Guy.MaxHp + 5: Guy.Health = Guy.MaxHp: screenMap(Guy.ScreenX, Guy.ScreenY) = 0: SharedWiseMessage$ = "MAX HP +5!!!": SharedTalk = 50; }
-if (screenMap(Guy.ScreenX, Guy.ScreenY) = -14) { Guy.AP = Guy.AP + 3: screenMap(Guy.ScreenX, Guy.ScreenY) = 0: SharedWiseMessage$ = "Attack +3!!!": SharedTalk = 50; }
+if (screenMap[Guy.ScreenX][Guy.ScreenY] = -13) { Guy.MaxHp = Guy.MaxHp + 5: Guy.Health = Guy.MaxHp: screenMap[Guy.ScreenX][Guy.ScreenY] = 0: SharedWiseMessage$ = "MAX HP +5!!!": SharedTalk = 50; }
+if (screenMap[Guy.ScreenX][Guy.ScreenY] = -14) { Guy.AP = Guy.AP + 3: screenMap[Guy.ScreenX][Guy.ScreenY] = 0: SharedWiseMessage$ = "Attack +3!!!": SharedTalk = 50; }
 
-if (screenMap(Guy.ScreenX, Guy.ScreenY) = -11) {
+if (screenMap[Guy.ScreenX][Guy.ScreenY] = -11) {
   Guy.x = PortalBeta.x * 10
   Guy.y = (PortalBeta.y * 10) + 9
 }
-if (screenMap(Guy.ScreenX, Guy.ScreenY) = -12) {
+if (screenMap[Guy.ScreenX][Guy.ScreenY] = -12) {
   Guy.x = PortalAlpha.x * 10
   Guy.y = (PortalAlpha.y * 10) + 9
 }
@@ -1981,7 +1981,7 @@ if (Demo$ !== "DEMO") {
   if (Guy.Mvmnt !== "UP") {
     if (((Guy.y - 1) / 10) >= 19) { Guy.y = Guy.y - 10; }
     if (Guy.x / 10 >= 31) { Guy.x = Guy.x - 10; }
-    if (screenMap(Guy.ScreenX, Guy.ScreenY + 1) <= 0 && screenMap(INT((Guy.x + 5) / 10), Guy.ScreenY + 1) <= 0) {
+    if (screenMap(Guy.ScreenX, Guy.ScreenY + 1) <= 0 && screenMap[INT((Guy.x + 5) / 10)][Guy.ScreenY + 1] <= 0) {
       if (Guy.ScreenY = (Guy.y + 1) / 10) {
         Guy.y = Guy.y + 10
       } else {
@@ -2004,7 +2004,7 @@ if (Demo$ !== "DEMO") {
     Guy.JTime = Guy.JTime + 1
   }
 
-  if (Guy.ScreenY !== (Guy.y + 1) / 10 && screenMap(Guy.ScreenX, Guy.ScreenY + 1) > 0 && Guy.Mvmnt !== "UP") { Guy.y = Guy.y - 5; }
+  if (Guy.ScreenY !== (Guy.y + 1) / 10 && screenMap[Guy.ScreenX][Guy.ScreenY + 1] > 0 && Guy.Mvmnt !== "UP") { Guy.y = Guy.y - 5; }
 
   if (INKEY$ = ENTR$) {
     KEY(16) OFF
@@ -2017,7 +2017,7 @@ if (Demo$ !== "DEMO") {
     ON KEY(15) GOSUB Save
       for (let x0 = 0; x0 <= 31; x0 += 1) {
         for (let y0 = 0; y0 <= 19; y0 += 1) {
-          screenMap(x0, y0) = LescreenMap(x0, y0)
+          screenMap[x0][y0] = LescreenMap[x0][y0]
         }
       }
   }
@@ -2025,10 +2025,10 @@ if (Demo$ !== "DEMO") {
 if (Coins = CoinMax) {
   for (let y0 = 0; y0 <= 19; y0 += 1) {
     for (let x0 = 0; x0 <= 31; x0 += 1) {
-      if (screenMap(x0, y0) = -5) { screenMap(x0, y0) = 1; }
-      if (screenMap(x0, y0) = -2) { screenMap(x0, y0) = -20; }
-      if (screenMap(x0, y0) = -6) { screenMap(x0, y0) = -3; }
-      if (screenMap(x0, y0) = 3) { screenMap(x0, y0) = -10; }
+      if (screenMap[x0][y0] = -5) { screenMap[x0][y0] = 1; }
+      if (screenMap[x0][y0] = -2) { screenMap[x0][y0] = -20; }
+      if (screenMap[x0][y0] = -6) { screenMap[x0][y0] = -3; }
+      if (screenMap[x0][y0] = 3) { screenMap[x0][y0] = -10; }
     }
   }
   Coins = 0
@@ -2071,8 +2071,8 @@ SUB RecordDemo
       RecordNumber = 1
       for (let x0 = 0; x0 <= 31; x0 += 1) {
         for (let y0 = 0; y0 <= 19; y0 += 1) {
-          GET #1, RecordNumber, screenMap(x0, y0)
-          if (screenMap(x0, y0) = -1) { CoinMax = CoinMax + 1; }
+          GET #1, RecordNumber, screenMap[x0][y0]
+          if (screenMap[x0][y0] = -1) { CoinMax = CoinMax + 1; }
           RecordNumber = RecordNumber + 1
         }
       }
