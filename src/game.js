@@ -120,13 +120,12 @@ const bitmapString = gridString();
 
 const printBitmap = flipped => console.log(bitmapString(flipped));
 
-/*
-'--------------------DECLARE-CONSTANTS---------------------------------------
-// */
 const NoOfLevels = 10
 
 /*
-COMMON SHARED RGT$, LFT$, UP$, DN$, ESC$, ENTR$, SPC$, Coins, YMAX, XMAX, F1$, F2$, F3$, F4$, F5$, F6$, F7$, F8$, F9$, F10$, F11$, NJTimer, YouShouldGo, Warp, World$, WorldsChecked, BuildLevel, ADMISSION, SharedTalk, SharedWiseMessage$,  _
+COMMON SHARED RGT$, LFT$, UP$, DN$, ESC$, ENTR$, SPC$, Coins, YMAX, XMAX, F1$, F2$, F3$, F4$, F5$, F6$, F7$, F8$, F9$
+COMMON SHARED F10$, F11$, NJTimer, YouShouldGo, Warp, World$, WorldsChecked, BuildLevel, ADMISSION, SharedTalk
+COMMON SHARED SharedWiseMessage$,  _
 SharedMessage$
 DIM SHARED GlovePos AS INTEGER
 RGT$ = CHR$(0) + "M"
